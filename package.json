@@ -8,11 +8,13 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
+    "@mobilestock-native/button": "^0.0.6",
     "@mobilestock-native/container": "^0.0.1",
     "@mobilestock-native/image": "^0.0.1",
     "@mobilestock-native/spacer": "^0.0.4",
     "@mobilestock-native/tools": "^0.0.5",
     "@mobilestock-native/typography": "^0.0.4",
+    "@mobilestockweb/button": "^0.0.12",
     "@mobilestockweb/container": "^0.0.1",
     "@mobilestockweb/image": "^0.0.1",
     "@mobilestockweb/lazy-image": "^0.0.10",

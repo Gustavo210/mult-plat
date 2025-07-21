@@ -1,0 +1,27 @@
+{
+  "name": "@mobilestock-native/footer",
+  "version": "0.0.0",
+  "description": "Componente de Rodapé para aplicações React Web, com suporte a áreas flutuantes e conteúdo personalizado.",
+  "main": "./src/index.tsx",
+  "publishConfig": {
+    "directory": "./dist",
+    "linkDirectory": false
+  },
+  "tsup": {
+    "entry": [
+      "src/index.tsx"
+    ],
+    "minify": true,
+    "dts": true,
+    "clean": true,
+    "tsconfig": "../../../../../tsconfig.base.json"
+  },
+  "scripts": {
+    "prepublishOnly": "tsup && node ../../../../../scripts/npmPrepublish/index.js"
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "@mobilestock-native/container": "workspace:",
+    "@mobilestock-native/typography": "workspace:"
+  }
+}

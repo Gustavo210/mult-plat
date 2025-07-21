@@ -12,7 +12,7 @@ export const theme = {
       danger: defaultColors.tertiary,
     },
     container: {
-      default: defaultColors.grey11,
+      default: defaultColors.white,
       outline: {
         default: defaultColors.grey40,
         soft: defaultColors.secondary,

@@ -50,12 +50,23 @@ rl.question(
     fs.mkdirSync(routePath, { recursive: true });
     console.log(`Diretório da rota criado: ${routePath}`);
 
-    const layoutContent = `import React from 'react';
-import { Slot } from "expo-router";
+    const layoutContent = `import { Slot } from "expo-router";
+import React from "react";
+import { Platform } from "react-native";
+
+const Con =
+  Platform.OS === "web"
+    ? require("@mobilestock-native/container").Container.Main
+    : require("@mobilestock-native/container").Container.Main;
 
 export default function Layout() {
-  return <Slot/>;
+  return (
+    <Con>
+      <Slot />
+    </Con>
+  );
 }
+
 `;
 
     const indexContent = `import React from 'react';
@@ -83,33 +94,29 @@ export default function Index() {
 `;
 
     const androidContent = `import React from 'react';
-import { styled } from 'styled-components/native';
 import { Typography } from "@mobilestock-native/typography";
+import { Container } from "@mobilestock-native/container";
 
 export default function IndexAndroid() {
   return (
-    <AndroidContainer>
+    <Container.Vertical>
       <Typography>Rota Android para ${componentName}</Typography>
-    </AndroidContainer>
+    </Container.Vertical>
   );
 }
-
-const AndroidContainer = styled.View\`\`;
 `;
 
     const webContent = `import React from 'react';
-import { styled } from 'styled-components';
 import { Typography } from "@mobilestockweb/typography";
+import { Container } from "@mobilestockweb/container";
 
 export default function IndexWeb() {
   return (
-    <WebContainer>
+    <Container.Vertical>
       <Typography>Rota Web para ${componentName}</Typography>
-    </WebContainer>
+    </Container.Vertical>
   );
 }
-
-const WebContainer = styled.div\`\`;
 `;
 
     fs.writeFileSync(path.join(routePath, "_layout.tsx"), layoutContent);

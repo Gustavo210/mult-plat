@@ -29,7 +29,7 @@ export const theme = {
       error: defaultColors.red38A20,
     },
     button: {
-      default: defaultColors.blue41,
+      default: defaultColors.black,
       anchor: defaultColors.blue50,
       shadow: defaultColors.shadow,
       selected: defaultColors.secondary,

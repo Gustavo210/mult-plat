@@ -18,6 +18,7 @@ export const theme = {
 
     button: {
       default: defaultColors.primary,
+      custom: defaultColors.green49,
     },
     border: {
       visibleArea: defaultColors.pink,

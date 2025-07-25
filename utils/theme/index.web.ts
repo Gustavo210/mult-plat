@@ -35,6 +35,7 @@ export const theme = {
       selected: defaultColors.secondary,
       confirm: defaultColors.green50,
       cancel: defaultColors.orange58,
+      darker: defaultColors.primary,
     },
     alert: {
       default: defaultColors.cyan48,
@@ -60,6 +61,14 @@ export const theme = {
     },
     border: {
       visibleArea: defaultColors.pink,
+    },
+    footer: {
+      background: {
+        default: defaultColors.transparent,
+        regular: defaultColors.secondary,
+        contrast: defaultColors.primary,
+        visible_area: defaultColors.lightPink,
+      },
     },
   },
   font: {
@@ -91,4 +100,5 @@ export const theme = {
   borderRadius: { ...defaultSizes.borderRadius },
   sizeIcons: { ...defaultSizes.icons },
   sizeImage: { ...defaultSizes.sizeImage },
+  padding: { ...defaultSizes.padding },
 } as const;

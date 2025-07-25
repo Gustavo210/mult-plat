@@ -26,4 +26,5 @@ export default {
   pink: "#f76ee4",
   white: "#FFFFFF",
   black: "#000000",
+  transparent: "transparent",
 };

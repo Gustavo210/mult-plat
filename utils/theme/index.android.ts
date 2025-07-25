@@ -8,16 +8,23 @@ export const theme = {
     text: {
       default: defaultColors.black,
       contrast: defaultColors.white,
+      regular: defaultColors.black,
+      notice: defaultColors.orange50,
+      loading: defaultColors.orange60,
+      danger: defaultColors.tertiary,
     },
 
     container: {
       shadow: defaultColors.shadow,
       default: defaultColors.white,
+      pure: defaultColors.black,
       visibleArea: defaultColors.lightPink,
     },
 
     button: {
       default: defaultColors.primary,
+      confirm: defaultColors.green50,
+      cancel: defaultColors.red53,
     },
     border: {
       visibleArea: defaultColors.pink,
@@ -32,6 +39,24 @@ export const theme = {
       error: defaultColors.red53,
       info: defaultColors.grey40,
       warning: defaultColors.orange60,
+    },
+    footer: {
+      background: {
+        default: defaultColors.lightPink,
+        contrast: defaultColors.white,
+        visibleArea: defaultColors.pink,
+      },
+    },
+
+    list: {
+      item: {
+        default: defaultColors.white,
+        hover: defaultColors.shadow,
+        selected: defaultColors.primary,
+        success: defaultColors.green50,
+        disabled: defaultColors.black,
+        danger: defaultColors.red53,
+      },
     },
   },
   font: {
@@ -199,4 +224,5 @@ export const theme = {
   borderRadius: { ...defaultSizes.borderRadius },
   sizeIcons: { ...defaultSizes.icons },
   sizeImage: { ...defaultSizes.sizeImage },
+  padding: { ...defaultSizes.padding },
 } as const;

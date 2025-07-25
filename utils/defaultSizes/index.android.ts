@@ -59,4 +59,14 @@ export const defaultSizes = {
     default: "5px",
     none: "0px",
   },
+  padding: {
+    none: 0,
+    "2xs": tools.calculateRemToPx("0.25rem"),
+    xs: tools.calculateRemToPx("0.5rem"),
+    sm: tools.calculateRemToPx("0.75rem"),
+    md: tools.calculateRemToPx("1rem"),
+    lg: tools.calculateRemToPx("1.5rem"),
+    xl: tools.calculateRemToPx("2rem"),
+    "2xl": tools.calculateRemToPx("3rem"),
+  },
 };

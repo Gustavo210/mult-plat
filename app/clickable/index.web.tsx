@@ -1,7 +1,7 @@
-import { Clickable } from "@/COMPONENTE/web/Clickable/src";
-import { LoadingSpinner } from "@/COMPONENTE/web/LoadingSpinner/src";
+import { Clickable } from "@mobilestockweb/clickable";
 import { Container } from "@mobilestockweb/container";
 import { Icon } from "@mobilestockweb/icons";
+import { LoadingSpinner } from "@mobilestockweb/loading-spinner";
 import { Typography } from "@mobilestockweb/typography";
 import React, { useState } from "react";
 

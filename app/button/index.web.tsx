@@ -1,9 +1,9 @@
 import { Icon } from "@mobilestock-native/icons";
+import { Button, ButtonProps } from "@mobilestockweb/button";
 import { Container } from "@mobilestockweb/container";
 import { Typography } from "@mobilestockweb/typography";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Button, ButtonProps } from "../../COMPONENTE/web/Button/src";
 
 export default function IndexWeb() {
   return (

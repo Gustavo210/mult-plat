@@ -1,12 +1,12 @@
-import React, { ElementType, ReactElement, useState } from "react";
+import { ElementType, ReactElement } from "react";
 import { StyleProp, View, ViewStyle } from "react-native";
 import styled, { DefaultTheme, useTheme } from "styled-components/native";
 
 import { Container, ViewBaseProps } from "@mobilestock-native/container";
-import { IconName } from "@mobilestock-native/icons";
-import tools, { ComponentWithTarget } from "@mobilestock-native/tools";
 import { Typography, TypographyProps } from "@mobilestock-native/typography";
 import { Clickable, ClickableProps } from "../../../../Clickable/src";
+import { IconName } from "../../../../Icons";
+import tools, { ComponentWithTarget } from "../../../../Tools/src";
 
 import {
   getIconAlign,
@@ -40,7 +40,7 @@ export type TextAlign = "START" | "CENTER" | "END";
 
 export type NotificationPosition = "ICON" | "TEXT" | "END";
 
-export interface ButtonProps extends Omit<ClickableProps, "children"> {
+export interface ButtonProps extends Omit<ClickableProps, "children" | "size"> {
   text?: string | ReactElement;
   disabled?: boolean;
   circular?: boolean;
@@ -98,17 +98,17 @@ export function Button({
   ...props
 }: ButtonProps) {
   const Theme = useTheme();
-  const [textColor, setTextColor] = useState<string>("");
 
-  function changeTextColor(styleState: StyleProp<ViewStyle>) {
+  function getTextColorFromStyle(styleState: StyleProp<ViewStyle>) {
     if (
       typeof styleState === "object" &&
       !!styleState &&
       "color" in styleState &&
       typeof styleState.color === "string"
     ) {
-      setTextColor(styleState.color);
+      return styleState.color;
     }
+    return "";
   }
 
   if (typeof text !== "string" && !!text) {
@@ -128,119 +128,123 @@ export function Button({
     <ButtonComponent
       {...props}
       style={({ pressed }) => {
+        return getPressedStyles(pressed, variant, backgroundColor, Theme);
+      }}
+      isLoading={isLoading}
+      disabled={disabled || isLoading}
+      size={size}
+      $backgroundColor={backgroundColor}
+      $variant={variant}
+      $circular={circular}
+    >
+      {(state) => {
         let currentStyle = props.style;
-
         if (typeof currentStyle === "function") {
-          currentStyle = currentStyle({ pressed });
+          currentStyle = currentStyle({ pressed: state.pressed });
         }
+
+        let textColor = getTextColorFromStyle(currentStyle);
 
         if (Array.isArray(currentStyle)) {
           const findStyleData = currentStyle.findLast(
             (styleArray) => styleArray && "color" in styleArray
           );
-          changeTextColor(findStyleData as StyleProp<ViewStyle>);
-          return currentStyle;
+          textColor = getTextColorFromStyle(
+            findStyleData as StyleProp<ViewStyle>
+          );
         }
 
-        changeTextColor(currentStyle);
-
-        return getPressedStyles(pressed, variant, backgroundColor, Theme);
-      }}
-      isLoading={isLoading}
-      disabled={disabled || isLoading}
-      $backgroundColor={backgroundColor}
-      $size={size}
-      $variant={variant}
-      $circular={circular}
-    >
-      <ButtonContent
-        padding={padding}
-        gap={size}
-        align="CENTER"
-        $textAlign={textAlign}
-        $iconAlign={iconAlign}
-      >
-        {iconAlign !== "START" && iconAlign !== "END" ? (
-          <FlexContainer
-            gap={iconAlign === "ABOVE-TEXT" ? "NONE" : size}
+        return (
+          <ButtonContent
+            padding={padding}
+            gap={size}
             align="CENTER"
+            $textAlign={textAlign}
             $iconAlign={iconAlign}
           >
-            <IconContainer
-              variant={variant}
-              backgroundColor={backgroundColor}
-              icon={icon}
-              size={size}
-              color={textColor}
-              notification={notification}
-              notificationPosition={notificationPosition}
-            />
+            {iconAlign !== "START" && iconAlign !== "END" ? (
+              <FlexContainer
+                gap={iconAlign === "ABOVE-TEXT" ? "NONE" : size}
+                align="CENTER"
+                $iconAlign={iconAlign}
+              >
+                <IconContainer
+                  variant={variant}
+                  backgroundColor={backgroundColor}
+                  icon={icon}
+                  size={size}
+                  color={textColor}
+                  notification={notification}
+                  notificationPosition={notificationPosition}
+                />
 
-            <TextContainer
-              backgroundColor={backgroundColor}
-              variant={variant}
-              fontWeight={fontWeight}
-              text={text}
-              size={size}
-              color={textColor}
-              withUnderline={variant === "LINK"}
-              notification={notification}
-              notificationPosition={notificationPosition}
-            />
-          </FlexContainer>
-        ) : (
-          <>
-            <IconContainer
-              variant={variant}
-              backgroundColor={backgroundColor}
-              icon={icon}
-              size={size}
-              color={textColor}
-              notification={notification}
-              notificationPosition={notificationPosition}
-            />
+                <TextContainer
+                  backgroundColor={backgroundColor}
+                  variant={variant}
+                  fontWeight={fontWeight}
+                  text={text}
+                  size={size}
+                  color={textColor}
+                  withUnderline={variant === "LINK"}
+                  notification={notification}
+                  notificationPosition={notificationPosition}
+                />
+              </FlexContainer>
+            ) : (
+              <>
+                <IconContainer
+                  variant={variant}
+                  backgroundColor={backgroundColor}
+                  icon={icon}
+                  size={size}
+                  color={textColor}
+                  notification={notification}
+                  notificationPosition={notificationPosition}
+                />
 
-            <TextContainer
-              backgroundColor={backgroundColor}
-              variant={variant}
-              fontWeight={fontWeight}
-              text={text}
-              size={size}
-              color={textColor}
-              withUnderline={variant === "LINK"}
-              notification={notification}
-              notificationPosition={notificationPosition}
-            />
-          </>
-        )}
+                <TextContainer
+                  backgroundColor={backgroundColor}
+                  variant={variant}
+                  fontWeight={fontWeight}
+                  text={text}
+                  size={size}
+                  color={textColor}
+                  withUnderline={variant === "LINK"}
+                  notification={notification}
+                  notificationPosition={notificationPosition}
+                />
+              </>
+            )}
 
-        {!!notification && notificationPosition === "END" && (
-          <NotificationBadge
-            notification={notification}
-            notificationPosition={notificationPosition}
-            size={size}
-          />
-        )}
+            {!!notification && notificationPosition === "END" && (
+              <NotificationBadge
+                notification={notification}
+                notificationPosition={notificationPosition}
+                size={size}
+              />
+            )}
 
-        {!notification &&
-          (iconAlign === "START" || iconAlign === "END") &&
-          !circular && <FlexHelper />}
-      </ButtonContent>
+            {!notification &&
+              (iconAlign === "START" || iconAlign === "END") &&
+              !circular && <FlexHelper />}
+          </ButtonContent>
+        );
+      }}
     </ButtonComponent>
   );
 }
 
 const ButtonComponent = styled(Clickable)<{
+  size: Sizes;
   $variant: Variant;
-  $size: Sizes;
   $circular: boolean;
   $backgroundColor: BackgroundColor;
 }>`
   justify-content: center;
   ${({ $variant, $backgroundColor, theme }) =>
     getVariantStyles($variant, $backgroundColor, theme)}
-  ${({ $size, $circular, theme }) =>
-    getSizeAndWidthStyles($size, $circular, theme)}
+  ${({ size, $circular, theme }) =>
+    getSizeAndWidthStyles(size, $circular, theme)}
 `;
 
 const ButtonContent = styled(Container)<{

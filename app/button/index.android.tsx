@@ -1,9 +1,8 @@
 import { Container } from "@mobilestock-native/container";
 import React, { useState } from "react";
-import { Button, ButtonProps } from "../../COMPONENTE/native/Button/src/index";
+import { Button, ButtonProps } from "../../COMPONENTE/native/Button/src";
 
 import { Typography } from "@mobilestock-native/typography";
-import styled from "styled-components/native";
 
 export default function IndexAndroid() {
   return (
@@ -14,13 +13,12 @@ export default function IndexAndroid() {
         {(["XS", "SM", "MD", "LG", "XL", "2XL", "3XL"] as ButtonProps["size"][])
           .map<ButtonProps>((item) => ({
             icon: "AlertCircle",
-            circular: true,
+            circular: false,
             text: `OLA ${item}`,
             iconAlign: "ABOVE-TEXT",
             textAlign: "CENTER",
-            // notification: 10,
+            notification: -1,
             variant: "DEFAULT",
-
             // notificationPosition: "END",
             size: item,
           }))
@@ -44,6 +42,3 @@ function MyButton(props: ButtonProps) {
     />
   );
 }
-const Teste = styled(Button)`
-  color: red;
-`;

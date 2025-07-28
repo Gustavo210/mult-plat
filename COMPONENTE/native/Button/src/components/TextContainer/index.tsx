@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components/native";
 
-import tools from "@mobilestock-native/tools";
 import { Typography } from "@mobilestock-native/typography";
+import tools from "../../../../Tools/src";
 
 import { calculateBackgroundColor } from "../../utils";
 import { ButtonProps, RelativeContainer } from "../Button";

@@ -2,7 +2,7 @@ import chroma from "chroma-js";
 import { StyleProp, ViewStyle } from "react-native";
 import { DefaultTheme, css } from "styled-components/native";
 
-import tools, { BrightnessLevel } from "@mobilestock-native/tools";
+import tools, { BrightnessLevel } from "../../../Tools/src";
 
 import {
   BackgroundColor,
@@ -93,7 +93,6 @@ export function getIconAlign(iconAlign: IconAlign) {
     case "ABOVE-TEXT":
       return css`
         flex-direction: column;
-        gap: 0;
       `;
     case "END":
       return css`
@@ -202,9 +201,6 @@ export function getSizeAndWidthStyles(
   };
 
   const config = sizeMap[size];
-  const minHeight = `${
-    baseMinHeight * parseFloat(theme.spacing[size.toLowerCase()])
-  }px`;
 
   const baseStyle = css`
     padding: ${circular ? "0" : config.padding};
@@ -214,6 +210,9 @@ export function getSizeAndWidthStyles(
   `;
 
   if (circular) {
+    const minHeight = `${
+      baseMinHeight * parseFloat(theme.spacing[size.toLowerCase()])
+    }px`;
     return css`
       ${baseStyle}
       width: ${minHeight};

@@ -1,9 +1,9 @@
-import { Clickable } from "@/COMPONENTE/native/Clickable/src";
-import { LoadingSpinner } from "@/COMPONENTE/native/LoadingSpinner/src";
+import { Clickable } from "@mobilestock-native/clickable";
 import { Container } from "@mobilestock-native/container";
 import { Icon } from "@mobilestock-native/icons";
+import { LoadingSpinner } from "@mobilestock-native/loading-spinner";
 import { Typography } from "@mobilestock-native/typography";
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function IndexAndroid() {
   const [loading, setLoading] = useState(false);

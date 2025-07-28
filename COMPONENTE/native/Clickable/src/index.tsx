@@ -1,6 +1,4 @@
-import { useState } from "react";
 import {
-  ColorValue,
   Pressable,
   PressableProps,
   PressableStateCallbackType,
@@ -9,70 +7,64 @@ import {
 } from "react-native";
 import styled, { css } from "styled-components/native";
 
-import { LoadingSpinner } from "@mobilestock-native/loading-spinner";
-import tools from "@mobilestock-native/tools";
+import { LoadingSpinner, LoadingSpinnerProps } from "../../LoadingSpinner/src";
+import tools from "../../Tools/src";
 
 export interface ClickableProps extends PressableProps {
   isLoading?: boolean;
+  size?: LoadingSpinnerProps["size"];
 }
 
 export function Clickable({
   disabled,
   isLoading,
   children,
+  size,
   ...props
 }: ClickableProps) {
-  const [iconColor, setIconColor] = useState<ColorValue>("");
-
-  function changeIconColor(styleState: StyleProp<ViewStyle>) {
+  function getColorFromStyle(styleState: StyleProp<ViewStyle>) {
     if (
       typeof styleState === "object" &&
       !!styleState &&
       "backgroundColor" in styleState &&
       typeof styleState.backgroundColor === "string"
     ) {
-      const color = tools.defineTextColor(styleState.backgroundColor);
-      setIconColor(color);
-    } else {
-      setIconColor("");
+      return tools.defineTextColor(styleState.backgroundColor);
     }
+    return "";
   }
 
   return (
-    <Pressable
-      {...props}
-      style={({ pressed }) => {
+    <Pressable {...props} disabled={disabled || isLoading}>
+      {(state: PressableStateCallbackType) => {
         let currentStyle = props.style;
 
         if (typeof currentStyle === "function") {
-          currentStyle = currentStyle({ pressed });
+          currentStyle = currentStyle({ pressed: state.pressed });
         }
+
+        let iconColor = getColorFromStyle(currentStyle);
 
         if (Array.isArray(currentStyle)) {
           const findStyleData = currentStyle.findLast(
             (styleArray) => styleArray && "backgroundColor" in styleArray
           );
-          changeIconColor(findStyleData as StyleProp<ViewStyle>);
-          return currentStyle;
+          iconColor = getColorFromStyle(findStyleData as StyleProp<ViewStyle>);
         }
 
-        changeIconColor(currentStyle);
-        return currentStyle;
+        return (
+          <>
+            <ContentWrapper $disabled={disabled} $isLoading={isLoading}>
+              {typeof children === "function" ? children(state) : children}
+            </ContentWrapper>
+            {isLoading && (
+              <LoadingOverlay>
+                <TransparentLoadingSpinner size={size} color={iconColor} />
+              </LoadingOverlay>
+            )}
+          </>
+        );
       }}
-      disabled={disabled || isLoading}
-    >
-      {(state: PressableStateCallbackType) => (
-        <>
-          <ContentWrapper $disabled={disabled} $isLoading={isLoading}>
-            {typeof children === "function" ? children(state) : children}
-          </ContentWrapper>
-          {isLoading && (
-            <LoadingOverlay>
-              <TransparentLoadingSpinner color={iconColor} />
-            </LoadingOverlay>
-          )}
-        </>
-      )}
     </Pressable>
   );
 }

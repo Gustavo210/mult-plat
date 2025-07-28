@@ -1,9 +1,9 @@
 import { ActivityIndicator, ColorValue, ViewProps } from "react-native";
-import styled, { useTheme } from "styled-components/native";
+import styled, { DefaultTheme, useTheme } from "styled-components/native";
 
-import { IconSize } from "@mobilestock-native/icons";
+import { IconSize } from "../../Icons";
 
-interface LoadingSpinnerProps extends ViewProps {
+export interface LoadingSpinnerProps extends ViewProps {
   title?: string;
   size?: IconSize;
   color?: ColorValue;
@@ -18,7 +18,10 @@ export function LoadingSpinner({
   const theme = useTheme();
 
   function getLoadingSize() {
-    return parseFloat(theme.sizeIcons[size?.toLowerCase?.() || "MD"]);
+    const sizeFormated: keyof DefaultTheme["sizeIcons"] =
+      size?.toLowerCase?.() as keyof DefaultTheme["sizeIcons"];
+    console.log("teste", theme.sizeIcons[sizeFormated || "md"]);
+    return parseFloat(theme.sizeIcons[sizeFormated || "md"]);
   }
 
   return (

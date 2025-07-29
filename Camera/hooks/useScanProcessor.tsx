@@ -1,5 +1,5 @@
 import { BarcodeScanningResult } from "expo-camera";
-import { useCameraConfig } from "../contexts/CameraProvider";
+import { CameraConfigs, useCameraConfig } from "../contexts/CameraProvider";
 
 export interface ProcessedScanResult {
   type: string;
@@ -10,7 +10,7 @@ export interface ProcessedScanResult {
 export function useScanProcessor(): (
   scanResult: BarcodeScanningResult
 ) => ProcessedScanResult {
-  const configs = useCameraConfig();
+  const configs = useCameraConfig<CameraConfigs>();
 
   function processScan(scanResult: BarcodeScanningResult): ProcessedScanResult {
     const rawData = scanResult.data;

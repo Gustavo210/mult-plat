@@ -11,22 +11,25 @@ export interface CameraConfigs {
 
 const CameraConfigContext = createContext<CameraConfigs | null>(null);
 
-export function useCameraConfig(): CameraConfigs {
+export function useCameraConfig<T extends CameraConfigs>(): T {
   const context = useContext(CameraConfigContext);
   if (!context) {
     throw new Error(
       "useCameraConfig deve ser usado dentro de um CameraProvider"
     );
   }
-  return context;
+
+  return context as T;
 }
 
-interface CameraProviderProps {
-  configs: CameraConfigs;
+interface CameraProviderProps<T extends CameraConfigs> {
+  configs: T;
   children: ReactNode;
 }
 
-export function CameraProvider(props: CameraProviderProps) {
+export function CameraProvider<T extends CameraConfigs>(
+  props: CameraProviderProps<T>
+) {
   const { configs, children } = props;
   return (
     <CameraConfigContext.Provider value={configs}>

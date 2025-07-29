@@ -2,6 +2,7 @@ import { BarcodeScanningResult } from "expo-camera";
 import React, { createContext, ReactNode, useContext } from "react";
 
 import { Container } from "@mobilestock-native/container";
+import { CameraConfigs } from "../../contexts/CameraProvider";
 import {
   useCamera,
   UseCameraOptions,
@@ -27,22 +28,43 @@ export function useCameraContext(): UseCameraResult {
   return context;
 }
 
-export interface CameraProps {
+export interface CameraProps<T extends CameraConfigs> {
   onScan: (result: ProcessedScanResult) => void;
   children?: ReactNode;
   options?: UseCameraOptions;
+  isLoading?: boolean;
+  blockScan?: boolean;
+  acceptReads?: (keyof T)[];
 }
 
-export function CameraRoot({ children, onScan, options = {} }: CameraProps) {
+export function CameraRoot<T extends CameraConfigs>({
+  children,
+  onScan,
+  options = {},
+  isLoading = false,
+  blockScan = false,
+  acceptReads,
+}: CameraProps<T>) {
   const cameraHandler = useCamera(options);
   const processScan = useScanProcessor();
   const { headerHeight, headerChildren, mainChildren } = useLayout(children);
 
   function handleCodeScanned(rawResult: BarcodeScanningResult): void {
-    if (cameraHandler.isScanningActive) {
-      const processedResult = processScan(rawResult);
-      onScan(processedResult);
+    if (isLoading || blockScan || !cameraHandler.isScanningActive) {
+      return;
     }
+
+    const processedResult = processScan(rawResult);
+
+    if (
+      acceptReads &&
+      acceptReads.length > 0 &&
+      !acceptReads.includes(processedResult.type)
+    ) {
+      return;
+    }
+
+    onScan(processedResult);
   }
 
   return (

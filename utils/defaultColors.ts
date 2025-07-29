@@ -8,7 +8,7 @@ export default {
   blue50: "#007FFF",
   cyan54: "#2196F3",
   cyan48: "#0ea5e9",
-  shadow: "rgba(0 0 0 0.25)",
+  shadow: "rgba(0, 0, 0, 0.25)",
   purpleShadow: "rgba(101, 13, 73, 0.25)",
   purple42: "#9C27B0",
   red38A20: "#B50D4833",

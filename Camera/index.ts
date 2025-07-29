@@ -1,8 +1,8 @@
 import { CameraRoot } from "./components/CameraRoot";
-import { OverlayPlaceholder } from "./components/OverlayPlaceholder";
-import { ViewPlaceholder } from "./components/ViewPlaceholder";
+import { Header } from "./components/Header";
+import { Overlay } from "./components/Overlay";
 
 export const Camera = Object.assign(CameraRoot, {
-  View: ViewPlaceholder,
-  Overlay: OverlayPlaceholder,
+  Header,
+  Overlay,
 });

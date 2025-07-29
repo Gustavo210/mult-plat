@@ -49,35 +49,17 @@ export function CameraRoot({ children, onScan, options = {} }: CameraProps) {
     cameraHandler.activateManualScan();
   }
 
-  function renderContentWrapper(): ReactNode {
-    const overlayUI = (
-      <ContentOverlay>
-        {!cameraHandler.isScanningActive && (
-          <>
-            <TargetContainer>
-              <TargetImage source={require("../../images/target.png")} />
-              <Icon name="CameraOutline" />
-            </TargetContainer>
-          </>
-        )}
-        {children}
-      </ContentOverlay>
-    );
-
-    if (cameraHandler.isManualActivation) {
-      return (
-        <ActivationArea
-          underlayColor="transparent"
-          onPressIn={handlePressIn}
-          onPressOut={cameraHandler.deactivateManualScan}
-        >
-          {overlayUI}
-        </ActivationArea>
-      );
-    }
-
-    return overlayUI;
-  }
+  const overlayUI = (
+    <ContentOverlay>
+      {!cameraHandler.isScanningActive && (
+        <TargetContainer>
+          <TargetImage source={require("../../images/target.png")} />
+          <Icon name="CameraOutline" />
+        </TargetContainer>
+      )}
+      {children}
+    </ContentOverlay>
+  );
 
   return (
     <CameraContext.Provider value={cameraHandler}>
@@ -92,7 +74,17 @@ export function CameraRoot({ children, onScan, options = {} }: CameraProps) {
                 barcodeTypes: ["qr", "code128"],
               }}
             />
-            {renderContentWrapper()}
+            {cameraHandler.isManualActivation ? (
+              <ActivationArea
+                underlayColor="transparent"
+                onPressIn={handlePressIn}
+                onPressOut={cameraHandler.deactivateManualScan}
+              >
+                {overlayUI}
+              </ActivationArea>
+            ) : (
+              overlayUI
+            )}
           </>
         )}
       </CameraContainer>

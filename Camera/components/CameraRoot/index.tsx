@@ -109,7 +109,7 @@ export function CameraRoot({ children, onScan, options = {} }: CameraProps) {
       {!cameraHandler.isScanningActive && (
         <TargetContainer>
           <TargetImage source={require("../../images/target.png")} />
-          <Icon name="CameraOutline" />
+          <Icon name="CameraOutline" size="LG" color="blue" />
         </TargetContainer>
       )}
       {mainChildren}

@@ -1,8 +1,9 @@
 import { BarcodeScanningResult, CameraView } from "expo-camera";
 import React, { createContext, ReactNode, useContext } from "react";
+import { Vibration } from "react-native";
 import { styled } from "styled-components/native";
 
-import { Container } from "@mobilestock-native/container";
+import { Icon } from "@mobilestock-native/icons";
 import {
   useCamera,
   UseCameraOptions,
@@ -14,7 +15,6 @@ import {
 } from "../../hooks/useScanProcessor";
 import { PausedScreen } from "../PausedScreen";
 
-// interface CameraContextType extends UseCameraResult {}
 const CameraContext = createContext<UseCameraResult | null>(null);
 
 export function useCameraContext(): UseCameraResult {
@@ -44,25 +44,103 @@ export function CameraRoot({ children, onScan, options = {} }: CameraProps) {
     }
   }
 
+  function handlePressIn(): void {
+    Vibration.vibrate(50);
+    cameraHandler.activateManualScan();
+  }
+
+  function renderContentWrapper(): ReactNode {
+    const overlayUI = (
+      <ContentOverlay>
+        {!cameraHandler.isScanningActive && (
+          <>
+            <TargetContainer>
+              <TargetImage source={require("../../images/target.png")} />
+              <Icon name="CameraOutline" />
+            </TargetContainer>
+          </>
+        )}
+        {children}
+      </ContentOverlay>
+    );
+
+    if (cameraHandler.isManualActivation) {
+      return (
+        <ActivationArea
+          underlayColor="transparent"
+          onPressIn={handlePressIn}
+          onPressOut={cameraHandler.deactivateManualScan}
+        >
+          {overlayUI}
+        </ActivationArea>
+      );
+    }
+
+    return overlayUI;
+  }
+
   return (
     <CameraContext.Provider value={cameraHandler}>
-      <Container.Main>
+      <CameraContainer>
         {cameraHandler.cameraState === "PAUSED" ? (
           <PausedScreen />
         ) : (
-          <ExpoCameraView
-            onBarcodeScanned={handleBarcodeScanned}
-            barcodeScannerSettings={{
-              barcodeTypes: ["qr", "code128"],
-            }}
-          />
+          <>
+            <ExpoCameraView
+              onBarcodeScanned={handleBarcodeScanned}
+              barcodeScannerSettings={{
+                barcodeTypes: ["qr", "code128"],
+              }}
+            />
+            {renderContentWrapper()}
+          </>
         )}
-        {children}
-      </Container.Main>
+      </CameraContainer>
     </CameraContext.Provider>
   );
 }
 
+const CameraContainer = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme.colors.container.default};
+  overflow: hidden;
+`;
+
 const ExpoCameraView = styled(CameraView)`
   flex: 1;
+`;
+
+const ContentOverlay = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`;
+
+const ActivationArea = styled.TouchableHighlight`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`;
+
+const TargetContainer = styled.View`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 250px;
+  height: 250px;
+
+  margin-top: -125px;
+  margin-left: -125px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TargetImage = styled.Image`
+  width: 100%;
+  height: 100%;
 `;

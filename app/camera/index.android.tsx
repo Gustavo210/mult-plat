@@ -6,10 +6,6 @@ import { Alert } from "react-native";
 import { styled } from "styled-components/native";
 
 export default function IndexAndroid() {
-  /**
-   * Função que será chamada quando um código for lido.
-   * Para testes, vamos apenas exibir um alerta.
-   */
   function handleScan(result: ProcessedScanResult): void {
     console.log("Resultado Processado:", result);
 
@@ -26,8 +22,6 @@ export default function IndexAndroid() {
         <OverlayContent>
           <InfoText>Aponte para o código</InfoText>
         </OverlayContent>
-
-        <Camera.View />
       </Camera>
     </Container>
   );

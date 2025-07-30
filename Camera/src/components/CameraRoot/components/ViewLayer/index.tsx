@@ -111,8 +111,8 @@ const TargetContainer = styled.View`
 
 const MessageContainer = styled(TargetContainer)`
   background-color: ${({ theme }) => theme.colors.container.default};
-  border-radius: 125px;
-  opacity: 0.6;
+  border-radius: 10px;
+  opacity: 0.8;
 `;
 
 const TargetImage = styled.Image`

@@ -50,66 +50,39 @@ rl.question(
     fs.mkdirSync(routePath, { recursive: true });
     console.log(`Diretório da rota criado: ${routePath}`);
 
-    const layoutContent = `import React from 'react';
-import { Slot } from "expo-router";
+    const layoutContent = `import { Slot } from "expo-router";
 
 export default function Layout() {
   return <Slot/>;
 }
 `;
 
-    const indexContent = `import React from 'react';
-import { styled } from 'styled-components/native';
+    const indexContent = `export default function Index() {
+  return <></>
+}`;
 
-const FallbackContainer = styled.View\`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
-\`;
-
-const FallbackText = styled.Text\`
-  font-size: 24px;
-  color: #333;
-\`;
-
-export default function Index() {
-  return (
-    <FallbackContainer>
-      <FallbackText>Fallback para ${componentName}</FallbackText>
-    </FallbackContainer>
-  );
-}
-`;
-
-    const androidContent = `import React from 'react';
-import { styled } from 'styled-components/native';
+    const androidContent = `import { Container } from "@mobilestock-native/container";
 import { Typography } from "@mobilestock-native/typography";
 
 export default function IndexAndroid() {
   return (
-    <AndroidContainer>
+    <Container.Vertical>
       <Typography>Rota Android para ${componentName}</Typography>
-    </AndroidContainer>
+    </Container.Vertical>
   );
 }
-
-const AndroidContainer = styled.View\`\`;
 `;
 
-    const webContent = `import React from 'react';
-import { styled } from 'styled-components';
+    const webContent = `import { Container } from "@mobilestockweb/container";
 import { Typography } from "@mobilestockweb/typography";
 
 export default function IndexWeb() {
   return (
-    <WebContainer>
+    <Container.Vertical>
       <Typography>Rota Web para ${componentName}</Typography>
-    </WebContainer>
+    </Container.Vertical>
   );
 }
-
-const WebContainer = styled.div\`\`;
 `;
 
     fs.writeFileSync(path.join(routePath, "_layout.tsx"), layoutContent);

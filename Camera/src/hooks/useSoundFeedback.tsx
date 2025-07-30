@@ -1,41 +1,50 @@
-import { useAudioPlayer } from "expo-audio";
+import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
+import { useCallback } from "react";
 import { Vibration } from "react-native";
 
 const shortBipSource = require("../assets/audios/shortBip.mp3");
 const longBipSource = require("../assets/audios/longBip.mp3");
 
 export interface SoundFeedbackResult {
-  playShortBip: () => Promise<void>;
-  playLongBip: () => Promise<void>;
+  playShortBip: () => void;
+  playLongBip: () => void;
 }
 
 export function useSoundFeedback(): SoundFeedbackResult {
   const shortBipPlayer = useAudioPlayer(shortBipSource);
   const longBipPlayer = useAudioPlayer(longBipSource);
 
-  async function playShortBip(): Promise<void> {
+  const shortBipStatus = useAudioPlayerStatus(shortBipPlayer);
+  const longBipStatus = useAudioPlayerStatus(longBipPlayer);
+
+  const playShortBip = useCallback(() => {
     try {
       Vibration.vibrate(50);
-      if (shortBipPlayer) {
-        shortBipPlayer.seekTo(0);
-        await shortBipPlayer.play();
+      if (longBipStatus.playing) {
+        longBipPlayer.pause();
       }
+
+      shortBipPlayer.seekTo(0);
+      shortBipPlayer.play();
     } catch (error) {
       console.error("Erro ao tocar o bip curto", error);
     }
-  }
+  }, [shortBipPlayer, longBipPlayer, longBipStatus.playing]);
 
-  async function playLongBip(): Promise<void> {
+  const playLongBip = useCallback(() => {
     try {
       Vibration.vibrate(150);
-      if (longBipPlayer) {
-        longBipPlayer.seekTo(0);
-        await longBipPlayer.play();
+
+      if (shortBipStatus.playing) {
+        shortBipPlayer.pause();
       }
+
+      longBipPlayer.seekTo(0);
+      longBipPlayer.play();
     } catch (error) {
       console.error("Erro ao tocar o bip longo", error);
     }
-  }
+  }, [longBipPlayer, shortBipPlayer, shortBipStatus.playing]);
 
   return { playShortBip, playLongBip };
 }

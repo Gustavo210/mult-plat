@@ -17,9 +17,7 @@ const CameraConfigContext = createContext<CameraConfigs | null>(null);
 export function useCameraConfig(): CameraConfigs {
   const context = useContext(CameraConfigContext);
   if (!context) {
-    throw new Error(
-      "useCameraConfig deve ser usado dentro de um CameraProvider"
-    );
+    throw new Error("useCameraConfig must be used within a CameraProvider");
   }
 
   return context;

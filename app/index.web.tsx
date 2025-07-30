@@ -1,4 +1,6 @@
 import { navigationButtons } from "@/rotes";
+import { Button } from "@mobilestockweb/button";
+import { Container } from "@mobilestockweb/container";
 import { Spacer } from "@mobilestockweb/spacer";
 import { Typography } from "@mobilestockweb/typography";
 import { router } from "expo-router";
@@ -6,55 +8,57 @@ import React, { Fragment } from "react";
 
 export default function Screen() {
   return (
-    <div style={{ flex: 1, paddingTop: 40, backgroundColor: "#fff" }}>
-      <Typography size="3XL" weight="BOLD" family="POPPINS" align="CENTER">
-        Repositório Mult-plat
-      </Typography>
-      <Spacer size="MD" />
+    <Container.Vertical
+      style={{
+        position: "relative",
+        backgroundColor: "#fff",
+      }}
+      full
+    >
       {navigationButtons.length === 0 && (
         <Fragment>
           <Typography size="MD" weight="MEDIUM" family="POPPINS" align="CENTER">
-            Vocẽ ainda não tem rotas definidas.
+            Você ainda não tem rotas definidas.
           </Typography>
           <Spacer size="MD" />
         </Fragment>
       )}
       {navigationButtons.map((route) => (
-        <div
-          style={{
-            padding: "10px 0",
-          }}
-          key={route as string}
-        >
-          <button onClick={() => router.push(route)}>{route as string}</button>
+        <Container key={route as string}>
+          <Button
+            icon="ChevronRight"
+            iconAlign="END"
+            text={route as string}
+            onClick={() => router.push(route)}
+          />
           <Spacer size="MD" />
-        </div>
+        </Container>
       ))}
-      <div
+      <Container.Vertical
+        padding="SM"
+        align="CENTER"
         style={{
           backgroundColor: "#e5e5e5",
-          position: "fixed",
+          position: "absolute",
           bottom: 0,
-          padding: 20,
-          justifyContent: "center",
-          alignItems: "center",
+          width: "100%",
         }}
       >
         <Typography size="MD" weight="BOLD" family="POPPINS">
           Execute o comando abaixo para adicionar uma rota.
         </Typography>
-        <div
+        <Spacer size="MD" />
+        <Container.Horizontal
+          padding="SM"
           style={{
             borderColor: "#404040",
-            padding: 10,
             borderWidth: 1,
             borderRadius: 10,
-            marginTop: 10,
           }}
         >
           <Typography family="MONOCRAFT">pnpm create-route</Typography>
-        </div>
-      </div>
-    </div>
+        </Container.Horizontal>
+      </Container.Vertical>
+    </Container.Vertical>
   );
 }

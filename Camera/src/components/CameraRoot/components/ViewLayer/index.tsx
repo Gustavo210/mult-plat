@@ -10,13 +10,11 @@ import { useCameraContext } from "../../";
 
 interface CameraViewLayerProps {
   onBarcodeScanned: (result: BarcodeScanningResult) => void;
-  headerHeight: number;
   children: ReactNode;
 }
 
 export function ViewLayer({
   onBarcodeScanned,
-  headerHeight,
   children,
 }: CameraViewLayerProps) {
   const {
@@ -32,7 +30,7 @@ export function ViewLayer({
   }
 
   const overlayUI = (
-    <ContentOverlay $headerHeight={headerHeight}>
+    <ContentOverlay>
       {!isScanningActive ? (
         <MessageContainer>
           <Typography align="CENTER" size="MD" weight="SEMIBOLD">
@@ -53,7 +51,7 @@ export function ViewLayer({
   );
 
   return (
-    <>
+    <CameraViewContainer>
       <ExpoCameraView
         onBarcodeScanned={onBarcodeScanned}
         barcodeScannerSettings={{
@@ -71,20 +69,29 @@ export function ViewLayer({
       ) : (
         overlayUI
       )}
-    </>
+    </CameraViewContainer>
   );
 }
 
-const ExpoCameraView = styled(CameraView)`
+const CameraViewContainer = styled.View`
   flex: 1;
+  position: relative;
 `;
 
-const ContentOverlay = styled.View<{ $headerHeight: number }>`
-  top: ${({ $headerHeight }) => ($headerHeight > 0 ? $headerHeight + 5 : 0)}px;
+const ExpoCameraView = styled(CameraView)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`;
+
+const ContentOverlay = styled.View`
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
+  top: 0;
 `;
 
 const ActivationArea = styled.TouchableHighlight`

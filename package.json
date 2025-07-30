@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
+    "@mobilestock-native/button": "^1.0.2",
     "@mobilestock-native/container": "^0.0.2",
     "@mobilestock-native/icons": "^0.0.5",
     "@mobilestock-native/image": "^0.0.5",

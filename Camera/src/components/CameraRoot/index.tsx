@@ -56,7 +56,7 @@ export function CameraRoot({
   const cameraHandler = useCamera({ isManualActivation: !isAutomaticScan });
   const processScan = useScanProcessor();
   const { playShortBip, playLongBip } = useSoundFeedback();
-  const { headerHeight, headerChildren, mainChildren } = useLayout(children);
+  const { headerChildren, mainChildren } = useLayout(children);
 
   function handleCodeScanned(rawResult: BarcodeScanningResult): void {
     if (isLoading || blockScan || !cameraHandler.isScanningActive) {
@@ -101,10 +101,7 @@ export function CameraRoot({
         {cameraHandler.isPaused ? (
           <PausedScreen />
         ) : (
-          <ViewLayer
-            onBarcodeScanned={handleCodeScanned}
-            headerHeight={headerHeight}
-          >
+          <ViewLayer onBarcodeScanned={handleCodeScanned}>
             {mainChildren}
           </ViewLayer>
         )}

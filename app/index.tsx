@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import { gql } from "@mobilestockweb/graphql-axios-fetcher";
 
 gql`

@@ -98,7 +98,7 @@ export function CameraRoot({
     <CameraContext.Provider value={cameraHandler}>
       <Container.Vertical full>
         {headerChildren}
-        {cameraHandler.cameraState === "PAUSED" ? (
+        {cameraHandler.isPaused ? (
           <PausedScreen />
         ) : (
           <ViewLayer

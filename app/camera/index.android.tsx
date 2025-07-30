@@ -26,7 +26,7 @@ export default function IndexAndroid() {
 
   return (
     <Container>
-      <Camera onScan={handleScan}>
+      <Camera onScan={handleScan} acceptReads={["QRCODE_SKU"]}>
         <Camera.Header.Vertical>
           <Typography>Os códigos validos são:</Typography>
           <Typography>SKU</Typography>

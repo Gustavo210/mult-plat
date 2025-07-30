@@ -9,27 +9,27 @@ import { styled } from "styled-components/native";
 import { useCameraContext } from "../CameraRoot";
 
 export function PausedScreen() {
-  const { cameraState, reactivate } = useCameraContext();
+  const camera = useCameraContext();
 
-  if (cameraState !== "PAUSED") {
+  if (!camera.isPaused) {
     return null;
   }
 
   return (
     <Container.Main>
-      <InativeCamera onPress={reactivate}>
+      <InactiveCamera onPress={camera.reactivate}>
         <Icon name="CameraOff" size="3XL" />
         <Spacer />
         <Container.Vertical align="CENTER" gap="MD">
           <Typography>Câmera pausada para poupar bateria.</Typography>
           <Typography>Toque na tela para reativar a câmera.</Typography>
         </Container.Vertical>
-      </InativeCamera>
+      </InactiveCamera>
     </Container.Main>
   );
 }
 
-const InativeCamera = styled(TouchableOpacity)`
+const InactiveCamera = styled(TouchableOpacity)`
   justify-content: center;
   align-items: center;
   flex: 1;

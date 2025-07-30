@@ -3,19 +3,13 @@ import { PermissionResponse, useCameraPermissions } from "expo-camera";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, AppState, Linking } from "react-native";
 
-export type CameraState =
-  | "LOADING"
-  | "NO_PERMISSION"
-  | "UNAVAILABLE"
-  | "READY"
-  | "PAUSED";
-
 export interface UseCameraOptions {
   isManualActivation?: boolean;
 }
 
 export interface UseCameraResult {
-  cameraState: CameraState;
+  status: "LOADING" | "NO_PERMISSION" | "UNAVAILABLE" | "READY";
+  isPaused: boolean;
   permission: PermissionResponse | null;
   requestPermission: () => Promise<void>;
   reactivate: () => void;
@@ -29,12 +23,12 @@ export interface UseCameraResult {
 export function useCamera({
   isManualActivation = true,
 }: UseCameraOptions = {}): UseCameraResult {
-  const inactivityTimeout = 30000;
   const [permission, requestExpoPermission] = useCameraPermissions();
-  const [cameraState, setCameraState] = useState<CameraState>("LOADING");
+  const [isPaused, setIsPaused] = useState(false);
   const [isManuallyActive, setIsManuallyActive] = useState(false);
   const isFocused = useIsFocused();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const inactivityTimeout = 30000;
 
   function stopInactivityTimer(): void {
     if (timeoutRef.current) {
@@ -43,21 +37,18 @@ export function useCamera({
     }
   }
 
-  const resetInactivityTimer = useCallback(
-    function (): void {
-      stopInactivityTimer();
-      if (inactivityTimeout > 0) {
-        timeoutRef.current = setTimeout(() => {
-          setCameraState("PAUSED");
-        }, inactivityTimeout);
-      }
-    },
-    [inactivityTimeout]
-  );
+  const resetInactivityTimer = useCallback(function (): void {
+    stopInactivityTimer();
+    if (inactivityTimeout > 0) {
+      timeoutRef.current = setTimeout(() => {
+        setIsPaused(true);
+      }, inactivityTimeout);
+    }
+  }, []);
 
   function reactivate(): void {
-    if (cameraState === "PAUSED") {
-      setCameraState("READY");
+    if (isPaused) {
+      setIsPaused(false);
       resetInactivityTimer();
     }
   }
@@ -87,30 +78,6 @@ export function useCamera({
 
   useEffect(
     function () {
-      if (!isFocused) {
-        setCameraState("UNAVAILABLE");
-        return;
-      }
-
-      if (!permission) {
-        setCameraState("LOADING");
-        return;
-      }
-
-      if (!permission.granted) {
-        setCameraState("NO_PERMISSION");
-        return;
-      }
-
-      if (cameraState !== "READY" && cameraState !== "PAUSED") {
-        setCameraState("READY");
-      }
-    },
-    [permission, isFocused, cameraState]
-  );
-
-  useEffect(
-    function () {
       if (!permission?.granted) {
         requestPermission();
       }
@@ -118,7 +85,7 @@ export function useCamera({
       const subscription = AppState.addEventListener(
         "change",
         (nextAppState) => {
-          if (nextAppState === "active") {
+          if (nextAppState === "active" && !permission?.granted) {
             requestExpoPermission();
           }
         }
@@ -126,23 +93,33 @@ export function useCamera({
 
       return function () {
         subscription.remove();
-        stopInactivityTimer();
       };
     },
     [requestPermission, requestExpoPermission, permission?.granted]
   );
 
+  let status: UseCameraResult["status"] = "LOADING";
+  if (permission) {
+    if (!isFocused) {
+      status = "UNAVAILABLE";
+    } else if (!permission.granted) {
+      status = "NO_PERMISSION";
+    } else {
+      status = "READY";
+    }
+  }
+
   useEffect(
     function () {
-      if (cameraState === "READY" && isFocused) {
+      const shouldRunTimer = status === "READY" && !isPaused && isFocused;
+      if (shouldRunTimer) {
         resetInactivityTimer();
       } else {
         stopInactivityTimer();
       }
-
       return stopInactivityTimer;
     },
-    [cameraState, isFocused, resetInactivityTimer]
+    [status, isPaused, isFocused, resetInactivityTimer]
   );
 
   function activateManualScan(): void {
@@ -158,10 +135,13 @@ export function useCamera({
   }
 
   const isScanningActive =
-    cameraState === "READY" && (!isManualActivation || isManuallyActive);
+    status === "READY" &&
+    !isPaused &&
+    (!isManualActivation || isManuallyActive);
 
   return {
-    cameraState,
+    status,
+    isPaused,
     permission,
     requestPermission,
     reactivate,

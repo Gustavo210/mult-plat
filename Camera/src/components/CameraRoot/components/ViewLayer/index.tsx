@@ -33,7 +33,9 @@ export function ViewLayer({
     <ContentOverlay $headerHeight={headerHeight}>
       {!isScanningActive && (
         <TargetContainer>
-          <TargetImage source={require("../../../../images/target.png")} />
+          <TargetImage
+            source={require("../../../../assets/images/target.png")}
+          />
           <Icon name="CameraOutline" size="LG" color="blue" />
         </TargetContainer>
       )}

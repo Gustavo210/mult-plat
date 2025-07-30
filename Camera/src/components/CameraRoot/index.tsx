@@ -13,6 +13,10 @@ import {
   ProcessedScanResult,
   useScanProcessor,
 } from "../../hooks/useScanProcessor";
+import {
+  SoundFeedbackResult,
+  useSoundFeedback,
+} from "../../hooks/useSoundFeedback";
 import { PausedScreen } from "../PausedScreen";
 import { ViewLayer } from "./components/ViewLayer";
 
@@ -29,7 +33,10 @@ export function useCameraContext(): UseCameraResult {
 }
 
 export interface CameraProps {
-  onScan: (result: ProcessedScanResult) => void;
+  onScan: (
+    result: ProcessedScanResult,
+    soundControls: SoundFeedbackResult
+  ) => void;
   children?: ReactNode;
   options?: UseCameraOptions;
   isLoading?: boolean;
@@ -47,6 +54,7 @@ export function CameraRoot({
 }: CameraProps) {
   const cameraHandler = useCamera(options);
   const processScan = useScanProcessor();
+  const { playShortBip, playLongBip } = useSoundFeedback();
   const { headerHeight, headerChildren, mainChildren } = useLayout(children);
 
   function handleCodeScanned(rawResult: BarcodeScanningResult): void {
@@ -64,7 +72,8 @@ export function CameraRoot({
       return;
     }
 
-    onScan(processedResult);
+    if (processedResult.type !== "UNKNOWN") playShortBip();
+    onScan(processedResult, { playShortBip, playLongBip });
   }
 
   return (

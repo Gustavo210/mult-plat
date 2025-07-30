@@ -5,13 +5,16 @@ export interface ScanConfig {
   format: (data: string) => string;
 }
 
-export interface CameraConfigs {
-  [key: string]: ScanConfig;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface CameraConfigRegistry {}
+
+export type CameraConfigs = {
+  [K in keyof CameraConfigRegistry]: ScanConfig;
+};
 
 const CameraConfigContext = createContext<CameraConfigs | null>(null);
 
-export function useCameraConfig<T extends CameraConfigs>(): T {
+export function useCameraConfig(): CameraConfigs {
   const context = useContext(CameraConfigContext);
   if (!context) {
     throw new Error(
@@ -19,17 +22,15 @@ export function useCameraConfig<T extends CameraConfigs>(): T {
     );
   }
 
-  return context as T;
+  return context;
 }
 
-interface CameraProviderProps<T extends CameraConfigs> {
-  configs: T;
+interface CameraProviderProps {
+  configs: CameraConfigs;
   children: ReactNode;
 }
 
-export function CameraProvider<T extends CameraConfigs>(
-  props: CameraProviderProps<T>
-) {
+export function CameraProvider(props: CameraProviderProps) {
   const { configs, children } = props;
   return (
     <CameraConfigContext.Provider value={configs}>

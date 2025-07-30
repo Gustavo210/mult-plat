@@ -28,23 +28,23 @@ export function useCameraContext(): UseCameraResult {
   return context;
 }
 
-export interface CameraProps<T extends CameraConfigs> {
+export interface CameraProps {
   onScan: (result: ProcessedScanResult) => void;
   children?: ReactNode;
   options?: UseCameraOptions;
   isLoading?: boolean;
   blockScan?: boolean;
-  acceptReads?: (keyof T)[];
+  acceptReads?: (keyof CameraConfigs)[];
 }
 
-export function CameraRoot<T extends CameraConfigs>({
+export function CameraRoot({
   children,
   onScan,
   options = {},
   isLoading = false,
   blockScan = false,
   acceptReads,
-}: CameraProps<T>) {
+}: CameraProps) {
   const cameraHandler = useCamera(options);
   const processScan = useScanProcessor();
   const { headerHeight, headerChildren, mainChildren } = useLayout(children);
@@ -59,7 +59,7 @@ export function CameraRoot<T extends CameraConfigs>({
     if (
       acceptReads &&
       acceptReads.length > 0 &&
-      !acceptReads.includes(processedResult.type)
+      !acceptReads.includes(processedResult.type as keyof CameraConfigs)
     ) {
       return;
     }

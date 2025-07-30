@@ -1,5 +1,5 @@
 import { Camera } from "@/Camera";
-import { ProcessedScanResult } from "@/Camera/hooks/useScanProcessor";
+import { ProcessedScanResult } from "@/Camera/src/hooks/useScanProcessor";
 import { Typography } from "@mobilestock-native/typography";
 import React from "react";
 import { Alert } from "react-native";

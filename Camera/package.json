@@ -1,0 +1,28 @@
+{
+  "name": "@storybook-native/camera",
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "directory": "./dist",
+    "linkDirectory": false
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "minify": true,
+    "dts": true,
+    "clean": true,
+    "tsconfig": "../../../../../tsconfig.base.json"
+  },
+  "scripts": {
+    "prepublishOnly": "pnpm --filter @monorepo/tsup-generate-externals start"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-native": "catalog:",
+    "styled-components": "catalog:"
+  }
+}

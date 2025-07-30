@@ -2,7 +2,7 @@ import { BarcodeScanningResult } from "expo-camera";
 import { CameraConfigs, useCameraConfig } from "../contexts/CameraProvider";
 
 export interface ProcessedScanResult {
-  type: string;
+  type: keyof CameraConfigs | "UNKNOWN";
   formattedData: string;
   rawData: string;
 }
@@ -10,16 +10,16 @@ export interface ProcessedScanResult {
 export function useScanProcessor(): (
   scanResult: BarcodeScanningResult
 ) => ProcessedScanResult {
-  const configs = useCameraConfig<CameraConfigs>();
+  const configs = useCameraConfig();
 
   function processScan(scanResult: BarcodeScanningResult): ProcessedScanResult {
     const rawData = scanResult.data;
 
     for (const key in configs) {
-      const config = configs[key];
+      const config = configs[key as keyof CameraConfigs];
       if (config.match.test(rawData)) {
         return {
-          type: key,
+          type: key as keyof CameraConfigs,
           formattedData: config.format(rawData),
           rawData,
         };

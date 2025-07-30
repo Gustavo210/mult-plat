@@ -96,15 +96,17 @@ export default function RootLayout() {
                 );
               },
               headerRight: () => (
-                <Button
-                  text="Configs"
-                  icon="Settings"
-                  padding="NONE"
-                  backgroundColor="DEFAULT_LIGHT"
-                  size="SM"
-                  iconAlign="START"
-                  onPress={() => router.push("/configs")}
-                />
+                <ContainerHorizontal>
+                  <Button
+                    text="Configs"
+                    icon="Settings"
+                    padding="NONE"
+                    backgroundColor="DEFAULT_LIGHT"
+                    size="SM"
+                    iconAlign="START"
+                    onPress={() => router.push("/configs")}
+                  />
+                </ContainerHorizontal>
               ),
               title: "Expo Router",
             }}
@@ -130,6 +132,9 @@ export default function RootLayout() {
               name="configs"
               options={{
                 headerShown: false,
+                contentStyle: {
+                  backgroundColor: "transparent",
+                },
                 animation: "fade_from_bottom",
                 presentation: "transparentModal",
               }}

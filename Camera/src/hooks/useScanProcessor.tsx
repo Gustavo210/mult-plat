@@ -1,4 +1,5 @@
 import { BarcodeScanningResult } from "expo-camera";
+import { useCallback } from "react";
 import { CameraConfigs, useCameraConfig } from "../contexts/CameraProvider";
 
 export interface ProcessedScanResult {
@@ -12,27 +13,30 @@ export function useScanProcessor(): (
 ) => ProcessedScanResult {
   const configs = useCameraConfig();
 
-  function processScan(scanResult: BarcodeScanningResult): ProcessedScanResult {
-    const rawData = scanResult.data;
+  const processScan = useCallback(
+    function (scanResult: BarcodeScanningResult): ProcessedScanResult {
+      const rawData = scanResult.data;
 
-    for (const key in configs) {
-      const config = configs[key as keyof CameraConfigs];
-      config.match.lastIndex = 0;
-      if (config.match.test(rawData)) {
-        return {
-          type: key as keyof CameraConfigs,
-          formattedData: config.format(rawData),
-          rawData,
-        };
+      for (const key in configs) {
+        const config = configs[key as keyof CameraConfigs];
+        config.match.lastIndex = 0;
+        if (config.match.test(rawData)) {
+          return {
+            type: key as keyof CameraConfigs,
+            formattedData: config.format(rawData),
+            rawData,
+          };
+        }
       }
-    }
 
-    return {
-      type: "UNKNOWN",
-      formattedData: rawData,
-      rawData,
-    };
-  }
+      return {
+        type: "UNKNOWN",
+        formattedData: rawData,
+        rawData,
+      };
+    },
+    [configs]
+  );
 
   return processScan;
 }

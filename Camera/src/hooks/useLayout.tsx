@@ -1,4 +1,4 @@
-import React, { isValidElement, ReactNode, useState } from "react";
+import React, { isValidElement, ReactNode, useMemo, useState } from "react";
 import { LayoutChangeEvent } from "react-native";
 import { Header } from "../components/Header";
 
@@ -25,37 +25,41 @@ export function useLayout(children: ReactNode): UseCameraLayoutResult {
     setHeaderHeight(height);
   }
 
-  const headerChildren: ReactNode[] = [];
-  const mainChildren: ReactNode[] = [];
+  const { headerChildren, mainChildren } = useMemo(() => {
+    const headerChildren: ReactNode[] = [];
+    const mainChildren: ReactNode[] = [];
 
-  let childrenToIterate = children;
-  if (React.isValidElement(children) && children.type === React.Fragment) {
-    childrenToIterate = (
-      children as React.ReactElement<{ children?: ReactNode }>
-    ).props.children;
-  }
-
-  React.Children.toArray(childrenToIterate).forEach((child) => {
-    if (isValidElement(child) && isComponentWithDisplayName(child.type)) {
-      if (
-        [Header.Vertical.displayName, Header.Horizontal.displayName].includes(
-          child.type.displayName
-        )
-      ) {
-        const clonedHeader = React.cloneElement(
-          child as React.ReactElement<{
-            onLayout?: (event: LayoutChangeEvent) => void;
-          }>,
-          {
-            onLayout: handleHeaderLayout,
-          }
-        );
-        headerChildren.push(clonedHeader);
-      }
-    } else {
-      mainChildren.push(child);
+    let childrenToIterate = children;
+    if (React.isValidElement(children) && children.type === React.Fragment) {
+      childrenToIterate = (
+        children as React.ReactElement<{ children?: ReactNode }>
+      ).props.children;
     }
-  });
+
+    React.Children.toArray(childrenToIterate).forEach((child) => {
+      if (isValidElement(child) && isComponentWithDisplayName(child.type)) {
+        if (
+          [Header.Vertical.displayName, Header.Horizontal.displayName].includes(
+            child.type.displayName
+          )
+        ) {
+          const clonedHeader = React.cloneElement(
+            child as React.ReactElement<{
+              onLayout?: (event: LayoutChangeEvent) => void;
+            }>,
+            {
+              onLayout: handleHeaderLayout,
+            }
+          );
+          headerChildren.push(clonedHeader);
+        }
+      } else {
+        mainChildren.push(child);
+      }
+    });
+
+    return { headerChildren, mainChildren };
+  }, [children]);
 
   return { headerHeight, headerChildren, mainChildren };
 }

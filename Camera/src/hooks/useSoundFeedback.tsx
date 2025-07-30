@@ -27,7 +27,7 @@ export function useSoundFeedback(): SoundFeedbackResult {
       shortBipPlayer.seekTo(0);
       shortBipPlayer.play();
     } catch (error) {
-      console.error("Erro ao tocar o bip curto", error);
+      console.error("Error playing short bip", error);
     }
   }, [shortBipPlayer, longBipPlayer, longBipStatus.playing]);
 
@@ -42,7 +42,7 @@ export function useSoundFeedback(): SoundFeedbackResult {
       longBipPlayer.seekTo(0);
       longBipPlayer.play();
     } catch (error) {
-      console.error("Erro ao tocar o bip longo", error);
+      console.error("Error playing long bip", error);
     }
   }, [longBipPlayer, shortBipPlayer, shortBipStatus.playing]);
 

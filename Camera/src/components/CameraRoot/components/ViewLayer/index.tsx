@@ -4,6 +4,8 @@ import { Vibration } from "react-native";
 import { styled } from "styled-components/native";
 
 import { Icon } from "@mobilestock-native/icons";
+import { Spacer } from "@mobilestock-native/spacer";
+import { Typography } from "@mobilestock-native/typography";
 import { useCameraContext } from "../../";
 
 interface CameraViewLayerProps {
@@ -31,12 +33,19 @@ export function ViewLayer({
 
   const overlayUI = (
     <ContentOverlay $headerHeight={headerHeight}>
-      {!isScanningActive && (
+      {!isScanningActive ? (
+        <MessageContainer>
+          <Typography align="CENTER" size="MD" weight="SEMIBOLD">
+            Pressione e segure para escanear
+          </Typography>
+          <Spacer size="SM" />
+          <Icon name="Fingerprint" size="3XL" color="blue" />
+        </MessageContainer>
+      ) : (
         <TargetContainer>
           <TargetImage
             source={require("../../../../assets/images/target.png")}
           />
-          <Icon name="CameraOutline" size="LG" color="blue" />
         </TargetContainer>
       )}
       {children}
@@ -98,6 +107,12 @@ const TargetContainer = styled.View`
   margin-left: -125px;
   justify-content: center;
   align-items: center;
+`;
+
+const MessageContainer = styled(TargetContainer)`
+  background-color: ${({ theme }) => theme.colors.container.default};
+  border-radius: 125px;
+  opacity: 0.6;
 `;
 
 const TargetImage = styled.Image`

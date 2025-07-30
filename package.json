@@ -9,11 +9,12 @@
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
     "@mobilestock-native/container": "^0.0.2",
-    "@mobilestock-native/icons": "^0.0.4",
+    "@mobilestock-native/icons": "^0.0.5",
     "@mobilestock-native/image": "^0.0.5",
     "@mobilestock-native/spacer": "^0.0.6",
     "@mobilestock-native/tools": "^0.0.7",
     "@mobilestock-native/typography": "^0.0.4",
+    "@mobilestock-native/loading-spinner": "^0.0.8",
     "@mobilestockweb/container": "^0.0.1",
     "@mobilestockweb/image": "^0.0.3",
     "@mobilestockweb/lazy-image": "^0.0.11",

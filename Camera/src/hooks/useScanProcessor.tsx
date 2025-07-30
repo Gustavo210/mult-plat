@@ -17,6 +17,7 @@ export function useScanProcessor(): (
 
     for (const key in configs) {
       const config = configs[key as keyof CameraConfigs];
+      config.match.lastIndex = 0;
       if (config.match.test(rawData)) {
         return {
           type: key as keyof CameraConfigs,

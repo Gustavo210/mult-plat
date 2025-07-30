@@ -2,12 +2,11 @@ import { BarcodeScanningResult } from "expo-camera";
 import React, { createContext, ReactNode, useContext } from "react";
 
 import { Container } from "@mobilestock-native/container";
+import { Icon } from "@mobilestock-native/icons";
+import { LoadingSpinner } from "@mobilestock-native/loading-spinner";
+import { Typography } from "@mobilestock-native/typography";
 import { CameraConfigs } from "../../contexts/CameraProvider";
-import {
-  useCamera,
-  UseCameraOptions,
-  UseCameraResult,
-} from "../../hooks/useCamera";
+import { useCamera, UseCameraResult } from "../../hooks/useCamera";
 import { useLayout } from "../../hooks/useLayout";
 import {
   ProcessedScanResult,
@@ -38,21 +37,23 @@ export interface CameraProps {
     soundControls: SoundFeedbackResult
   ) => void;
   children?: ReactNode;
-  options?: UseCameraOptions;
   isLoading?: boolean;
   blockScan?: boolean;
   acceptReads?: (keyof CameraConfigs)[];
+  isAutomaticScan?: boolean;
+  disableAutomaticBip?: boolean;
 }
 
 export function CameraRoot({
   children,
   onScan,
-  options = {},
   isLoading = false,
   blockScan = false,
   acceptReads,
+  isAutomaticScan = false,
+  disableAutomaticBip = false,
 }: CameraProps) {
-  const cameraHandler = useCamera(options);
+  const cameraHandler = useCamera({ isManualActivation: !isAutomaticScan });
   const processScan = useScanProcessor();
   const { playShortBip, playLongBip } = useSoundFeedback();
   const { headerHeight, headerChildren, mainChildren } = useLayout(children);
@@ -73,8 +74,24 @@ export function CameraRoot({
       return;
     }
 
-    if (processedResult.type !== "UNKNOWN") playShortBip();
+    if (processedResult.type !== "UNKNOWN" && !disableAutomaticBip) {
+      playShortBip();
+    }
+
     onScan(processedResult, { playShortBip, playLongBip });
+  }
+
+  if (isLoading) return <LoadingSpinner size="3XL" title="Carregando..." />;
+
+  if (blockScan) {
+    return (
+      <Container.Vertical full align="CENTER">
+        <Icon name="AlertTriangle" size="3XL" color="orange" />
+        <Typography size="LG" weight="EXTRABOLD">
+          Escaneamento bloqueado
+        </Typography>
+      </Container.Vertical>
+    );
   }
 
   return (

@@ -11,7 +11,6 @@ export type CameraState =
   | "PAUSED";
 
 export interface UseCameraOptions {
-  inactivityTimeout?: number;
   isManualActivation?: boolean;
 }
 
@@ -27,9 +26,10 @@ export interface UseCameraResult {
   resetInactivityTimer: () => void;
 }
 
-export function useCamera(options: UseCameraOptions): UseCameraResult {
-  const { inactivityTimeout = 30000, isManualActivation = true } = options;
-
+export function useCamera({
+  isManualActivation = true,
+}: UseCameraOptions = {}): UseCameraResult {
+  const inactivityTimeout = 30000;
   const [permission, requestExpoPermission] = useCameraPermissions();
   const [cameraState, setCameraState] = useState<CameraState>("LOADING");
   const [isManuallyActive, setIsManuallyActive] = useState(false);

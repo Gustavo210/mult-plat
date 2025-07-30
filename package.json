@@ -3,8 +3,9 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
-    "create-route": "node create-route.js"
+    "start": "pnpm codegen && expo start",
+    "create-route": "node create-route.js",
+    "codegen": "pnpm graphql-codegen --config graphql-codegen.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
@@ -21,6 +22,7 @@
     "@mobilestockweb/button": "^1.0.1",
     "@mobilestockweb/clickable": "^1.0.0",
     "@mobilestockweb/container": "^0.0.2",
+    "@mobilestockweb/graphql-axios-fetcher": "^0.0.1",
     "@mobilestockweb/icons": "^0.0.4",
     "@mobilestockweb/image": "^0.0.5",
     "@mobilestockweb/lazy-image": "^0.0.13",
@@ -32,6 +34,8 @@
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
     "@shopify/flash-list": "^1.8.3",
+    "@tanstack/react-query": "^5.83.0",
+    "axios": "^1.11.0",
     "expo": "~53.0.12",
     "expo-blur": "~14.1.5",
     "expo-constants": "~17.1.6",
@@ -60,6 +64,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-generic-sdk": "^4.0.2",
+    "@graphql-codegen/typescript-operations": "^4.6.1",
+    "@graphql-codegen/typescript-react-query": "^6.1.1",
     "@types/react": "~19.0.10",
     "@types/react-native-vector-icons": "^6.4.18",
     "eslint": "^9.25.0",
@@ -67,5 +76,9 @@
     "typescript": "~5.8.3"
   },
   "private": true,
+  "graphql": {
+    "schema": "https://rickandmortyapi.com/graphql",
+    "documents": "**/*.tsx"
+  },
   "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }

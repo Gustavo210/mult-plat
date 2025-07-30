@@ -24,6 +24,7 @@ export interface UseCameraResult {
   activateManualScan: () => void;
   deactivateManualScan: () => void;
   isManualActivation?: boolean;
+  resetInactivityTimer: () => void;
 }
 
 export function useCamera(options: UseCameraOptions): UseCameraResult {
@@ -42,7 +43,7 @@ export function useCamera(options: UseCameraOptions): UseCameraResult {
     }
   }
 
-  const startInactivityTimer = useCallback(
+  const resetInactivityTimer = useCallback(
     function (): void {
       stopInactivityTimer();
       if (inactivityTimeout > 0) {
@@ -57,7 +58,7 @@ export function useCamera(options: UseCameraOptions): UseCameraResult {
   function reactivate(): void {
     if (cameraState === "PAUSED") {
       setCameraState("READY");
-      startInactivityTimer();
+      resetInactivityTimer();
     }
   }
 
@@ -134,14 +135,14 @@ export function useCamera(options: UseCameraOptions): UseCameraResult {
   useEffect(
     function () {
       if (cameraState === "READY" && isFocused) {
-        startInactivityTimer();
+        resetInactivityTimer();
       } else {
         stopInactivityTimer();
       }
 
       return stopInactivityTimer;
     },
-    [cameraState, isFocused, startInactivityTimer]
+    [cameraState, isFocused, resetInactivityTimer]
   );
 
   function activateManualScan(): void {
@@ -168,5 +169,6 @@ export function useCamera(options: UseCameraOptions): UseCameraResult {
     activateManualScan,
     deactivateManualScan,
     isManualActivation,
+    resetInactivityTimer,
   };
 }

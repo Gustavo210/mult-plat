@@ -62,6 +62,7 @@ export function CameraRoot({
       return;
     }
 
+    cameraHandler.resetInactivityTimer();
     const processedResult = processScan(rawResult);
 
     if (

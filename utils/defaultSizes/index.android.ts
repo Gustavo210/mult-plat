@@ -11,6 +11,7 @@ export const defaultSizes = {
     "3xl": tools.calculateFontSize("2rem"),
   },
   space: {
+    none: 0,
     xs: tools.calculateRemToPx("0.75rem"),
     sm: tools.calculateRemToPx("0.875rem"),
     md: tools.calculateRemToPx("1rem"),

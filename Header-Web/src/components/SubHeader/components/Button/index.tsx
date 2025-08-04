@@ -2,7 +2,7 @@ import { Button, ButtonProps } from "@mobilestockweb/button";
 
 interface HeaderButtonProps extends Omit<ButtonProps, "icon" | "text"> {
   icon: ButtonProps["icon"];
-  text: string;
+  text: ButtonProps["text"];
 }
 
 export function HeaderButton({ icon, text, ...rest }: HeaderButtonProps) {

@@ -33,7 +33,7 @@ export function Header({
   }, [context]);
 
   return (
-    <BaseContainer>
+    <>
       <BackgroundContainer>
         <Container.Main>
           <Container.Horizontal align="BETWEEN_CENTER" padding="XS">
@@ -92,14 +92,12 @@ export function Header({
       </BackgroundContainer>
       {context?.subHeader && (
         <BackGroundSubHeader>
-          <Container.Main>
-            <Container.Horizontal align="BETWEEN_CENTER">
-              {context?.subHeader}
-            </Container.Horizontal>
-          </Container.Main>
+          <Container.Horizontal align="BETWEEN_CENTER">
+            {context?.subHeader}
+          </Container.Horizontal>
         </BackGroundSubHeader>
       )}
-    </BaseContainer>
+    </>
   );
 }
 
@@ -117,5 +115,3 @@ const BackGroundSubHeader = styled.div`
   background-color: ${({ theme }) => theme.colors.header.sub};
   border-radius: 0 0 0.4rem 0.4rem;
 `;
-
-const BaseContainer = styled.div``;

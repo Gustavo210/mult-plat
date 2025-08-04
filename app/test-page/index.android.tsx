@@ -1,5 +1,5 @@
-import { SubHeader } from "@/Header-Native/src";
 import { Container } from "@mobilestock-native/container";
+import { SubHeader } from "@mobilestock-native/header";
 import { Typography } from "@mobilestock-native/typography";
 
 export default function IndexAndroid() {

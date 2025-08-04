@@ -1,5 +1,5 @@
-import { SubHeader } from "@/Header-Web/src";
 import { Container } from "@mobilestockweb/container";
+import { SubHeader } from "@mobilestockweb/header";
 import { Typography } from "@mobilestockweb/typography";
 
 export default function IndexWeb() {
@@ -15,7 +15,7 @@ export default function IndexWeb() {
           />
           <SubHeader.Button
             icon="CreditCard"
-            text="Look Pay"
+            text="LookPay"
             iconAlign="BEFORE-TEXT"
             variant="TRANSPARENT"
           />

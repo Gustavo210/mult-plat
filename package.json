@@ -18,6 +18,8 @@
     "@mobilestock-native/spacer": "^0.0.6",
     "@mobilestock-native/tools": "^0.0.7",
     "@mobilestock-native/typography": "^0.0.6",
+    "@mobilestock-native/header": "^0.0.1",
+    "@mobilestockweb/header": "^0.0.1",
     "@mobilestockweb/avatar": "^0.0.15",
     "@mobilestockweb/button": "^1.0.3",
     "@mobilestockweb/clickable": "^1.0.1",

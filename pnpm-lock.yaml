@@ -20,6 +20,9 @@ importers:
       '@mobilestock-native/container':
         specifier: ^0.0.3
         version: 0.0.3(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestock-native/header':
+        specifier: ^0.0.1
+        version: 0.0.1(react-dom@19.0.0(react@19.0.0))(react-native-svg@15.12.0(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       '@mobilestock-native/icons':
         specifier: ^0.0.4
         version: 0.0.4(react-native-svg@15.12.0(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
@@ -53,6 +56,9 @@ importers:
       '@mobilestockweb/graphql-axios-fetcher':
         specifier: ^0.0.1
         version: 0.0.1
+      '@mobilestockweb/header':
+        specifier: ^0.0.1
+        version: 0.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       '@mobilestockweb/icons':
         specifier: ^0.0.5
         version: 0.0.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
@@ -1314,6 +1320,13 @@ packages:
       react-native: 0.74.5
       styled-components: ^6.1.8
 
+  '@mobilestock-native/header@0.0.1':
+    resolution: {integrity: sha512-9cSMljQt/dYXyMhwugbcjMNYJIUHAHxXBHkwXOR8IzsN+2/mHMQwt36ecjabP+iC/VYB0+Pj/z6fzDSDht2KJA==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+      styled-components: ^6.1.8
+
   '@mobilestock-native/icons@0.0.4':
     resolution: {integrity: sha512-GX6tdyB8uhF7Fw13JFX0uhi0qnUUAvgxbILu+FuMcpFsfEyRyu+Mi9GfDAVhDaLDu3oluZiTlZe4dOpfpjPvmA==}
     peerDependencies:
@@ -1401,6 +1414,13 @@ packages:
 
   '@mobilestockweb/graphql-axios-fetcher@0.0.1':
     resolution: {integrity: sha512-s+O3fxMtG64XyGRnNnlSwACb1u9w5qmKhWzKMcdpfggwglttmdl6PipH9K3sf2gudXt8qj+7AgWWAKkgDP6B4g==}
+
+  '@mobilestockweb/header@0.0.1':
+    resolution: {integrity: sha512-ugQBojlOzi4vJR2lquce+1Nb+62U+zyFPdz7kM3QRTh73gWHhskk56C9VjD9H67IcruZSR3xfYyR6Yum8WYZng==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+      styled-components: ^6.1.8
 
   '@mobilestockweb/icons@0.0.5':
     resolution: {integrity: sha512-Ep3oAhxqNCcQYVxTajyjOOaCFNJTciT/ccKbWJj7B3YU+YrebPBa8GnkI2i2hYFzYE5rCbPiCQAi80/V2JP8Tw==}
@@ -6971,6 +6991,20 @@ snapshots:
       react-native: 0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0)
       styled-components: 6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
+  '@mobilestock-native/header@0.0.1(react-dom@19.0.0(react@19.0.0))(react-native-svg@15.12.0(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+    dependencies:
+      '@mobilestock-native/button': 1.0.3(react-dom@19.0.0(react@19.0.0))(react-native-svg@15.12.0(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestock-native/clickable': 1.0.1(react-dom@19.0.0(react@19.0.0))(react-native-svg@15.12.0(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestock-native/container': 0.0.3(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestock-native/image': 0.0.5(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestock-native/typography': 0.0.6(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      styled-components: 6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+    transitivePeerDependencies:
+      - react-native
+      - react-native-svg
+
   '@mobilestock-native/icons@0.0.4(react-native-svg@15.12.0(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.4(@babel/core@7.27.7)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:
       react: 19.0.0
@@ -7063,6 +7097,17 @@ snapshots:
       styled-components: 6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   '@mobilestockweb/graphql-axios-fetcher@0.0.1': {}
+
+  '@mobilestockweb/header@0.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+    dependencies:
+      '@mobilestockweb/button': 1.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestockweb/clickable': 1.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestockweb/container': 0.0.3(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestockweb/image': 0.0.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@mobilestockweb/typography': 0.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      styled-components: 6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   '@mobilestockweb/icons@0.0.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(styled-components@6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:

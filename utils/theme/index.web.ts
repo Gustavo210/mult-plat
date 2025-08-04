@@ -48,7 +48,7 @@ export const theme = {
       warning: defaultColors.orange60,
     },
     header: {
-      background: defaultColors.secondary,
+      background: defaultColors.primary,
       color: defaultColors.primary,
       sub: defaultColors.grey80,
     },

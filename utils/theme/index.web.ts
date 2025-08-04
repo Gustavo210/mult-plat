@@ -5,7 +5,7 @@ export const theme = {
   colors: {
     text: {
       default: defaultColors.secondary,
-      contrast: defaultColors.primary,
+      contrast: defaultColors.white,
       regular: defaultColors.primary,
       notice: defaultColors.orange50,
       loading: defaultColors.orange60,
@@ -50,6 +50,7 @@ export const theme = {
     header: {
       background: defaultColors.secondary,
       color: defaultColors.primary,
+      sub: defaultColors.grey80,
     },
     banner: {
       note: defaultColors.cyan54,

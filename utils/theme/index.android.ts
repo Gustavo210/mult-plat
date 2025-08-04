@@ -33,6 +33,10 @@ export const theme = {
       info: defaultColors.grey40,
       warning: defaultColors.orange60,
     },
+    header: {
+      background: defaultColors.black,
+      sub: defaultColors.grey80,
+    },
   },
   font: {
     families: [

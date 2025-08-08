@@ -14,6 +14,7 @@ export default function Screen() {
         backgroundColor: "#fff",
       }}
       full
+      padding="MD_NONE"
     >
       {navigationButtons.length === 0 && (
         <Fragment>

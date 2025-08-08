@@ -54,6 +54,7 @@ export const defaultSizes = {
     "3xl": "3rem",
   },
   sizeImage: {
+    "2xs": "3.125rem",
     xs: "4.125rem",
     sm: "5.625rem",
     md: "9.375rem",

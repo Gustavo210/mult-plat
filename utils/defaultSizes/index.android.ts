@@ -12,6 +12,7 @@ export const defaultSizes = {
   },
   space: {
     none: 0,
+    "2xs": tools.calculateRemToPx("0.25rem"),
     xs: tools.calculateRemToPx("0.75rem"),
     sm: tools.calculateRemToPx("0.875rem"),
     md: tools.calculateRemToPx("1rem"),
@@ -47,6 +48,7 @@ export const defaultSizes = {
     "3xl": tools.calculateRemToPx("2rem"),
   },
   sizeImage: {
+    "2xs": tools.calculateImageSize("3.125rem"),
     xs: tools.calculateImageSize("4.125rem"),
     sm: tools.calculateImageSize("5.625rem"),
     md: tools.calculateImageSize("9.375rem"),

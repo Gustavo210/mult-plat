@@ -11,56 +11,34 @@ import tools from "@mobilestock-native/tools";
 import { configureFetchInstance } from "@mobilestockweb/graphql-axios-fetcher";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { lazy, useEffect } from "react";
-import { Platform, SafeAreaView, Text } from "react-native";
+import { Platform, SafeAreaView } from "react-native";
 
-const Button =
+const HeaderProvider =
   Platform.OS === "web"
     ? lazy(() =>
-        import("@mobilestockweb/button").then((mod) => ({
-          default: mod.Button,
+        import("@mobilestockweb/header").then((mod) => ({
+          default: mod.HeaderProvider,
         }))
       )
     : lazy(() =>
-        import("@mobilestock-native/button").then((mod) => ({
-          default: mod.Button,
+        import("@mobilestock-native/header").then((mod) => ({
+          default: mod.HeaderProvider,
         }))
       );
-const ContainerMain =
+
+const Header =
   Platform.OS === "web"
     ? lazy(() =>
-        import("@mobilestockweb/container").then((mod) => ({
-          default: mod.Container.Main,
+        import("@mobilestockweb/header").then((mod) => ({
+          default: mod.Header,
         }))
       )
     : lazy(() =>
-        import("@mobilestock-native/container").then((mod) => ({
-          default: mod.Container.Main,
+        import("@mobilestock-native/header").then((mod) => ({
+          default: mod.Header,
         }))
       );
-const ContainerHorizontal =
-  Platform.OS === "web"
-    ? lazy(() =>
-        import("@mobilestockweb/container").then((mod) => ({
-          default: mod.Container.Horizontal,
-        }))
-      )
-    : lazy(() =>
-        import("@mobilestock-native/container").then((mod) => ({
-          default: mod.Container.Horizontal,
-        }))
-      );
-const Typography =
-  Platform.OS === "web"
-    ? lazy(() =>
-        import("@mobilestockweb/typography").then((mod) => ({
-          default: mod.Typography,
-        }))
-      )
-    : lazy(() =>
-        import("@mobilestock-native/typography").then((mod) => ({
-          default: mod.Typography,
-        }))
-      );
+
 configureFetchInstance(GqlApi);
 SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
@@ -84,53 +62,30 @@ export default function RootLayout() {
     <QueryClientProvider client={new QueryClient()}>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         <ThemeProvider>
-          <ContainerMain>
+          <HeaderProvider
+            appName="Multi-plat"
+            avatar={
+              "https://tse1.mm.bing.net/th/id/OIP.dUF3ioAUQ7maZCgH2eaMYAHaGW?rs=1&pid=ImgDetMain&o=7&rm=3"
+            }
+            logo="https://tse1.mm.bing.net/th/id/OIP.vPvdOr_bEgF1bknqMhM5TQHaFf?rs=1&pid=ImgDetMain&o=7&rm=3"
+            pressOnAvatar={() => router.replace("/configs")}
+          >
             <Stack
               initialRouteName="index"
               screenOptions={{
-                contentStyle: {
-                  paddingTop: 10,
-                  backgroundColor: "#fff",
-                },
-                headerTitle: (props) => {
-                  return (
-                    <Text style={{ fontFamily: "SpaceMono", fontSize: 18 }}>
-                      {Platform.OS === "web" ? "Web" : "Mobile"}
-                    </Text>
-                  );
-                },
-                headerRight: () => (
-                  <ContainerHorizontal>
-                    <Button
-                      text="Configs"
-                      icon="Settings"
-                      padding="NONE"
-                      backgroundColor="DEFAULT_LIGHT"
-                      size="SM"
-                      iconAlign="START"
-                      onPress={() => router.push("/configs")}
-                    />
-                  </ContainerHorizontal>
+                header: () => (
+                  <Header
+                    pageTitle={Platform.OS === "web" ? "Web" : "Mobile"}
+                  />
                 ),
+                contentStyle: {
+                  paddingTop: 40,
+                  paddingHorizontal: 4,
+                  paddingBottom: 12,
+                },
                 title: "Expo Router",
               }}
             >
-              <Stack.Screen
-                name="index"
-                options={{
-                  headerLeft: () => null,
-                  headerRight: () => null,
-                  headerTitle: () => {
-                    return (
-                      <ContainerHorizontal align="CENTER" full>
-                        <Typography size="3XL" weight="BOLD" family="POPPINS">
-                          Repositório Mult-plat
-                        </Typography>
-                      </ContainerHorizontal>
-                    );
-                  },
-                }}
-              />
               <Stack.Screen name="+not-found" />
               <Stack.Screen
                 name="configs"
@@ -143,10 +98,32 @@ export default function RootLayout() {
                   presentation: "transparentModal",
                 }}
               />
+              <Stack.Screen
+                name="header"
+                options={{
+                  header: () => (
+                    <Header
+                      pageTitle="Header"
+                      pressOnTitle={() => router.replace("/")}
+                    />
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name="test-page"
+                options={{
+                  header: () => (
+                    <Header
+                      pageTitle="Header Test Page"
+                      pressOnTitle={() => router.replace("/")}
+                    />
+                  ),
+                }}
+              />
             </Stack>
             <StatusBar style="dark" />
-          </ContainerMain>
-          {Platform.OS === "web" && <GlobalStyle />}
+            {Platform.OS === "web" && <GlobalStyle />}
+          </HeaderProvider>
         </ThemeProvider>
       </SafeAreaView>
     </QueryClientProvider>

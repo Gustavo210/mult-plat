@@ -12,6 +12,7 @@ export default {
   purpleShadow: "rgba(101, 13, 73, 0.25)",
   purple42: "#9C27B0",
   red38A20: "#B50D4833",
+  grey80: "#B0BEC5",
   grey40: "#4B6680",
   grey11: "#1c1c1c",
   orange50: "#ffc700",

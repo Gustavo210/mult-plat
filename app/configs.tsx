@@ -65,7 +65,7 @@ ConfigCategory.displayName = "ConfigCategory";
 export default function Configs() {
   // Memoize the back button handler
   const handlePressBack = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace("/");
   }, []);
 
   // Prepare data for FlatList, ensuring defaultSizes is valid and iterating over its properties

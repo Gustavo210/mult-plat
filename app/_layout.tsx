@@ -68,7 +68,6 @@ export default function RootLayout() {
               "https://tse1.mm.bing.net/th/id/OIP.dUF3ioAUQ7maZCgH2eaMYAHaGW?rs=1&pid=ImgDetMain&o=7&rm=3"
             }
             logo="https://tse1.mm.bing.net/th/id/OIP.vPvdOr_bEgF1bknqMhM5TQHaFf?rs=1&pid=ImgDetMain&o=7&rm=3"
-            pressOnTitle={() => router.replace("/")}
             pressOnAvatar={() => router.replace("/configs")}
           >
             <Stack
@@ -77,7 +76,6 @@ export default function RootLayout() {
                 header: () => (
                   <Header
                     pageTitle={Platform.OS === "web" ? "Web" : "Mobile"}
-                    pressOnTitle={() => router.replace("/")}
                   />
                 ),
                 contentStyle: {
@@ -103,7 +101,12 @@ export default function RootLayout() {
               <Stack.Screen
                 name="header"
                 options={{
-                  header: () => <Header pageTitle="Header" />,
+                  header: () => (
+                    <Header
+                      pageTitle="Header"
+                      pressOnTitle={() => router.replace("/")}
+                    />
+                  ),
                 }}
               />
               <Stack.Screen
@@ -113,7 +116,6 @@ export default function RootLayout() {
                     <Header
                       pageTitle="Header Test Page"
                       pressOnTitle={() => router.replace("/")}
-                      backNavigation={() => router.back()}
                     />
                   ),
                 }}

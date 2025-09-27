@@ -6,12 +6,12 @@ import "react-native-reanimated";
 import { GlobalStyle } from "@/globals";
 import { GqlApi } from "@/services/GqlApi";
 import ThemeProvider from "@/themeProvider";
-import { theme } from "@/utils/theme/index.android";
+import { theme } from "@/utils/theme";
 import tools from "@mobilestock-native/tools";
 import { configureFetchInstance } from "@mobilestockweb/graphql-axios-fetcher";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { lazy, useEffect } from "react";
-import { Platform, SafeAreaView, Text } from "react-native";
+import { Platform, SafeAreaView } from "react-native";
 
 const Button =
   Platform.OS === "web"
@@ -88,31 +88,8 @@ export default function RootLayout() {
             <Stack
               initialRouteName="index"
               screenOptions={{
-                contentStyle: {
-                  paddingTop: 10,
-                  backgroundColor: "#fff",
-                },
-                headerTitle: (props) => {
-                  return (
-                    <Text style={{ fontFamily: "SpaceMono", fontSize: 18 }}>
-                      {Platform.OS === "web" ? "Web" : "Mobile"}
-                    </Text>
-                  );
-                },
-                headerRight: () => (
-                  <ContainerHorizontal>
-                    <Button
-                      text="Configs"
-                      icon="Settings"
-                      padding="NONE"
-                      backgroundColor="DEFAULT_LIGHT"
-                      size="SM"
-                      iconAlign="START"
-                      onPress={() => router.push("/configs")}
-                    />
-                  </ContainerHorizontal>
-                ),
                 title: "Expo Router",
+                headerTitle: "Expo Router",
               }}
             >
               <Stack.Screen

@@ -1,12 +1,11 @@
-import * as androidTheme from "./utils/theme/index.android";
-import * as webTheme from "./utils/theme/index.web";
+import * as webTheme from "./utils/theme";
 declare module "styled-components" {
   type ThemeType = typeof webTheme.theme;
 
   export interface DefaultTheme extends ThemeType {}
 }
 declare module "styled-components/native" {
-  type ThemeType = typeof androidTheme.theme;
+  type ThemeType = typeof webTheme.theme;
 
   export interface DefaultTheme extends ThemeType {}
 }

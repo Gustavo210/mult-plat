@@ -5,15 +5,9 @@ import { Container } from "@mobilestock-native/container";
 import { List } from "@mobilestock-native/list";
 
 import { Typography } from "@mobilestock-native/typography";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { Dimensions, Modal, TouchableWithoutFeedback } from "react-native";
 import {
-  Dimensions,
-  Modal,
-  Text,
-  TouchableWithoutFeedback,
-} from "react-native";
-import {
-  FlatList,
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
@@ -30,16 +24,26 @@ import styled from "styled-components/native";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 const MODAL_INITIAL_HEIGHT = SCREEN_HEIGHT * 0.3; // 30% da tela
-const MODAL_FULL_HEIGHT = SCREEN_HEIGHT;
+const MODAL_MAX_HEIGHT = SCREEN_HEIGHT * 0.8; // 80% da tela
+const MODAL_MIN_HEIGHT = 200; // Altura mínima do modal
 
-export function FormSelectModal() {
+interface FormSelectModalProps<T> {
+  data: (T & { id?: string | number })[];
+  placeholder?: string;
+}
+
+export function FormSelectModal<T extends { name: string }>({
+  data,
+  placeholder = "Selecione um item",
+}: FormSelectModalProps<T>) {
   const [showModal, setShowModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [selected, setSelected] = useState<T | null>(null);
+  const [listContentHeight, setListContentHeight] = useState(0);
   const position = useSharedValue(SCREEN_HEIGHT);
   const offset = useSharedValue(0);
   const modalHeight = useSharedValue(MODAL_INITIAL_HEIGHT);
   const isScrolling = useSharedValue(false);
-  const flatListRef = useRef<FlatList<any>>(null);
+  // const flatListRef = useRef<FlatList<any>>(null); // Removido, pois List não aceita ref
 
   const close = () => {
     "worklet";
@@ -53,24 +57,34 @@ export function FormSelectModal() {
       offset.value = position.value;
     })
     .onUpdate((e) => {
-      if (position.value === 0 && e.translationY < 0) {
-        // Se o modal estiver no topo e o usuário arrastar para cima, a lista deve rolar
-        if (flatListRef.current && flatListRef.current.scrollToOffset) {
-          runOnJS(flatListRef.current.scrollToOffset)({
-            offset: -e.translationY,
-            animated: false,
-          });
-        }
+      if (
+        position.value <= SCREEN_HEIGHT - MODAL_MAX_HEIGHT &&
+        e.translationY < 0
+      ) {
+        // Se o modal estiver no topo (ou acima) e o usuário arrastar para cima, a lista deve rolar
         isScrolling.value = true;
+      } else if (
+        position.value >= SCREEN_HEIGHT - MODAL_MAX_HEIGHT &&
+        e.translationY > 0
+      ) {
+        // Se o modal estiver no topo e o usuário arrastar para baixo, o modal deve descer
+        position.value = offset.value + e.translationY;
+        isScrolling.value = false;
       } else {
         position.value = offset.value + e.translationY;
         isScrolling.value = false;
       }
-      modalHeight.value = withSpring(MODAL_FULL_HEIGHT, {
-        damping: 20,
-        stiffness: 90,
-        mass: 0.3,
-      });
+      modalHeight.value = withSpring(
+        Math.max(
+          MODAL_MIN_HEIGHT,
+          Math.min(SCREEN_HEIGHT - position.value, MODAL_MAX_HEIGHT)
+        ),
+        {
+          damping: 20,
+          stiffness: 90,
+          mass: 0.3,
+        }
+      );
     })
     .onEnd((e) => {
       if (isScrolling.value) {
@@ -84,27 +98,20 @@ export function FormSelectModal() {
         close();
       } else if (e.velocityY < -1000) {
         // Jogar para cima
-        position.value = withSpring(0, {
-          damping: 20,
-          stiffness: 90,
-          mass: 0.3,
-        });
+        position.value = withTiming(SCREEN_HEIGHT - MODAL_MAX_HEIGHT);
+        modalHeight.value = withTiming(MODAL_MAX_HEIGHT);
       } else {
         // Ficar onde soltou
         if (position.value > SCREEN_HEIGHT / 2) {
           close();
         } else {
-          position.value = withSpring(SCREEN_HEIGHT - modalHeight.value, {
-            damping: 20,
-            stiffness: 90,
-            mass: 0.3,
-          });
+          position.value = withTiming(SCREEN_HEIGHT - modalHeight.value);
         }
       }
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: position.value }],
+    transform: [{ translateY: Math.max(position.value, 200) }],
     height: modalHeight.value,
   }));
 
@@ -112,23 +119,27 @@ export function FormSelectModal() {
     () => showModal,
     (modalVisible) => {
       if (modalVisible) {
-        position.value = withSpring(SCREEN_HEIGHT - MODAL_INITIAL_HEIGHT, {
+        modalHeight.value = withSpring(MODAL_INITIAL_HEIGHT, {
           damping: 20,
           stiffness: 90,
           mass: 0.3,
         });
+        position.value = withTiming(SCREEN_HEIGHT - MODAL_INITIAL_HEIGHT);
       }
     },
-    [showModal]
+    [showModal, listContentHeight]
   );
 
   return (
     <>
       <Clickable onPress={() => setShowModal(true)}>
-        <ContainerInputFake padding="NONE_MD" align="BETWEEN_CENTER">
+        <ContainerInputFake
+          padding="NONE_MD"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
+        >
           <Container.Horizontal style={{}}>
-            <Typography color={selectedItem ? "DEFAULT" : "DEFAULT_200"}>
-              {selectedItem || "Selecione um item"}
+            <Typography color={selected ? "DEFAULT" : "DEFAULT_200"}>
+              {selected?.name || placeholder}
             </Typography>
           </Container.Horizontal>
           <Container.Vertical>
@@ -161,7 +172,6 @@ export function FormSelectModal() {
             <GestureDetector gesture={panGesture}>
               <Container.Horizontal
                 style={{
-                  // backgroundColor: "red",
                   paddingVertical: 15,
                   borderTopLeftRadius: 20,
                   borderTopRightRadius: 20,
@@ -179,74 +189,31 @@ export function FormSelectModal() {
                 />
               </Container.Horizontal>
             </GestureDetector>
-            <List
-              ref={flatListRef}
-              data={[
-                {
-                  id: 1,
-                  name: "item 1",
-                },
-                {
-                  id: 2,
-                  name: "item 2",
-                },
-                {
-                  id: 3,
-                  name: "item 3",
-                },
-                {
-                  id: 4,
-                  name: "item 4",
-                },
-                {
-                  id: 5,
-                  name: "item 5",
-                },
-                { id: 6, name: "item 6" },
-                { id: 7, name: "item 7" },
-                { id: 8, name: "item 8" },
-                { id: 9, name: "item 9" },
-                { id: 10, name: "item 10" },
-                { id: 11, name: "item 11" },
-                { id: 12, name: "item 12" },
-                { id: 13, name: "item 13" },
-                { id: 14, name: "item 14" },
-                { id: 15, name: "item 15" },
-                { id: 16, name: "item 16" },
-                { id: 17, name: "item 17" },
-                { id: 18, name: "item 18" },
-                { id: 19, name: "item 19" },
-                { id: 20, name: "item 20" },
-              ]}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={(item) => {
-                return (
-                  <Clickable
-                    onPress={() => {
-                      console.log("Clicou", item.name);
-                      if (selectedItem === item.name) {
-                        setSelectedItem(null);
-                      } else {
-                        setSelectedItem(item.name);
-                      }
-                      close();
-                    }}
-                    style={[
-                      {
-                        padding: 20,
-                        borderWidth: 1,
-                        borderColor: "#eee",
-                      },
-                      selectedItem === item.name
-                        ? { backgroundColor: "#ddd" }
-                        : {},
-                    ]}
-                  >
-                    <Text>{item.name}</Text>
-                  </Clickable>
-                );
-              }}
-            />
+            <Animated.View style={{ flex: 1 }}>
+              <Container.Main>
+                <Animated.View style={{ flex: 1 }}>
+                  <List
+                    data={data.map((item, key) => ({
+                      id: item?.id || key,
+                      ...item,
+                    }))}
+                    keyExtractor={(item) => item.id.toString()}
+                    itemKey={(item) => item.id.toString()}
+                    renderItem={(item) => (
+                      <List.Item.Horizontal
+                        padding="SM"
+                        onPress={() => {
+                          setSelected(item);
+                          close();
+                        }}
+                      >
+                        <List.Item.Title>{item.name}</List.Item.Title>
+                      </List.Item.Horizontal>
+                    )}
+                  />
+                </Animated.View>
+              </Container.Main>
+            </Animated.View>
           </Animated.View>
         </GestureHandlerRootView>
       </Modal>

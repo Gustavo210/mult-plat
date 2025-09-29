@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
-    "@mobilestock-native/button": "^1.0.0",
+    "@mobilestock-native/button": "^1.0.11",
     "@mobilestock-native/clickable": "^1.0.0",
     "@mobilestock-native/container": "^0.0.2",
     "@mobilestock-native/icons": "^0.0.4",

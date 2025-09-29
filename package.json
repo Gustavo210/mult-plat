@@ -14,6 +14,7 @@
     "@mobilestock-native/container": "^0.0.2",
     "@mobilestock-native/icons": "^0.0.4",
     "@mobilestock-native/image": "^0.0.5",
+    "@mobilestock-native/list": "^0.0.7",
     "@mobilestock-native/loading-spinner": "^0.0.7",
     "@mobilestock-native/modalalert": "^0.0.13",
     "@mobilestock-native/spacer": "^0.0.6",

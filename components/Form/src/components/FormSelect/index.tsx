@@ -21,7 +21,6 @@ export function FormSelect({
   label,
   disabled,
   options,
-  menuIsOpen = false,
   placeholder,
   full = false,
   value,
@@ -42,18 +41,12 @@ export function FormSelect({
   }, [fieldName, registerField]);
 
   return (
-    <Container.Vertical
-      full={full}
-      style={{
-        zIndex: 100,
-      }}
-    >
+    <Container.Vertical full={full}>
       {label && <Typography>{label}</Typography>}
       {Platform.OS === "web" ? (
         <SelectWeb
           disabled={disabled}
           options={options || []}
-          menuIsOpen={menuIsOpen}
           defaultValue={
             defaultValue
               ? { label: defaultValue, value: defaultValue }
@@ -62,7 +55,6 @@ export function FormSelect({
           value={value}
           selectRef={selectRef}
           placeholder={placeholder}
-          label={label}
         />
       ) : (
         <SelectAndroid
@@ -75,42 +67,6 @@ export function FormSelect({
           label={label}
         />
       )}
-
-      {/* <Picker
-          ref={selectRef}
-          selectedValue={value || defaultValue}
-          prompt={label}
-          dropdownIconRippleColor="transparent"
-          mode="dialog"
-          style={{
-            padding: 0,
-            margin: 0,
-            flex: 1,
-            height: 48,
-            backgroundColor: "transparent",
-            borderWidth: 0,
-          }}
-          onValueChange={(itemValue: any, itemIndex: number) => {
-            console.log(itemValue, itemIndex);
-          }}
-          selectionColor={"#f00"}
-          enabled={!disabled}
-        >
-          <Picker.Item
-            label={placeholder || "Selecione"}
-            style={{
-              color: "#999",
-            }}
-          />
-          {options?.map((option) => (
-            <Picker.Item
-              key={option.value}
-              label={option.label}
-              value={option.value}
-              style={{ color: "#000" }}
-            />
-          ))}
-        </Picker> */}
       {error && (
         <Typography color="DANGER" size="SM">
           {error}

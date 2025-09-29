@@ -15,8 +15,7 @@ export default function IndexWeb() {
             full
             name="select"
             label="Opções"
-            menuIsOpen
-            placeholder="Selecione"
+            placeholder="Placeholder"
             options={[
               { label: "Opção 1", value: "1" },
               { label: "Opção 2", value: "2" },
@@ -42,6 +41,7 @@ export default function IndexWeb() {
             { label: "Opção 32", value: "3" },
           ]}
         />
+        <Form.SelectModal />
         <Form.Button text="Enviar" />
       </Form>
     </Container.Vertical>

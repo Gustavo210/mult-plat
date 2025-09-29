@@ -3,7 +3,6 @@ import { Picker } from "@react-native-picker/picker";
 import styled from "styled-components/native";
 
 export function SelectAndroid({
-  label,
   options,
   placeholder,
   selectRef,
@@ -11,7 +10,6 @@ export function SelectAndroid({
   value,
   disabled,
 }: {
-  label?: string;
   options?: { label: string; value: string }[];
   placeholder?: string;
   selectRef: any;
@@ -24,7 +22,7 @@ export function SelectAndroid({
       <Picker
         ref={selectRef}
         selectedValue={value || defaultValue}
-        prompt={label}
+        prompt={placeholder}
         dropdownIconRippleColor="transparent"
         mode="dialog"
         style={{

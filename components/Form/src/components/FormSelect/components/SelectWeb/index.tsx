@@ -3,6 +3,7 @@ import { useField } from "@unform/core";
 import { mergeWith } from "lodash";
 import { useCallback, useEffect, useRef } from "react";
 import ReactSelect, { CSSObjectWithLabel } from "react-select";
+import { useTheme } from "styled-components";
 import { CustomOption, FormSelectPropsBase } from "../..";
 
 export function SelectWeb({
@@ -13,11 +14,13 @@ export function SelectWeb({
   name,
   defaultValue,
 }: FormSelectPropsBase) {
+  const Theme = useTheme();
   const { loading } = useForm();
   const {
     fieldName,
     defaultValue: unformDefaultValue,
     registerField,
+    error,
   } = useField(name);
   const selectRef = useRef(null);
 
@@ -35,7 +38,7 @@ export function SelectWeb({
 
   const performStyles = useCallback((base: CSSObjectWithLabel) => {
     return function (style: CSSObjectWithLabel): CSSObjectWithLabel {
-      return mergeWith(base, style);
+      return mergeWith(style, base);
     };
   }, []);
   return (
@@ -63,6 +66,14 @@ export function SelectWeb({
         }),
         control: performStyles({
           width: "100%",
+          backgroundColor: error ? Theme.colors.input.error : undefined,
+          borderColor: error ? Theme.colors.alert.urgent : undefined,
+        }),
+        indicatorSeparator: performStyles({
+          backgroundColor: error ? Theme.colors.alert.urgent : undefined,
+        }),
+        dropdownIndicator: performStyles({
+          color: error ? Theme.colors.alert.urgent : undefined,
         }),
       }}
       className="react-select"

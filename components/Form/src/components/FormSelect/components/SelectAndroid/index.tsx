@@ -7,7 +7,7 @@ import { useForm } from "@/components/Form/src/hooks/useForm";
 import { Typography } from "@mobilestock-native/typography";
 import { useField } from "@unform/core";
 import { useEffect, useState } from "react";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 import { CustomOption, FormSelectPropsBase } from "../..";
 import { FormSheet } from "./components/FormSheet";
 
@@ -18,8 +18,9 @@ export function SelectAndroid({
   defaultValue,
   name,
 }: FormSelectPropsBase) {
+  const Theme = useTheme();
   const { loading } = useForm();
-  const { fieldName, registerField } = useField(name);
+  const { fieldName, registerField, error } = useField(name);
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState<CustomOption | null>(
     defaultValue || null
@@ -51,6 +52,7 @@ export function SelectAndroid({
       >
         <ContainerInputFake
           padding="NONE_XS_NONE_MD"
+          error={!!error}
           style={{ justifyContent: "space-between", alignItems: "center" }}
         >
           <Container.Horizontal>
@@ -58,15 +60,29 @@ export function SelectAndroid({
               {selected?.label || placeholder}
             </Typography>
           </Container.Horizontal>
-          <Container.Horizontal gap="XS" align="CENTER">
+          <Container.Horizontal
+            style={{
+              opacity: 0.3,
+            }}
+            gap="XS"
+            align="CENTER"
+          >
             <Container.Vertical
               style={{
                 width: 1,
                 height: 30,
-                backgroundColor: "#E1E1E6",
+                backgroundColor: error
+                  ? Theme.colors.alert.urgent
+                  : Theme.colors.text.default,
               }}
             />
-            <Icon name="ChevronDown" size="XS" />
+            <Icon
+              name="ChevronDown"
+              size="XS"
+              color={
+                error ? Theme.colors.alert.urgent : Theme.colors.text.default
+              }
+            />
           </Container.Horizontal>
         </ContainerInputFake>
       </Clickable>
@@ -94,11 +110,11 @@ const ContainerInputFake = styled(
   Container.Horizontal
 )<ContainerInputFakeProps>`
   overflow: hidden;
-  height: 45px;
+  height: 47px;
   background-color: ${({ error, theme }) =>
     error ? theme.colors.input.error : theme.colors.input.default};
   border: 1px solid
     ${({ error, theme }) =>
       error ? theme.colors.alert.urgent : theme.colors.input.border};
-  border-radius: 8px;
+  border-radius: 5px;
 `;

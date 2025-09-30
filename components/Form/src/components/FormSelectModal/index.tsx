@@ -50,14 +50,13 @@ export function FormSelectModal<
     });
   };
 
-  const initialModalHeight = useSharedValue(MODAL_INITIAL_HEIGHT); // Nova variável para armazenar a altura inicial do modal no início do gesto
+  const initialModalHeight = useSharedValue(MODAL_INITIAL_HEIGHT);
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
-      initialModalHeight.value = modalHeight.value; // Armazena a altura atual do modal
+      initialModalHeight.value = modalHeight.value;
     })
     .onUpdate((e) => {
-      // Calcula a nova altura com base na altura inicial e na translação do dedo
       const newHeight = initialModalHeight.value - e.translationY;
       modalHeight.value = Math.max(
         MODAL_MIN_HEIGHT,
@@ -66,13 +65,10 @@ export function FormSelectModal<
     })
     .onEnd((e) => {
       if (e.velocityY > 1000) {
-        // Jogar para baixo
         close();
       } else if (e.velocityY < -1000) {
-        // Jogar para cima
         modalHeight.value = withTiming(MODAL_MAX_HEIGHT);
       } else {
-        // Soltar
         if (modalHeight.value > MODAL_MAX_HEIGHT / 2) {
           modalHeight.value = withTiming(MODAL_MAX_HEIGHT);
         } else {
@@ -83,7 +79,7 @@ export function FormSelectModal<
 
   const animatedStyle = useAnimatedStyle(() => ({
     height: modalHeight.value,
-    bottom: 0, // O modal sempre começa da parte inferior
+    bottom: 0,
   }));
 
   useAnimatedReaction(
@@ -173,7 +169,11 @@ export function FormSelectModal<
                         isSelected={selected?.id === item.id}
                         padding="SM"
                         onPress={() => {
-                          setSelected(item);
+                          if (item.id === selected?.id) {
+                            setSelected(null);
+                          } else {
+                            setSelected(item);
+                          }
                           close();
                         }}
                       >

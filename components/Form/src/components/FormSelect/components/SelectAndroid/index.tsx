@@ -9,47 +9,55 @@ import styled from "styled-components/native";
 import { CustomOption } from "../..";
 import { FormSheet } from "./components/FormSheet";
 
-interface FormSelectModalProps<T> {
-  data: (T & { id?: string | number })[];
+interface FormSelectModalProps {
   placeholder?: string;
   options: CustomOption[];
+  disabled?: boolean;
 }
 
 export function SelectAndroid<T extends { name: string; id: string | number }>({
-  data,
   options,
   placeholder = "Selecione um item",
-}: FormSelectModalProps<T>) {
+  disabled = false,
+}: FormSelectModalProps) {
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState<CustomOption | null>(null);
 
   return (
     <>
-      <Clickable onPress={() => setShowModal(true)}>
+      <Clickable disabled={disabled} onPress={() => setShowModal(true)}>
         <ContainerInputFake
-          padding="NONE_MD"
+          padding="NONE_XS_NONE_MD"
           style={{ justifyContent: "space-between", alignItems: "center" }}
         >
-          <Container.Horizontal style={{}}>
+          <Container.Horizontal>
             <Typography color={selected ? "DEFAULT" : "DEFAULT_200"}>
               {selected?.label || placeholder}
             </Typography>
           </Container.Horizontal>
-          <Container.Vertical>
+          <Container.Horizontal gap="XS" align="CENTER">
+            <Container.Vertical
+              style={{
+                width: 1,
+                height: 30,
+                backgroundColor: "#E1E1E6",
+              }}
+            />
             <Icon name="ChevronDown" size="XS" />
-          </Container.Vertical>
+          </Container.Horizontal>
         </ContainerInputFake>
       </Clickable>
-
-      <FormSheet
-        options={options}
-        onClose={() => setShowModal(false)}
-        visible={showModal}
-        placeholder={placeholder}
-        onSelect={(item) => {
-          setSelected(item);
-        }}
-      />
+      {!disabled && (
+        <FormSheet
+          options={options}
+          onClose={() => setShowModal(false)}
+          visible={showModal}
+          placeholder={placeholder}
+          onSelect={(item) => {
+            setSelected(item);
+          }}
+        />
+      )}
     </>
   );
 }

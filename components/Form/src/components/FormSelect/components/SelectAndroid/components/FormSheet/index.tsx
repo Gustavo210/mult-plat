@@ -31,7 +31,7 @@ interface FormSheetProps {
   onClose: () => void;
   onSelect: (item: CustomOption | null) => void;
 }
-export function FormSheet({ onClose, ...props }: FormSheetProps) {
+export function FormSheet(props: FormSheetProps) {
   const [selected, setSelected] = useState<CustomOptionWithId | null>(null);
 
   const MIN_HEIGHT_AVAILABLE = useMemo(() => {
@@ -100,7 +100,7 @@ export function FormSheet({ onClose, ...props }: FormSheetProps) {
   function close() {
     "worklet";
     modalHeight.value = withTiming(0, {}, () => {
-      runOnJS(onClose)();
+      runOnJS(props.onClose)();
     });
   }
 

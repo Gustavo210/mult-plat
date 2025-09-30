@@ -1,7 +1,7 @@
 import { Container } from "@mobilestock-native/container";
 import { List } from "@mobilestock-native/list";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Dimensions, Modal, TouchableWithoutFeedback } from "react-native";
 import { Gesture, GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, {
@@ -20,20 +20,15 @@ const MODAL_MAX_HEIGHT = SCREEN_HEIGHT * 0.8; // 80% da tela
 const MODAL_MIN_HEIGHT = 200; // Altura mínima do modal
 const ITEM_HEIGHT = 45; // Altura estimada de cada item da lista
 
-interface CustomOptionWithId extends CustomOption {
-  id?: string | number;
-}
-
 interface FormSheetProps {
   visible: boolean;
-  options: CustomOptionWithId[];
+  options: CustomOption[];
   placeholder: string;
   onClose: () => void;
   onSelect: (item: CustomOption | null) => void;
+  selectValue: CustomOption | null;
 }
 export function FormSheet(props: FormSheetProps) {
-  const [selected, setSelected] = useState<CustomOptionWithId | null>(null);
-
   const MIN_HEIGHT_AVAILABLE = useMemo(() => {
     return Math.min(
       MODAL_MAX_HEIGHT,
@@ -45,15 +40,6 @@ export function FormSheet(props: FormSheetProps) {
 
   const modalHeight = useSharedValue(MODAL_INITIAL_HEIGHT);
   const initialModalHeight = useSharedValue(MODAL_INITIAL_HEIGHT);
-
-  const memoizedOptions = useMemo(
-    () =>
-      props.options.map((item, index) => ({
-        ...item,
-        id: item?.id ?? index,
-      })),
-    [props.options]
-  );
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
@@ -135,9 +121,8 @@ export function FormSheet(props: FormSheetProps) {
           />
           <Container.Main>
             <List
-              data={memoizedOptions}
-              keyExtractor={(item) => item.id.toString()}
-              itemKey={(item) => item.id.toString()}
+              data={props.options}
+              itemKey="value"
               ItemSeparatorComponent={() => {
                 return (
                   <Container.Horizontal
@@ -150,22 +135,22 @@ export function FormSheet(props: FormSheetProps) {
                 );
               }}
               renderItem={(item) => (
-                <List.Item.Horizontal
-                  isSelected={selected?.id === item.id}
-                  padding="SM"
-                  onPress={() => {
-                    if (item.id === selected?.id) {
-                      props.onSelect(null);
-                      setSelected(null);
-                    } else {
-                      props.onSelect(item);
-                      setSelected(item);
-                    }
-                    close();
-                  }}
-                >
-                  <List.Item.Title>{item.label}</List.Item.Title>
-                </List.Item.Horizontal>
+                <>
+                  <List.Item.Horizontal
+                    isSelected={props.selectValue?.value === item.value}
+                    padding="SM"
+                    onPress={() => {
+                      if (item.value === props.selectValue?.value) {
+                        props.onSelect(null);
+                      } else {
+                        props.onSelect(item);
+                      }
+                      close();
+                    }}
+                  >
+                    <List.Item.Title>{item.label}</List.Item.Title>
+                  </List.Item.Horizontal>
+                </>
               )}
             />
           </Container.Main>

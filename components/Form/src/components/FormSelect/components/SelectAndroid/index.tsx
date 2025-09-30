@@ -14,6 +14,7 @@ import { FormSheet } from "./components/FormSheet";
 interface FormSelectModalProps {
   placeholder?: string;
   options: CustomOption[];
+  defaultValue?: CustomOption;
   disabled?: boolean;
   name: string;
 }
@@ -22,12 +23,15 @@ export function SelectAndroid({
   options,
   placeholder = "Selecione um item",
   disabled = false,
+  defaultValue,
   name,
 }: FormSelectModalProps) {
   const { loading } = useForm();
   const { fieldName, registerField } = useField(name);
   const [showModal, setShowModal] = useState(false);
-  const [selected, setSelected] = useState<CustomOption | null>(null);
+  const [selected, setSelected] = useState<CustomOption | null>(
+    defaultValue || null
+  );
 
   useEffect(() => {
     registerField({
@@ -80,6 +84,7 @@ export function SelectAndroid({
           onClose={() => setShowModal(false)}
           visible={showModal}
           placeholder={placeholder}
+          selectValue={selected}
           onSelect={(item) => {
             setSelected(item);
           }}

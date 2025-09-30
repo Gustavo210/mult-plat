@@ -8,7 +8,6 @@ import { CustomOption } from "../..";
 interface SelectWebProps {
   options: CustomOption[];
   placeholder?: string;
-  selectRef: any;
   defaultValue?: CustomOption;
   value?: CustomOption;
   disabled?: boolean;
@@ -21,9 +20,14 @@ export function SelectWeb({
   value,
   disabled,
   name,
+  defaultValue,
 }: SelectWebProps) {
   const { loading } = useForm();
-  const { fieldName, defaultValue, registerField } = useField(name);
+  const {
+    fieldName,
+    defaultValue: unformDefaultValue,
+    registerField,
+  } = useField(name);
   const selectRef = useRef(null);
 
   useEffect(() => {
@@ -47,12 +51,14 @@ export function SelectWeb({
     <ReactSelect<CustomOption>
       options={[
         {
-          label: placeholder || "Selecione",
+          label: placeholder,
           options: options,
         },
       ]}
-      placeholder={placeholder || "Selecione"}
-      defaultInputValue={defaultValue?.label}
+      placeholder={placeholder}
+      defaultInputValue={
+        defaultValue?.label ?? unformDefaultValue?.label ?? undefined
+      }
       value={value}
       menuPortalTarget={
         typeof document !== "undefined" ? document.body : undefined

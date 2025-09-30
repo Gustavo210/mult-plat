@@ -16,6 +16,7 @@ interface FormSelectProps {
   label?: string;
   disabled?: boolean;
   options: CustomOption[];
+  defaultValue?: CustomOption;
   placeholder?: string;
   value?: CustomOption;
   full?: boolean;
@@ -25,9 +26,10 @@ export function FormSelect({
   label,
   disabled,
   options,
-  placeholder,
+  placeholder = "Selecione um item",
   full = false,
   value,
+  defaultValue,
 }: FormSelectProps) {
   const { error } = useField(name);
 
@@ -39,6 +41,8 @@ export function FormSelect({
           disabled={disabled}
           options={options}
           value={value}
+          name={name}
+          defaultValue={defaultValue}
           placeholder={placeholder}
         />
       ) : (
@@ -46,6 +50,7 @@ export function FormSelect({
           name={name}
           disabled={disabled}
           options={options}
+          defaultValue={defaultValue}
           placeholder={placeholder}
         />
       )}

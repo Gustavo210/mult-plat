@@ -20,6 +20,7 @@ export default function IndexWeb() {
               { label: "Opção 1", value: "1" },
               { label: "Opção 2", value: "2" },
               { label: "Opção 3", value: "3" },
+              { label: "Opção 4", value: "4" },
             ]}
           />
         </Form.Horizontal>
@@ -41,28 +42,30 @@ export default function IndexWeb() {
             { label: "Opção 32", value: "3" },
           ]}
         />
-        <Form.SelectModal
-          data={[
-            { id: 1, name: "item 1" },
-            { id: 2, name: "item 2" },
-            { id: 3, name: "item 3" },
-            { id: 4, name: "item 4" },
-            { id: 5, name: "item 5" },
-            { id: 6, name: "item 6" },
-            { id: 7, name: "item 7" },
-            { id: 8, name: "item 8" },
-            { id: 9, name: "item 9" },
-            { id: 10, name: "item 10" },
-            { id: 11, name: "item 11" },
-            { id: 12, name: "item 12" },
-            { id: 13, name: "item 13" },
-            { id: 14, name: "item 14" },
-            { id: 15, name: "item 15" },
-            { id: 16, name: "item 16" },
-            { id: 17, name: "item 17" },
-            { id: 18, name: "item 18" },
-            { id: 19, name: "item 19" },
-            { id: 20, name: "item 20" },
+        <Form.Select
+          name="select3"
+          label="Opções3"
+          options={[
+            { value: "1", label: "item 1" },
+            { value: "2", label: "item 2" },
+            { value: "3", label: "item 3" },
+            { value: "4", label: "item 4" },
+            { value: "5", label: "item 5" },
+            { value: "6", label: "item 6" },
+            { value: "7", label: "item 7" },
+            { value: "8", label: "item 8" },
+            { value: "9", label: "item 9" },
+            { value: "10", label: "item 10" },
+            { value: "11", label: "item 11" },
+            { value: "12", label: "item 12" },
+            { value: "13", label: "item 13" },
+            { value: "14", label: "item 14" },
+            { value: "15", label: "item 15" },
+            { value: "16", label: "item 16" },
+            { value: "17", label: "item 17" },
+            { value: "18", label: "item 18" },
+            { value: "19", label: "item 19" },
+            { value: "20", label: "item 20" },
           ]}
         />
         <Form.Button text="Enviar" />

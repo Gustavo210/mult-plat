@@ -4,16 +4,21 @@ import { useEffect, useRef } from "react";
 import { Container } from "@mobilestock-native/container";
 import { Typography } from "@mobilestock-native/typography";
 import { Platform } from "react-native";
-import { SelectAndroid } from "./implemetations/android";
-import { SelectWeb } from "./implemetations/web";
+import { SelectAndroid } from "./components/SelectAndroid";
+import { SelectWeb } from "./components/SelectWeb";
+
+export interface CustomOption {
+  label: string;
+  value: string;
+}
 
 interface FormSelectProps {
   name: string;
   label?: string;
   disabled?: boolean;
-  options?: { label: string; value: string }[];
+  options?: CustomOption[];
   placeholder?: string;
-  value?: { label: string; value: string };
+  value?: CustomOption;
   full?: boolean;
 }
 export function FormSelect({

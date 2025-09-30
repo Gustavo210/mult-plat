@@ -1,10 +1,17 @@
 import { mergeWith } from "lodash";
 import { useCallback } from "react";
 import ReactSelect, { CSSObjectWithLabel } from "react-select";
-interface CustomOption {
-  label: string;
-  value: string;
+import { CustomOption } from "../..";
+
+interface SelectWebProps {
+  options: CustomOption[];
+  placeholder?: string;
+  selectRef: any;
+  defaultValue?: CustomOption;
+  value?: CustomOption;
+  disabled?: boolean;
 }
+
 export function SelectWeb({
   options,
   placeholder,
@@ -12,14 +19,7 @@ export function SelectWeb({
   defaultValue,
   value,
   disabled,
-}: {
-  options: CustomOption[];
-  placeholder?: string;
-  selectRef: any;
-  defaultValue?: CustomOption;
-  value?: CustomOption;
-  disabled?: boolean;
-}) {
+}: SelectWebProps) {
   const performStyles = useCallback((base: CSSObjectWithLabel) => {
     return function (style: CSSObjectWithLabel): CSSObjectWithLabel {
       return mergeWith(base, style);

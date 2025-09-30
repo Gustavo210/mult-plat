@@ -3,16 +3,7 @@ import { useField } from "@unform/core";
 import { mergeWith } from "lodash";
 import { useCallback, useEffect, useRef } from "react";
 import ReactSelect, { CSSObjectWithLabel } from "react-select";
-import { CustomOption } from "../..";
-
-interface SelectWebProps {
-  options: CustomOption[];
-  placeholder?: string;
-  defaultValue?: CustomOption;
-  value?: CustomOption;
-  disabled?: boolean;
-  name: string;
-}
+import { CustomOption, FormSelectPropsBase } from "../..";
 
 export function SelectWeb({
   options,
@@ -21,7 +12,7 @@ export function SelectWeb({
   disabled,
   name,
   defaultValue,
-}: SelectWebProps) {
+}: FormSelectPropsBase) {
   const { loading } = useForm();
   const {
     fieldName,
@@ -36,8 +27,8 @@ export function SelectWeb({
       ref: selectRef.current,
       getValue: (ref) => {
         const selectValue: CustomOption[] = ref?.state?.selectValue;
-
-        return selectValue[0]?.value;
+        if (!selectValue) return "";
+        return selectValue[0]?.value || "";
       },
     });
   }, [fieldName, registerField]);

@@ -10,21 +10,24 @@ export interface CustomOption {
   label: string;
   value: string;
 }
-
-interface FormSelectProps {
+export interface FormSelectPropsBase {
   name: string;
   label?: string;
-  disabled?: boolean;
-  options: CustomOption[];
-  defaultValue?: CustomOption;
-  placeholder?: string;
   value?: CustomOption;
+  options: CustomOption[];
+  disabled?: boolean;
+  placeholder: string;
+  defaultValue?: CustomOption;
+}
+
+interface FormSelectProps extends Omit<FormSelectPropsBase, "placeholder"> {
+  placeholder?: string;
   full?: boolean;
 }
 export function FormSelect({
   name,
   label,
-  disabled,
+  disabled = false,
   options,
   placeholder = "Selecione um item",
   full = false,

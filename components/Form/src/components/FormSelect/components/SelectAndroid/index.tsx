@@ -8,24 +8,16 @@ import { Typography } from "@mobilestock-native/typography";
 import { useField } from "@unform/core";
 import { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { CustomOption } from "../..";
+import { CustomOption, FormSelectPropsBase } from "../..";
 import { FormSheet } from "./components/FormSheet";
-
-interface FormSelectModalProps {
-  placeholder?: string;
-  options: CustomOption[];
-  defaultValue?: CustomOption;
-  disabled?: boolean;
-  name: string;
-}
 
 export function SelectAndroid({
   options,
-  placeholder = "Selecione um item",
-  disabled = false,
+  placeholder,
+  disabled,
   defaultValue,
   name,
-}: FormSelectModalProps) {
+}: FormSelectPropsBase) {
   const { loading } = useForm();
   const { fieldName, registerField } = useField(name);
   const [showModal, setShowModal] = useState(false);
@@ -37,7 +29,7 @@ export function SelectAndroid({
     registerField({
       name: fieldName,
       getValue: () => {
-        return selected?.value;
+        return selected?.value || "";
       },
       setValue: (_, value) => {
         const item = options.find((option) => option.value === value);

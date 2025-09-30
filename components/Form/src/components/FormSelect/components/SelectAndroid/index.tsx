@@ -3,8 +3,10 @@ import { Icon } from "@mobilestock-native/icons";
 import { Clickable } from "@mobilestock-native/clickable";
 import { Container } from "@mobilestock-native/container";
 
+import { useForm } from "@/components/Form/src/hooks/useForm";
 import { Typography } from "@mobilestock-native/typography";
-import { useState } from "react";
+import { useField } from "@unform/core";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { CustomOption } from "../..";
 import { FormSheet } from "./components/FormSheet";
@@ -13,19 +15,44 @@ interface FormSelectModalProps {
   placeholder?: string;
   options: CustomOption[];
   disabled?: boolean;
+  name: string;
 }
 
-export function SelectAndroid<T extends { name: string; id: string | number }>({
+export function SelectAndroid({
   options,
   placeholder = "Selecione um item",
   disabled = false,
+  name,
 }: FormSelectModalProps) {
+  const { loading } = useForm();
+  const { fieldName, registerField } = useField(name);
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState<CustomOption | null>(null);
 
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      getValue: () => {
+        return selected?.value;
+      },
+      setValue: (_, value) => {
+        const item = options.find((option) => option.value === value);
+        if (item) {
+          setSelected(item);
+        }
+      },
+      clearValue: () => {
+        setSelected(null);
+      },
+    });
+  }, [fieldName, registerField, selected, options]);
+
   return (
     <>
-      <Clickable disabled={disabled} onPress={() => setShowModal(true)}>
+      <Clickable
+        disabled={disabled || loading}
+        onPress={() => setShowModal(true)}
+      >
         <ContainerInputFake
           padding="NONE_XS_NONE_MD"
           style={{ justifyContent: "space-between", alignItems: "center" }}
@@ -47,7 +74,7 @@ export function SelectAndroid<T extends { name: string; id: string | number }>({
           </Container.Horizontal>
         </ContainerInputFake>
       </Clickable>
-      {!disabled && (
+      {!disabled && !loading && (
         <FormSheet
           options={options}
           onClose={() => setShowModal(false)}

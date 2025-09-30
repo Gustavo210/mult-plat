@@ -1,5 +1,7 @@
+import { useForm } from "@/components/Form/src/hooks/useForm";
+import { useField } from "@unform/core";
 import { mergeWith } from "lodash";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import ReactSelect, { CSSObjectWithLabel } from "react-select";
 import { CustomOption } from "../..";
 
@@ -10,16 +12,32 @@ interface SelectWebProps {
   defaultValue?: CustomOption;
   value?: CustomOption;
   disabled?: boolean;
+  name: string;
 }
 
 export function SelectWeb({
   options,
   placeholder,
-  selectRef,
-  defaultValue,
   value,
   disabled,
+  name,
 }: SelectWebProps) {
+  const { loading } = useForm();
+  const { fieldName, defaultValue, registerField } = useField(name);
+  const selectRef = useRef(null);
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: selectRef.current,
+      getValue: (ref) => {
+        const selectValue: CustomOption[] = ref?.state?.selectValue;
+
+        return selectValue[0]?.value;
+      },
+    });
+  }, [fieldName, registerField]);
+
   const performStyles = useCallback((base: CSSObjectWithLabel) => {
     return function (style: CSSObjectWithLabel): CSSObjectWithLabel {
       return mergeWith(base, style);
@@ -54,7 +72,7 @@ export function SelectWeb({
       classNamePrefix="react-select"
       defaultValue={defaultValue}
       ref={selectRef}
-      isDisabled={disabled}
+      isDisabled={disabled || loading}
     />
   );
 }

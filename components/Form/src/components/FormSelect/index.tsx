@@ -1,5 +1,4 @@
 import { useField } from "@unform/core";
-import { useEffect, useRef } from "react";
 
 import { Container } from "@mobilestock-native/container";
 import { Typography } from "@mobilestock-native/typography";
@@ -16,7 +15,7 @@ interface FormSelectProps {
   name: string;
   label?: string;
   disabled?: boolean;
-  options?: CustomOption[];
+  options: CustomOption[];
   placeholder?: string;
   value?: CustomOption;
   full?: boolean;
@@ -30,20 +29,7 @@ export function FormSelect({
   full = false,
   value,
 }: FormSelectProps) {
-  const { fieldName, defaultValue, registerField, error } = useField(name);
-  const selectRef = useRef(null);
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: selectRef.current,
-      getValue: (ref) => {
-        const selectValue = ref?.state?.selectValue;
-        if (!selectValue) return "";
-
-        return selectValue[0]?.value;
-      },
-    });
-  }, [fieldName, registerField]);
+  const { error } = useField(name);
 
   return (
     <Container.Vertical full={full}>
@@ -51,25 +37,16 @@ export function FormSelect({
       {Platform.OS === "web" ? (
         <SelectWeb
           disabled={disabled}
-          options={options || []}
-          defaultValue={
-            defaultValue
-              ? { label: defaultValue, value: defaultValue }
-              : undefined
-          }
+          options={options}
           value={value}
-          selectRef={selectRef}
           placeholder={placeholder}
         />
       ) : (
         <SelectAndroid
+          name={name}
           disabled={disabled}
-          options={options || []}
-          defaultValue={defaultValue?.value}
-          value={value?.value}
-          selectRef={selectRef}
+          options={options}
           placeholder={placeholder}
-          label={label}
         />
       )}
       {error && (

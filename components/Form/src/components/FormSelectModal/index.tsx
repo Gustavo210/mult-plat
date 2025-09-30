@@ -23,96 +23,67 @@ import Animated, {
 import styled from "styled-components/native";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
-const MODAL_INITIAL_HEIGHT = SCREEN_HEIGHT * 0.3; // 30% da tela
 const MODAL_MAX_HEIGHT = SCREEN_HEIGHT * 0.8; // 80% da tela
 const MODAL_MIN_HEIGHT = 200; // Altura mínima do modal
+const ITEM_HEIGHT = 45; // Altura estimada de cada item da lista
 
 interface FormSelectModalProps<T> {
   data: (T & { id?: string | number })[];
   placeholder?: string;
 }
 
-export function FormSelectModal<T extends { name: string }>({
-  data,
-  placeholder = "Selecione um item",
-}: FormSelectModalProps<T>) {
+export function FormSelectModal<
+  T extends { name: string; id: string | number }
+>({ data, placeholder = "Selecione um item" }: FormSelectModalProps<T>) {
+  const MODAL_INITIAL_HEIGHT = Math.min(
+    MODAL_MIN_HEIGHT,
+    Math.min(SCREEN_HEIGHT * 0.8, data.length * ITEM_HEIGHT)
+  );
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState<T | null>(null);
-  const [listContentHeight, setListContentHeight] = useState(0);
-  const position = useSharedValue(SCREEN_HEIGHT);
-  const offset = useSharedValue(0);
   const modalHeight = useSharedValue(MODAL_INITIAL_HEIGHT);
-  const isScrolling = useSharedValue(false);
-  // const flatListRef = useRef<FlatList<any>>(null); // Removido, pois List não aceita ref
 
   const close = () => {
     "worklet";
-    position.value = withTiming(SCREEN_HEIGHT, {}, () => {
+    modalHeight.value = withTiming(0, {}, () => {
       runOnJS(setShowModal)(false);
     });
   };
 
+  const initialModalHeight = useSharedValue(MODAL_INITIAL_HEIGHT); // Nova variável para armazenar a altura inicial do modal no início do gesto
+
   const panGesture = Gesture.Pan()
     .onStart(() => {
-      offset.value = position.value;
+      initialModalHeight.value = modalHeight.value; // Armazena a altura atual do modal
     })
     .onUpdate((e) => {
-      if (
-        position.value <= SCREEN_HEIGHT - MODAL_MAX_HEIGHT &&
-        e.translationY < 0
-      ) {
-        // Se o modal estiver no topo (ou acima) e o usuário arrastar para cima, a lista deve rolar
-        isScrolling.value = true;
-      } else if (
-        position.value >= SCREEN_HEIGHT - MODAL_MAX_HEIGHT &&
-        e.translationY > 0
-      ) {
-        // Se o modal estiver no topo e o usuário arrastar para baixo, o modal deve descer
-        position.value = offset.value + e.translationY;
-        isScrolling.value = false;
-      } else {
-        position.value = offset.value + e.translationY;
-        isScrolling.value = false;
-      }
-      modalHeight.value = withSpring(
-        Math.max(
-          MODAL_MIN_HEIGHT,
-          Math.min(SCREEN_HEIGHT - position.value, MODAL_MAX_HEIGHT)
-        ),
-        {
-          damping: 20,
-          stiffness: 90,
-          mass: 0.3,
-        }
+      // Calcula a nova altura com base na altura inicial e na translação do dedo
+      const newHeight = initialModalHeight.value - e.translationY;
+      modalHeight.value = Math.max(
+        MODAL_MIN_HEIGHT,
+        Math.min(MODAL_MAX_HEIGHT, newHeight)
       );
     })
     .onEnd((e) => {
-      if (isScrolling.value) {
-        // Se estava rolando a lista, não fazer nada com o modal
-        isScrolling.value = false;
-        return;
-      }
-
       if (e.velocityY > 1000) {
         // Jogar para baixo
         close();
       } else if (e.velocityY < -1000) {
         // Jogar para cima
-        position.value = withTiming(SCREEN_HEIGHT - MODAL_MAX_HEIGHT);
         modalHeight.value = withTiming(MODAL_MAX_HEIGHT);
       } else {
-        // Ficar onde soltou
-        if (position.value > SCREEN_HEIGHT / 2) {
-          close();
+        // Soltar
+        if (modalHeight.value > MODAL_MAX_HEIGHT / 2) {
+          modalHeight.value = withTiming(MODAL_MAX_HEIGHT);
         } else {
-          position.value = withTiming(SCREEN_HEIGHT - modalHeight.value);
+          modalHeight.value = withTiming(MODAL_MIN_HEIGHT);
         }
       }
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: Math.max(position.value, 200) }],
     height: modalHeight.value,
+    bottom: 0, // O modal sempre começa da parte inferior
   }));
 
   useAnimatedReaction(
@@ -124,10 +95,9 @@ export function FormSelectModal<T extends { name: string }>({
           stiffness: 90,
           mass: 0.3,
         });
-        position.value = withTiming(SCREEN_HEIGHT - MODAL_INITIAL_HEIGHT);
       }
     },
-    [showModal, listContentHeight]
+    [showModal]
   );
 
   return (
@@ -189,18 +159,18 @@ export function FormSelectModal<T extends { name: string }>({
                 />
               </Container.Horizontal>
             </GestureDetector>
-            <Animated.View style={{ flex: 1 }}>
+            <Animated.View style={{ flex: 1, backgroundColor: "black" }}>
               <Container.Main>
                 <Animated.View style={{ flex: 1 }}>
                   <List
-                    data={data.map((item, key) => ({
-                      id: item?.id || key,
+                    data={data.map((item) => ({
                       ...item,
                     }))}
                     keyExtractor={(item) => item.id.toString()}
                     itemKey={(item) => item.id.toString()}
                     renderItem={(item) => (
                       <List.Item.Horizontal
+                        isSelected={selected?.id === item.id}
                         padding="SM"
                         onPress={() => {
                           setSelected(item);

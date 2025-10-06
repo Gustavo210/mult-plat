@@ -1,30 +1,18 @@
 import { Link, Stack } from "expo-router";
-import { Platform, View } from "react-native";
 
-import { lazy } from "react";
+import { Container } from "@mobilestock-native/container";
+import { Typography } from "@mobilestock-native/typography";
 
-const Typo =
-  Platform.OS === "web"
-    ? lazy(() =>
-        import("@mobilestockweb/typography").then((mod) => ({
-          default: mod.Typography,
-        }))
-      )
-    : lazy(() =>
-        import("@mobilestock-native/typography").then((mod) => ({
-          default: mod.Typography,
-        }))
-      );
 export default function NotFoundScreen() {
   return (
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
-      <View>
-        <Typo size="MD">This screen does not exist.</Typo>
+      <Container.Vertical>
+        <Typography size="MD">This screen does not exist.</Typography>
         <Link href="/">
-          <Typo size="MD">Go to home screen!</Typo>
+          <Typography size="MD">Go to home screen!</Typography>
         </Link>
-      </View>
+      </Container.Vertical>
     </>
   );
 }

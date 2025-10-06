@@ -39,7 +39,15 @@ rl.question(
   "Qual o nome do componente que você quer testar? ",
   (componentName) => {
     const routeName = formatComponentNameForRoute(componentName);
-    const routePath = path.join(process.cwd(), "app", routeName);
+    const routePath = path.join(
+      process.cwd(),
+      "..",
+      "..",
+      "apps",
+      "expo",
+      "app",
+      routeName
+    );
 
     if (fs.existsSync(routePath)) {
       console.error(`Erro: A rota '${routeName}' já existe em '${routePath}'.`);
@@ -73,8 +81,8 @@ export default function IndexAndroid() {
 }
 `;
 
-    const webContent = `import { Container } from "@mobilestockweb/container";
-import { Typography } from "@mobilestockweb/typography";
+    const webContent = `import { Container } from "@mobilestock-native/container";
+import { Typography } from "@mobilestock-native/typography";
 
 export default function IndexWeb() {
   return (

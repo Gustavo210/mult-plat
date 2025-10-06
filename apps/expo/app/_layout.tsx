@@ -2,14 +2,14 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { GlobalStyle } from "@/styles/globals";
-import { theme } from "@/styles/theme";
 import { Container } from "@mobilestock-native/container";
 import tools from "@mobilestock-native/tools";
 import { Typography } from "@mobilestock-native/typography";
 import { useEffect } from "react";
 import { Platform } from "react-native";
 import { ThemeProvider } from "styled-components/native";
+import { GlobalStyle } from "../styles/globals";
+import { theme } from "../styles/theme";
 
 SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {

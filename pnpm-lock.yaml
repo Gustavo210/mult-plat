@@ -44,6 +44,9 @@ importers:
       '@mobilestock-native/typography':
         specifier: ^0.0.9
         version: 0.0.9(react-native@0.81.4(@babel/core@7.27.7)(@types/react@19.2.0)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
+      '@mult-plat/create-route':
+        specifier: workspace:*
+        version: link:scripts/create-route
       '@react-navigation/bottom-tabs':
         specifier: ^7.3.10
         version: 7.4.2(@react-navigation/native@7.1.14(react-native@0.81.4(@babel/core@7.27.7)(@types/react@19.2.0)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.27.7)(@types/react@19.2.0)(react@19.1.0))(react@19.1.0))(react-native-screens@4.16.0(react-native@0.81.4(@babel/core@7.27.7)(@types/react@19.2.0)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.27.7)(@types/react@19.2.0)(react@19.1.0))(react@19.1.0)
@@ -147,6 +150,8 @@ importers:
       typescript:
         specifier: ~5.9.3
         version: 5.9.3
+
+  scripts/create-route: {}
 
 packages:
 

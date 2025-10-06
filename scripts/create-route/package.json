@@ -1,7 +1,8 @@
 {
-  "name": "@multplat/create-route",
+  "name": "@mult-plat/create-route",
   "version": "0.0.1",
   "private": true,
+  "main": "rotes.json",
   "scripts": {
     "start": "node index.js"
   }

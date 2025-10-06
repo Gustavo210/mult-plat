@@ -2,9 +2,9 @@ import { Button } from "@mobilestock-native/button";
 import { Container } from "@mobilestock-native/container";
 import { Spacer } from "@mobilestock-native/spacer";
 import { Typography } from "@mobilestock-native/typography";
+import rotes from "@mult-plat/create-route";
 import { router } from "expo-router";
-import React, { Fragment } from "react";
-import rotes from "../rotes.json";
+import { Fragment } from "react";
 
 type AppRoutes = Parameters<typeof router.push>[0];
 const navigationButtons: AppRoutes[] = rotes as AppRoutes[];

@@ -98,6 +98,7 @@ export function CounterProvider({
       {children ? (
         <Container.Vertical align="CENTER_START">
           <ContainerPill align={undefined}>{children}</ContainerPill>
+          {error && <Error>{error}</Error>}
         </Container.Vertical>
       ) : (
         <Container.Vertical align="CENTER_START">

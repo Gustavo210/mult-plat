@@ -15,3 +15,5 @@ export function Display() {
     </Container.Vertical>
   );
 }
+
+Display.displayName = "FormCounter.Display";

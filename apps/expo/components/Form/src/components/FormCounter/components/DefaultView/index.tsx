@@ -18,12 +18,8 @@ export function DefaultView() {
       )}
       {labelPosition !== "LEFT" && (
         <Container.Vertical align="CENTER">
-          {labelPosition === "TOP_CENTER" && label && (
-            <>
-              <Label>{label}</Label>
-              {error && <Error>{error}</Error>}
-            </>
-          )}
+          {labelPosition === "TOP_CENTER" && label && <Label>{label}</Label>}
+          {error && <Error>{error}</Error>}
           <ContainerPill>
             <Button type="MINUS" />
             <Display />

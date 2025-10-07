@@ -47,6 +47,7 @@ export function Button(props: TypeButton) {
     />
   );
 }
+Button.displayName = "FormCounter.Button";
 
 const Teste = styled(ButtonRaw)<{
   $variant?: "GROUPED" | "NAKED" | "DEFAULT";

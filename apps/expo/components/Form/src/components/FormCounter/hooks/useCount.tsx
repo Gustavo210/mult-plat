@@ -1,4 +1,11 @@
-import { createContext, useContext, useState } from "react";
+import { Container } from "@mobilestock-native/container";
+import { useField } from "@unform/core";
+import { createContext, useContext, useEffect, useState } from "react";
+import { Button } from "../components/Button";
+import { ContainerPill } from "../components/ContainerPiil";
+import { Counter } from "../components/Counter";
+import { Error } from "../components/Error";
+import { Label } from "../components/Label";
 
 interface CounterContextType {
   count: number;
@@ -10,20 +17,21 @@ interface CounterContextType {
   label?: string;
   labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
   variant?: "GROUPED" | "NAKED" | "DEFAULT";
+  error?: string;
 }
 const CounterContext = createContext<CounterContextType | undefined>(undefined);
 
 export function CounterProvider({
-  children,
   initialCount,
   maxCount,
   minCount,
   editable,
   label,
-  labelPosition,
-  variant,
+  labelPosition = "TOP_START",
+  variant = "DEFAULT",
+  name,
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   initialCount?: number;
   maxCount?: number;
   minCount?: number;
@@ -31,8 +39,25 @@ export function CounterProvider({
   label?: string;
   labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
   variant?: "GROUPED" | "NAKED" | "DEFAULT";
+  name: string;
 }) {
+  const { fieldName, registerField, error } = useField(name);
   const [count, setCount] = useState(initialCount || 0);
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      getValue: () => count,
+      setValue: (_, value) => {
+        if (value) {
+          setCount(value);
+        }
+      },
+      clearValue: () => {
+        setCount(0);
+      },
+    });
+  }, [fieldName, registerField, count]);
 
   function increment(multiplier = 1) {
     setCount((lastVal) => {
@@ -66,9 +91,47 @@ export function CounterProvider({
         label,
         labelPosition,
         variant,
+        error,
       }}
     >
-      {children}
+      <Container.Vertical align="CENTER_START">
+        {labelPosition === "TOP_START" && label && (
+          <Container.Horizontal gap="XS">
+            <Label>{label}</Label>
+            {error && <Error>{error}</Error>}
+          </Container.Horizontal>
+        )}
+        {labelPosition !== "LEFT" && (
+          <Container.Vertical align="CENTER">
+            {labelPosition === "TOP_CENTER" && label && (
+              <>
+                <Label>{label}</Label>
+                {error && <Error>{error}</Error>}
+              </>
+            )}
+            <ContainerPill>
+              <Button type="MINUS" />
+              <Counter />
+              <Button type="PLUS" />
+            </ContainerPill>
+          </Container.Vertical>
+        )}
+        {labelPosition === "LEFT" && (
+          <Container.Vertical>
+            <Container.Horizontal gap="XS" align="CENTER">
+              <Container.Vertical>
+                {label && <Label>{label}</Label>}
+                {error && <Error>{error}</Error>}
+              </Container.Vertical>
+              <ContainerPill>
+                <Button type="MINUS" />
+                <Counter />
+                <Button type="PLUS" />
+              </ContainerPill>
+            </Container.Horizontal>
+          </Container.Vertical>
+        )}
+      </Container.Vertical>
     </CounterContext.Provider>
   );
 }

@@ -33,6 +33,7 @@ export function Button(props: ButtonProps & { type: "PLUS" | "MINUS" }) {
   return (
     <ButtonRaw
       size="SM"
+      variant="TRANSPARENT"
       icon={props.type === "PLUS" ? "Plus" : "Minus"}
       {...props}
       disabled={disabledPress || props.disabled}

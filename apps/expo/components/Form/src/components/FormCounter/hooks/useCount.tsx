@@ -1,11 +1,8 @@
-import { Container } from "@mobilestock-native/container";
 import { useField } from "@unform/core";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Button } from "../components/Button";
-import { ContainerPill } from "../components/ContainerPiil";
-import { Display } from "../components/Display";
+import { CustomView } from "../components/CustomView";
+import { DefaultView } from "../components/DefaultView";
 import { Error } from "../components/Error";
-import { Label } from "../components/Label";
 
 interface CounterContextType {
   count: number;
@@ -95,51 +92,7 @@ export function CounterProvider({
         error,
       }}
     >
-      {children ? (
-        <Container.Vertical align="CENTER_START">
-          <ContainerPill align={undefined}>{children}</ContainerPill>
-          {error && <Error>{error}</Error>}
-        </Container.Vertical>
-      ) : (
-        <Container.Vertical align="CENTER_START">
-          {labelPosition === "TOP_START" && label && (
-            <Container.Horizontal gap="XS">
-              <Label>{label}</Label>
-              {error && <Error>{error}</Error>}
-            </Container.Horizontal>
-          )}
-          {labelPosition !== "LEFT" && (
-            <Container.Vertical align="CENTER">
-              {labelPosition === "TOP_CENTER" && label && (
-                <>
-                  <Label>{label}</Label>
-                  {error && <Error>{error}</Error>}
-                </>
-              )}
-              <ContainerPill>
-                <Button type="MINUS" />
-                <Display />
-                <Button type="PLUS" />
-              </ContainerPill>
-            </Container.Vertical>
-          )}
-          {labelPosition === "LEFT" && (
-            <Container.Vertical>
-              <Container.Horizontal gap="XS" align="CENTER">
-                <Container.Vertical>
-                  {label && <Label>{label}</Label>}
-                  {error && <Error>{error}</Error>}
-                </Container.Vertical>
-                <ContainerPill>
-                  <Button type="MINUS" />
-                  <Display />
-                  <Button type="PLUS" />
-                </ContainerPill>
-              </Container.Horizontal>
-            </Container.Vertical>
-          )}
-        </Container.Vertical>
-      )}
+      {children ? <CustomView>{children}</CustomView> : <DefaultView />}
     </CounterContext.Provider>
   );
 }

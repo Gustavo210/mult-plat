@@ -1,8 +1,10 @@
 import { ButtonProps, Button as ButtonRaw } from "@mobilestock-native/button";
 import { useMemo } from "react";
+import styled, { css } from "styled-components/native";
 import { useCounter } from "../../hooks/useCount";
 export function Button(props: ButtonProps & { type: "PLUS" | "MINUS" }) {
-  const { increment, decrement, maxCount, minCount, count } = useCounter();
+  const { increment, decrement, maxCount, minCount, count, variant } =
+    useCounter();
 
   const disabledPress = useMemo(() => {
     if (props.type === "PLUS" && maxCount !== undefined) {
@@ -31,14 +33,26 @@ export function Button(props: ButtonProps & { type: "PLUS" | "MINUS" }) {
   }
 
   return (
-    <ButtonRaw
+    <Teste
       size="SM"
-      variant="TRANSPARENT"
+      variant={variant === "NAKED" ? "TRANSPARENT" : "DEFAULT"}
+      $variant={variant}
       icon={props.type === "PLUS" ? "Plus" : "Minus"}
       {...props}
+      backgroundColor={props.type === "PLUS" ? "DEFAULT_DARK" : "CANCEL_DARK"}
       disabled={disabledPress || props.disabled}
       onPress={handlePress}
       onLongPress={handleLongPress}
     />
   );
 }
+
+const Teste = styled(ButtonRaw)<{
+  $variant?: "GROUPED" | "NAKED" | "DEFAULT";
+}>`
+  ${(props) =>
+    props.$variant === "GROUPED" &&
+    css`
+      border-radius: 0px;
+    `}
+`;

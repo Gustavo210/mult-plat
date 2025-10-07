@@ -6,6 +6,10 @@ interface CounterContextType {
   decrement: (multiplier?: number) => void;
   maxCount?: number;
   minCount?: number;
+  editable?: boolean;
+  label?: string;
+  labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
+  variant?: "GROUPED" | "NAKED" | "DEFAULT";
 }
 const CounterContext = createContext<CounterContextType | undefined>(undefined);
 
@@ -14,11 +18,19 @@ export function CounterProvider({
   initialCount,
   maxCount,
   minCount,
+  editable,
+  label,
+  labelPosition,
+  variant,
 }: {
   children: React.ReactNode;
   initialCount?: number;
   maxCount?: number;
   minCount?: number;
+  editable?: boolean;
+  label?: string;
+  labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
+  variant?: "GROUPED" | "NAKED" | "DEFAULT";
 }) {
   const [count, setCount] = useState(initialCount || 0);
 
@@ -44,7 +56,17 @@ export function CounterProvider({
 
   return (
     <CounterContext.Provider
-      value={{ count, increment, decrement, maxCount, minCount }}
+      value={{
+        count,
+        increment,
+        decrement,
+        maxCount,
+        minCount,
+        editable,
+        label,
+        labelPosition,
+        variant,
+      }}
     >
       {children}
     </CounterContext.Provider>

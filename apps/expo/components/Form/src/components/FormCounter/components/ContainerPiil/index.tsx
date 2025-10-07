@@ -1,25 +1,34 @@
 import { Container as ContainerRaw } from "@mobilestock-native/container";
+import styled, { css } from "styled-components/native";
 import { useCounter } from "../../hooks/useCount";
 
 export function ContainerPill({ children }: { children: React.ReactNode }) {
-  const { variant } = useCounter();
+  const { variant, error } = useCounter();
   return (
-    <ContainerRaw.Horizontal
-      align="CENTER"
-      gap="XS"
-      style={
-        variant === "GROUPED"
-          ? {
-              backgroundColor: "#e5e5e5",
-              borderColor: "#888",
-              borderWidth: 1,
-              borderRadius: 8,
-              overflow: "hidden",
-            }
-          : {}
-      }
-    >
+    <Container align="CENTER" gap="XS" $variant={variant} $error={!!error}>
       {children}
-    </ContainerRaw.Horizontal>
+    </Container>
   );
 }
+
+const Container = styled(ContainerRaw.Horizontal)<{
+  $variant?: "DEFAULT" | "GROUPED" | "NAKED";
+  $error?: boolean;
+}>`
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  ${({ $variant, theme }) =>
+    $variant === "GROUPED" &&
+    css`
+      background-color: #e5e5e5;
+
+      border: 1px solid ${theme.colors.input.border};
+    `}
+  ${({ $error, theme }) =>
+    $error &&
+    css`
+      background-color: ${theme.colors.input.error};
+      border: 1px solid ${theme.colors.input.error};
+    `}
+`;

@@ -9,7 +9,9 @@ export function Counter() {
       style={{ minWidth: 40, userSelect: "none" }}
       align="CENTER"
     >
-      <Typography>{count}</Typography>
+      <Typography weight="BOLD" size="LG">
+        {count}
+      </Typography>
     </Container.Vertical>
   );
 }

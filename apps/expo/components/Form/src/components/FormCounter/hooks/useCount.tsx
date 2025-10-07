@@ -3,7 +3,7 @@ import { useField } from "@unform/core";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { ContainerPill } from "../components/ContainerPiil";
-import { Counter } from "../components/Counter";
+import { Display } from "../components/Display";
 import { Error } from "../components/Error";
 import { Label } from "../components/Label";
 
@@ -22,6 +22,7 @@ interface CounterContextType {
 const CounterContext = createContext<CounterContextType | undefined>(undefined);
 
 export function CounterProvider({
+  children,
   initialCount,
   maxCount,
   minCount,
@@ -94,44 +95,50 @@ export function CounterProvider({
         error,
       }}
     >
-      <Container.Vertical align="CENTER_START">
-        {labelPosition === "TOP_START" && label && (
-          <Container.Horizontal gap="XS">
-            <Label>{label}</Label>
-            {error && <Error>{error}</Error>}
-          </Container.Horizontal>
-        )}
-        {labelPosition !== "LEFT" && (
-          <Container.Vertical align="CENTER">
-            {labelPosition === "TOP_CENTER" && label && (
-              <>
-                <Label>{label}</Label>
-                {error && <Error>{error}</Error>}
-              </>
-            )}
-            <ContainerPill>
-              <Button type="MINUS" />
-              <Counter />
-              <Button type="PLUS" />
-            </ContainerPill>
-          </Container.Vertical>
-        )}
-        {labelPosition === "LEFT" && (
-          <Container.Vertical>
-            <Container.Horizontal gap="XS" align="CENTER">
-              <Container.Vertical>
-                {label && <Label>{label}</Label>}
-                {error && <Error>{error}</Error>}
-              </Container.Vertical>
+      {children ? (
+        <Container.Vertical align="CENTER_START">
+          <ContainerPill align={undefined}>{children}</ContainerPill>
+        </Container.Vertical>
+      ) : (
+        <Container.Vertical align="CENTER_START">
+          {labelPosition === "TOP_START" && label && (
+            <Container.Horizontal gap="XS">
+              <Label>{label}</Label>
+              {error && <Error>{error}</Error>}
+            </Container.Horizontal>
+          )}
+          {labelPosition !== "LEFT" && (
+            <Container.Vertical align="CENTER">
+              {labelPosition === "TOP_CENTER" && label && (
+                <>
+                  <Label>{label}</Label>
+                  {error && <Error>{error}</Error>}
+                </>
+              )}
               <ContainerPill>
                 <Button type="MINUS" />
-                <Counter />
+                <Display />
                 <Button type="PLUS" />
               </ContainerPill>
-            </Container.Horizontal>
-          </Container.Vertical>
-        )}
-      </Container.Vertical>
+            </Container.Vertical>
+          )}
+          {labelPosition === "LEFT" && (
+            <Container.Vertical>
+              <Container.Horizontal gap="XS" align="CENTER">
+                <Container.Vertical>
+                  {label && <Label>{label}</Label>}
+                  {error && <Error>{error}</Error>}
+                </Container.Vertical>
+                <ContainerPill>
+                  <Button type="MINUS" />
+                  <Display />
+                  <Button type="PLUS" />
+                </ContainerPill>
+              </Container.Horizontal>
+            </Container.Vertical>
+          )}
+        </Container.Vertical>
+      )}
     </CounterContext.Provider>
   );
 }

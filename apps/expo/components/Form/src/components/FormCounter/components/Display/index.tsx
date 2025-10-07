@@ -2,7 +2,7 @@ import { Container } from "@mobilestock-native/container";
 import { Typography } from "@mobilestock-native/typography";
 import { useCounter } from "../../hooks/useCount";
 
-export function Counter() {
+export function Display() {
   const { count } = useCounter();
   return (
     <Container.Vertical

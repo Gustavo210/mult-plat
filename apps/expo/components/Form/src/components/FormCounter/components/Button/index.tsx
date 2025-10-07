@@ -2,7 +2,8 @@ import { ButtonProps, Button as ButtonRaw } from "@mobilestock-native/button";
 import { useMemo } from "react";
 import styled, { css } from "styled-components/native";
 import { useCounter } from "../../hooks/useCount";
-export function Button(props: ButtonProps & { type: "PLUS" | "MINUS" }) {
+export type TypeButton = ButtonProps & { type: "PLUS" | "MINUS" };
+export function Button(props: TypeButton) {
   const { increment, decrement, maxCount, minCount, count, variant } =
     useCounter();
 
@@ -37,7 +38,7 @@ export function Button(props: ButtonProps & { type: "PLUS" | "MINUS" }) {
       size="SM"
       variant={variant === "NAKED" ? "TRANSPARENT" : "DEFAULT"}
       $variant={variant}
-      icon={props.type === "PLUS" ? "Plus" : "Minus"}
+      icon={props.text ? undefined : props.type === "PLUS" ? "Plus" : "Minus"}
       {...props}
       backgroundColor={props.type === "PLUS" ? "DEFAULT_DARK" : "CANCEL_DARK"}
       disabled={disabledPress || props.disabled}

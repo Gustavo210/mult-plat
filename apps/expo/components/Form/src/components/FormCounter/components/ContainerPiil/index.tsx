@@ -1,11 +1,20 @@
-import { Container as ContainerRaw } from "@mobilestock-native/container";
+import {
+  Container as ContainerRaw,
+  ViewBaseProps,
+} from "@mobilestock-native/container";
 import styled, { css } from "styled-components/native";
 import { useCounter } from "../../hooks/useCount";
 
-export function ContainerPill({ children }: { children: React.ReactNode }) {
+export function ContainerPill({ children, ...props }: ViewBaseProps) {
   const { variant, error } = useCounter();
   return (
-    <Container align="CENTER" gap="XS" $variant={variant} $error={!!error}>
+    <Container
+      align="CENTER"
+      gap="XS"
+      $variant={variant}
+      $error={!!error}
+      {...props}
+    >
       {children}
     </Container>
   );

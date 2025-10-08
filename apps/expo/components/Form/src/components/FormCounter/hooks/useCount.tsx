@@ -4,10 +4,13 @@ import { CustomView } from "../components/CustomView";
 import { DefaultView } from "../components/DefaultView";
 import { Error } from "../components/Error";
 
+export type CounterEventName = "INCREMENT" | "DECREMENT";
+
 interface CounterContextType {
   count: number;
   increment: (multiplier?: number) => void;
   decrement: (multiplier?: number) => void;
+  onChange?: (data: { value: number; event: CounterEventName }) => void;
   maxCount?: number;
   minCount?: number;
   editable?: boolean;
@@ -28,6 +31,7 @@ export function CounterProvider({
   labelPosition = "TOP_START",
   variant = "DEFAULT",
   name,
+  onChange,
 }: {
   children?: React.ReactNode;
   initialCount?: number;
@@ -38,6 +42,7 @@ export function CounterProvider({
   labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
   variant?: "GROUPED" | "NAKED" | "DEFAULT";
   name: string;
+  onChange?: (data: { value: number; event: CounterEventName }) => void;
 }) {
   const { fieldName, registerField, error } = useField(name);
   const [count, setCount] = useState(initialCount || 0);
@@ -63,6 +68,10 @@ export function CounterProvider({
       if (maxCount !== undefined && newVal > maxCount) {
         return lastVal;
       }
+      onChange?.({
+        value: newVal,
+        event: "INCREMENT",
+      });
       return newVal;
     });
   }
@@ -73,6 +82,10 @@ export function CounterProvider({
       if (minCount !== undefined && newVal < minCount) {
         return lastVal;
       }
+      onChange?.({
+        value: newVal,
+        event: "DECREMENT",
+      });
       return newVal;
     });
   }

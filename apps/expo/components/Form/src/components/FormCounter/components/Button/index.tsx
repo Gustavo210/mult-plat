@@ -2,7 +2,9 @@ import { ButtonProps, Button as ButtonRaw } from "@mobilestock-native/button";
 import { useMemo } from "react";
 import styled, { css } from "styled-components/native";
 import { useCounter } from "../../hooks/useCount";
+import { Slot } from "../Slot";
 export type TypeButton = ButtonProps & { type: "PLUS" | "MINUS" };
+
 export function Button(props: TypeButton) {
   const { increment, decrement, maxCount, minCount, count, variant } =
     useCounter();
@@ -34,17 +36,19 @@ export function Button(props: TypeButton) {
   }
 
   return (
-    <Teste
-      size="SM"
-      variant={variant === "NAKED" ? "TRANSPARENT" : "DEFAULT"}
-      $variant={variant}
-      icon={props.text ? undefined : props.type === "PLUS" ? "Plus" : "Minus"}
-      {...props}
-      backgroundColor={props.type === "PLUS" ? "DEFAULT_DARK" : "CANCEL_DARK"}
-      disabled={disabledPress || props.disabled}
-      onPress={handlePress}
-      onLongPress={handleLongPress}
-    />
+    <Slot>
+      <Teste
+        size="SM"
+        variant={variant === "NAKED" ? "TRANSPARENT" : "DEFAULT"}
+        $variant={variant}
+        icon={props.text ? undefined : props.type === "PLUS" ? "Plus" : "Minus"}
+        {...props}
+        backgroundColor={props.type === "PLUS" ? "DEFAULT_DARK" : "CANCEL_DARK"}
+        disabled={disabledPress || props.disabled}
+        onPress={handlePress}
+        onLongPress={handleLongPress}
+      />
+    </Slot>
   );
 }
 Button.displayName = "FormCounter.Button";

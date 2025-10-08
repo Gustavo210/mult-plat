@@ -153,21 +153,6 @@ export default function IndexWeb() {
           <Form.Counter.Display />
           <Form.Counter.Plusle />
         </Form.Counter>
-        <Form.Counter
-          name="counter.children4"
-          onChange={(value) => console.log(value)}
-        >
-          {["34", "35", "36", "37", "38", "39", "40", "41", "42"].map(
-            (item) => (
-              <Form.Counter.Item key={item}>
-                <Form.Counter.Display />
-                <Form.Counter.Badge text={item} label="teste" />
-                <Form.Counter.Minun text="Remover" />
-                <Form.Counter.Plusle text="Adicionar" />
-              </Form.Counter.Item>
-            )
-          )}
-        </Form.Counter>
         <Form.Button text="Enviar" />
       </Form>
     </ScrollView>

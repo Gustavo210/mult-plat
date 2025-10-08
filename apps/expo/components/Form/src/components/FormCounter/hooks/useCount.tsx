@@ -11,6 +11,7 @@ interface CounterContextType {
   increment: (multiplier?: number) => void;
   decrement: (multiplier?: number) => void;
   onChange?: (data: { value: number; event: CounterEventName }) => void;
+  setCount: (value: number) => void;
   maxCount?: number;
   minCount?: number;
   editable?: boolean;
@@ -96,6 +97,7 @@ export function CounterProvider({
         count,
         increment,
         decrement,
+        setCount,
         maxCount,
         minCount,
         editable,

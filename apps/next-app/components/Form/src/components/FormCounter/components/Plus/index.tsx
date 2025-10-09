@@ -1,6 +1,6 @@
 import { Button, TypeButton } from "../Button";
 
-export function Plus(props: Partial<TypeButton>) {
+export function Plus(props: TypeButton) {
   return <Button {...props} size="SM" type="PLUS" />;
 }
 

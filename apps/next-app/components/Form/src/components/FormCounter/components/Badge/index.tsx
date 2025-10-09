@@ -18,7 +18,9 @@ export function Badge(props: { text: string; renderInsideThePill?: boolean }) {
           }}
           align="CENTER"
         >
-          <Typography color="CONTRAST">{props.text}</Typography>
+          <Typography color="DEFAULT_100" weight="BOLD">
+            {props.text}
+          </Typography>
         </Container.Vertical>
       ) : (
         <BadgeRaw text={props.text} size="XS" />

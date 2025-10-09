@@ -11,40 +11,33 @@ export interface TypeButton
   disabled?: boolean;
 }
 
-export function Button(props: TypeButton) {
+export function Button({ type, disabled, ...props }: TypeButton) {
   const Counter = useCounter();
 
   const disabledPress = useMemo(() => {
-    if (props.type === "PLUS" && Counter.maxCount !== undefined) {
+    if (type === "PLUS" && Counter.maxCount !== undefined) {
       return Counter.count >= Counter.maxCount;
     }
-    if (props.type === "MINUS" && Counter.minCount !== undefined) {
+    if (type === "MINUS" && Counter.minCount !== undefined) {
       return Counter.count <= Counter.minCount;
     }
     return false;
-  }, [props.type, Counter.count, Counter.maxCount, Counter.minCount]);
+  }, [type, Counter.count, Counter.maxCount, Counter.minCount]);
 
   function handlePress() {
-    if (props.type === "PLUS") {
+    if (type === "PLUS") {
       Counter.increment();
     } else {
       Counter.decrement();
     }
   }
 
-  function handleLongPress() {
-    if (props.type === "PLUS") {
-      Counter.increment(10);
-    } else {
-      Counter.decrement(10);
-    }
-  }
-
   return (
     <Slot>
       <ButtonRaw
+        type="button"
         size="SM"
-        icon={props.type === "PLUS" ? "Plus" : "Minus"}
+        icon={type === "PLUS" ? "Plus" : "Minus"}
         {...props}
         variant={Counter.buttonTransparent ? "TRANSPARENT" : "DEFAULT"}
         style={
@@ -54,10 +47,9 @@ export function Button(props: TypeButton) {
               }
             : undefined
         }
-        backgroundColor={props.type === "PLUS" ? "DEFAULT_DARK" : "CANCEL_DARK"}
-        disabled={disabledPress || props.disabled}
-        onPress={handlePress}
-        onLongPress={handleLongPress}
+        backgroundColor={type === "PLUS" ? "DEFAULT_DARK" : "CANCEL_DARK"}
+        disabled={disabledPress || disabled}
+        onClick={handlePress}
       />
     </Slot>
   );

@@ -69,7 +69,8 @@ export function CounterProvider(props: CounterRootProps) {
         editable: props.editable,
         label: props.label,
         labelPosition: props.labelPosition,
-        variant: props.variant,
+        buttonTransparent: props.buttonTransparent,
+        groupElements: props.groupElements,
         error,
       }}
     >

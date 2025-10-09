@@ -43,10 +43,10 @@ export function Button(props: TypeButton) {
     <Slot>
       <ButtonRaw
         size="SM"
-        variant={Counter.variant === "NAKED" ? "TRANSPARENT" : "DEFAULT"}
+        variant={Counter.buttonTransparent ? "TRANSPARENT" : "DEFAULT"}
         icon={props.type === "PLUS" ? "Plus" : "Minus"}
         style={
-          Counter.variant === "GROUPED"
+          Counter.groupElements
             ? {
                 borderRadius: 0,
               }

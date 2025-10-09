@@ -3,7 +3,7 @@ import { CounterRoot } from "./components/CounterRoot";
 import { Display } from "./components/Display";
 import { Minus } from "./components/Minus";
 import { Plus } from "./components/Plus";
-import { CounterEventName, CounterVariant } from "./hooks/useCount";
+import { CounterEventName } from "./hooks/useCount";
 
 export interface CounterRootProps {
   children?: React.ReactNode;
@@ -13,7 +13,8 @@ export interface CounterRootProps {
   editable?: boolean;
   label?: string;
   labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
-  variant?: CounterVariant;
+  buttonTransparent?: boolean;
+  groupElements?: boolean;
   name: string;
   onChange?: (data: { value: number; event: CounterEventName }) => void;
 }

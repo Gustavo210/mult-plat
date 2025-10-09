@@ -6,12 +6,12 @@ import styled, { css } from "styled-components/native";
 import { useCounter } from "../../hooks/useCount";
 
 export function ContainerPill({ children, ...props }: ViewBaseProps) {
-  const { variant, error } = useCounter();
+  const { groupElements, error } = useCounter();
   return (
     <Container
       align="CENTER"
       gap="XS"
-      $variant={variant}
+      $groupElements={groupElements}
       $error={!!error}
       {...props}
     >
@@ -21,14 +21,14 @@ export function ContainerPill({ children, ...props }: ViewBaseProps) {
 }
 
 const Container = styled(ContainerRaw.Horizontal)<{
-  $variant?: "DEFAULT" | "GROUPED" | "NAKED";
+  $groupElements?: boolean;
   $error?: boolean;
 }>`
   border-radius: 8px;
   overflow: hidden;
   background-color: #f0f0f0;
-  ${({ $variant, theme }) =>
-    $variant === "GROUPED" &&
+  ${({ $groupElements, theme }) =>
+    $groupElements &&
     css`
       background-color: #e5e5e5;
 

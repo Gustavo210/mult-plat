@@ -33,7 +33,7 @@ export function CustomView({ children }: { children: React.ReactNode }) {
       isValidElement(child) &&
       tools.isComponentWithDisplayName(child.type) &&
       child.type.displayName === Badge.displayName &&
-      child.props.label
+      !child.props.renderInsideThePill
     ) {
       externalChildren.push(child);
     } else {

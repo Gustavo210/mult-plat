@@ -36,20 +36,16 @@ export default function IndexWeb() {
         })}
       >
         <Form.Vertical gap="SM">
-          <Form.Counter
-            name="counter.padrao.default"
-            label="DEFAULT"
-            variant="DEFAULT"
-          />
+          <Form.Counter name="counter.padrao.default" label="DEFAULT" />
           <Form.Counter
             name="counter.padrao.grouped"
             label="GROUPED"
-            variant="GROUPED"
+            groupElements
           />
           <Form.Counter
             name="counter.padrao.naked"
             label="NAKED"
-            variant="NAKED"
+            buttonTransparent
           />
         </Form.Vertical>
 
@@ -61,19 +57,18 @@ export default function IndexWeb() {
             name="counter.top_center.default"
             labelPosition="TOP_CENTER"
             label="DEFAULT"
-            variant="DEFAULT"
           />
           <Form.Counter
             name="counter.top_center.grouped"
             labelPosition="TOP_CENTER"
             label="GROUPED"
-            variant="GROUPED"
+            groupElements
           />
           <Form.Counter
             name="counter.top_center.naked"
             labelPosition="TOP_CENTER"
             label="NAKED"
-            variant="NAKED"
+            buttonTransparent
           />
         </Form.Vertical>
 
@@ -85,74 +80,78 @@ export default function IndexWeb() {
             name="counter.left.default"
             labelPosition="LEFT"
             label="DEFAULT"
-            variant="DEFAULT"
           />
           <Form.Counter
             name="counter.left.grouped"
             labelPosition="LEFT"
             label="GROUPED"
-            variant="GROUPED"
+            groupElements
           />
           <Form.Counter
             name="counter.left.naked"
             labelPosition="LEFT"
             label="NAKED"
-            variant="NAKED"
+            buttonTransparent
           />
         </Form.Vertical>
         <Form.Counter
           name="counter.children"
+          editable
           onChange={(value) => console.log(value)}
         >
-          <Form.Counter.Plusle text="Adicionar" />
-          <Form.Counter.Minun text="Remover" />
-          <Form.Counter.Badge text="37" label="teste" />
+          <Form.Counter.Plus text="Adicionar" />
+          <Form.Counter.Minus text="Remover" />
+          <Form.Counter.Badge text="37" renderInsideThePill />
           <Form.Counter.Display />
         </Form.Counter>
         <Form.Counter
           name="counter.children2"
-          variant="GROUPED"
+          groupElements
           onChange={(value) => console.log(value)}
         >
-          <Form.Counter.Plusle />
-          <Form.Counter.Minun />
-          <Form.Counter.Badge text="37" label="teste" />
+          <Form.Counter.Badge text="37" renderInsideThePill />
+          <Form.Counter.Plus />
+          <Form.Counter.Minus />
           <Form.Counter.Display />
         </Form.Counter>
         <Form.Counter
           name="counter.children3"
-          variant="GROUPED"
+          groupElements
           labelPosition="LEFT"
           label="Counter com grouped"
           onChange={(value) => console.log(value)}
         >
-          <Form.Counter.Badge text="37" />
-          <Form.Counter.Minun />
+          <Form.Counter.Badge text="37" renderInsideThePill />
+          <Form.Counter.Minus />
           <Form.Counter.Display />
-          <Form.Counter.Plusle />
+          <Form.Counter.Plus />
         </Form.Counter>
         <Form.Counter
           name="counter.children4"
           labelPosition="TOP_CENTER"
-          label="Counter com grouped"
-          onChange={(value) => console.log(value)}
-        >
-          <Form.Counter.Badge text="37" label="teste" />
-          <Form.Counter.Minun />
-          <Form.Counter.Display />
-          <Form.Counter.Plusle />
-        </Form.Counter>
-        <Form.Counter
-          name="counter.children4"
-          labelPosition="TOP_START"
-          label="Counter com grouped"
+          label="Counter com grouped2"
           onChange={(value) => console.log(value)}
         >
           <Form.Counter.Badge text="37" />
-          <Form.Counter.Minun />
+          <Form.Counter.Minus />
           <Form.Counter.Display />
-          <Form.Counter.Plusle />
+          <Form.Counter.Plus />
         </Form.Counter>
+        {["37", "38", "39", "40"].map((value, index) => (
+          <Form.Counter
+            name={`counter.children4.[${index}]`}
+            labelPosition="TOP_START"
+            editable
+            groupElements
+            key={value}
+            onChange={(value) => console.log(value)}
+          >
+            <Form.Counter.Badge text={value} />
+            <Form.Counter.Minus />
+            <Form.Counter.Display />
+            <Form.Counter.Plus />
+          </Form.Counter>
+        ))}
         <Form.Button text="Enviar" />
       </Form>
     </ScrollView>

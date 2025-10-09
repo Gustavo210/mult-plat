@@ -1,47 +1,57 @@
 import { ButtonProps, Button as ButtonRaw } from "@mobilestock-native/button";
 import { useMemo } from "react";
-import styled, { css } from "styled-components/native";
 import { useCounter } from "../../hooks/useCount";
 import { Slot } from "../Slot";
-export type TypeButton = ButtonProps & { type: "PLUS" | "MINUS" };
+
+type ButtonType = "PLUS" | "MINUS";
+
+export interface TypeButton extends Pick<ButtonProps, "disabled" | "text"> {
+  type: ButtonType;
+  disabled?: boolean;
+}
 
 export function Button(props: TypeButton) {
-  const { increment, decrement, maxCount, minCount, count, variant } =
-    useCounter();
+  const Counter = useCounter();
 
   const disabledPress = useMemo(() => {
-    if (props.type === "PLUS" && maxCount !== undefined) {
-      return count >= maxCount;
+    if (props.type === "PLUS" && Counter.maxCount !== undefined) {
+      return Counter.count >= Counter.maxCount;
     }
-    if (props.type === "MINUS" && minCount !== undefined) {
-      return count <= minCount;
+    if (props.type === "MINUS" && Counter.minCount !== undefined) {
+      return Counter.count <= Counter.minCount;
     }
     return false;
-  }, [props.type, count, maxCount, minCount]);
+  }, [props.type, Counter.count, Counter.maxCount, Counter.minCount]);
 
   function handlePress() {
     if (props.type === "PLUS") {
-      increment();
+      Counter.increment();
     } else {
-      decrement();
+      Counter.decrement();
     }
   }
 
   function handleLongPress() {
     if (props.type === "PLUS") {
-      increment(10);
+      Counter.increment(10);
     } else {
-      decrement(10);
+      Counter.decrement(10);
     }
   }
 
   return (
     <Slot>
-      <Teste
+      <ButtonRaw
         size="SM"
-        variant={variant === "NAKED" ? "TRANSPARENT" : "DEFAULT"}
-        $variant={variant}
-        icon={props.text ? undefined : props.type === "PLUS" ? "Plus" : "Minus"}
+        variant={Counter.variant === "NAKED" ? "TRANSPARENT" : "DEFAULT"}
+        icon={props.type === "PLUS" ? "Plus" : "Minus"}
+        style={
+          Counter.variant === "GROUPED"
+            ? {
+                borderRadius: 0,
+              }
+            : undefined
+        }
         {...props}
         backgroundColor={props.type === "PLUS" ? "DEFAULT_DARK" : "CANCEL_DARK"}
         disabled={disabledPress || props.disabled}
@@ -51,14 +61,3 @@ export function Button(props: TypeButton) {
     </Slot>
   );
 }
-Button.displayName = "FormCounter.Button";
-
-const Teste = styled(ButtonRaw)<{
-  $variant?: "GROUPED" | "NAKED" | "DEFAULT";
-}>`
-  ${(props) =>
-    props.$variant === "GROUPED" &&
-    css`
-      border-radius: 0px;
-    `}
-`;

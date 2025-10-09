@@ -33,16 +33,18 @@ export function Display() {
               }}
               autoFocus
               selectTextOnFocus
-              onBlur={(e) => {
+              onBlur={(event) => {
                 setCount(
-                  e.nativeEvent.text === "" ? 0 : Number(e.nativeEvent.text)
+                  event.nativeEvent.text === ""
+                    ? 0
+                    : Number(event.nativeEvent.text)
                 );
                 setIsEditing(false);
               }}
-              onChangeText={(text) => setInputValue(text)}
-              onEndEditing={(e) => {
-                console.log(e.nativeEvent.text);
-                setCount(Number(e.nativeEvent.text) || 0);
+              onChangeText={setInputValue}
+              onEndEditing={(event) => {
+                console.log(event.nativeEvent.text);
+                setCount(Number(event.nativeEvent.text) || 0);
               }}
             />
           ) : (
@@ -60,4 +62,4 @@ export function Display() {
   );
 }
 
-Display.displayName = "FormCounter.Display";
+Display.displayName = "Form.FormCounter.Display";

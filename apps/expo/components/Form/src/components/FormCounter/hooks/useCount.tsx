@@ -1,75 +1,41 @@
 import { useField } from "@unform/core";
 import { createContext, useContext, useEffect, useState } from "react";
-import { CustomView } from "../components/CustomView";
-import { DefaultView } from "../components/DefaultView";
+import { CounterRootProps } from "..";
 import { Error } from "../components/Error";
+
+export type CounterVariant = "DEFAULT" | "GROUPED" | "NAKED";
 
 export type CounterEventName = "INCREMENT" | "DECREMENT";
 
-interface CounterContextType {
+interface CounterContextType extends Omit<CounterRootProps, "name"> {
   count: number;
   increment: (multiplier?: number) => void;
   decrement: (multiplier?: number) => void;
-  onChange?: (data: { value: number; event: CounterEventName }) => void;
   setCount: (value: number) => void;
-  maxCount?: number;
-  minCount?: number;
-  editable?: boolean;
-  label?: string;
-  labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
-  variant?: "GROUPED" | "NAKED" | "DEFAULT";
   error?: string;
 }
 const CounterContext = createContext<CounterContextType | undefined>(undefined);
 
-export function CounterProvider({
-  children,
-  initialCount,
-  maxCount,
-  minCount,
-  editable,
-  label,
-  labelPosition = "TOP_START",
-  variant = "DEFAULT",
-  name,
-  onChange,
-}: {
-  children?: React.ReactNode;
-  initialCount?: number;
-  maxCount?: number;
-  minCount?: number;
-  editable?: boolean;
-  label?: string;
-  labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
-  variant?: "GROUPED" | "NAKED" | "DEFAULT";
-  name: string;
-  onChange?: (data: { value: number; event: CounterEventName }) => void;
-}) {
-  const { fieldName, registerField, error } = useField(name);
-  const [count, setCount] = useState(initialCount || 0);
+export function CounterProvider(props: CounterRootProps) {
+  const { fieldName, registerField, error } = useField(props.name);
+  const [count, setCount] = useState(Number(props.initialCount) || 0);
 
   useEffect(() => {
     registerField({
       name: fieldName,
       getValue: () => count,
-      setValue: (_, value) => {
-        if (value) {
-          setCount(value);
-        }
-      },
-      clearValue: () => {
-        setCount(0);
-      },
+      setValue: (_, value) => setCount(value),
+      clearValue: () => setCount(0),
     });
   }, [fieldName, registerField, count]);
 
   function increment(multiplier = 1) {
     setCount((lastVal) => {
       const newVal = lastVal + 1 * multiplier;
-      if (maxCount !== undefined && newVal > maxCount) {
+      if (props.maxCount !== undefined && newVal > props.maxCount) {
         return lastVal;
       }
-      onChange?.({
+      props.onChange?.({
         value: newVal,
         event: "INCREMENT",
       });
@@ -80,10 +46,10 @@ export function CounterProvider({
   function decrement(multiplier = 1) {
     setCount((lastVal) => {
       const newVal = lastVal - 1 * multiplier;
-      if (minCount !== undefined && newVal < minCount) {
+      if (props.minCount !== undefined && newVal < props.minCount) {
         return lastVal;
       }
-      onChange?.({
+      props.onChange?.({
         value: newVal,
         event: "DECREMENT",
       });
@@ -98,16 +64,16 @@ export function CounterProvider({
         increment,
         decrement,
         setCount,
-        maxCount,
-        minCount,
-        editable,
-        label,
-        labelPosition,
-        variant,
+        maxCount: props.maxCount,
+        minCount: props.minCount,
+        editable: props.editable,
+        label: props.label,
+        labelPosition: props.labelPosition,
+        variant: props.variant,
         error,
       }}
     >
-      {children ? <CustomView>{children}</CustomView> : <DefaultView />}
+      {props.children}
     </CounterContext.Provider>
   );
 }

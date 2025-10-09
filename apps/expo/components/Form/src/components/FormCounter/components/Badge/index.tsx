@@ -9,4 +9,4 @@ export function Badge(props: React.ComponentProps<typeof BadgeRaw>) {
     </Slot>
   );
 }
-Badge.displayName = "FormCounter.Badge";
+Badge.displayName = "Form.FormCounter.Badge";

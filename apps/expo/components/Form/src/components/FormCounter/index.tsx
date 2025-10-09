@@ -1,24 +1,26 @@
 import { Badge } from "./components/Badge";
-import { Button, TypeButton } from "./components/Button";
+import { CounterRoot } from "./components/CounterRoot";
 import { Display } from "./components/Display";
-import { Item } from "./components/Item";
-import { CounterProvider } from "./hooks/useCount";
+import { Minus } from "./components/Minus";
+import { Plus } from "./components/Plus";
+import { CounterEventName, CounterVariant } from "./hooks/useCount";
 
-export function Plusle(props: Partial<TypeButton>) {
-  return <Button {...props} size="SM" type="PLUS" />;
+export interface CounterRootProps {
+  children?: React.ReactNode;
+  initialCount?: number;
+  maxCount?: number;
+  minCount?: number;
+  editable?: boolean;
+  label?: string;
+  labelPosition?: "TOP_START" | "LEFT" | "TOP_CENTER";
+  variant?: CounterVariant;
+  name: string;
+  onChange?: (data: { value: number; event: CounterEventName }) => void;
 }
 
-export function Minun(props: Partial<TypeButton>) {
-  return <Button {...props} size="SM" type="MINUS" />;
-}
-
-Plusle.displayName = "FormCounterPlusle";
-Minun.displayName = "FormCounterMinun";
-
-export const FormCounter = Object.assign(CounterProvider, {
+export const FormCounter = Object.assign(CounterRoot, {
   Display,
-  Plusle,
-  Minun,
+  Plus,
+  Minus,
   Badge,
-  Item,
 });

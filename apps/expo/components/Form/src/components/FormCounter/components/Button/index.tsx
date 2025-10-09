@@ -5,7 +5,8 @@ import { Slot } from "../Slot";
 
 type ButtonType = "PLUS" | "MINUS";
 
-export interface TypeButton extends Pick<ButtonProps, "disabled" | "text"> {
+export interface TypeButton
+  extends Pick<ButtonProps, "disabled" | "text" | "size"> {
   type: ButtonType;
   disabled?: boolean;
 }
@@ -43,8 +44,9 @@ export function Button(props: TypeButton) {
     <Slot>
       <ButtonRaw
         size="SM"
-        variant={Counter.buttonTransparent ? "TRANSPARENT" : "DEFAULT"}
         icon={props.type === "PLUS" ? "Plus" : "Minus"}
+        {...props}
+        variant={Counter.buttonTransparent ? "TRANSPARENT" : "DEFAULT"}
         style={
           Counter.groupElements
             ? {
@@ -52,7 +54,6 @@ export function Button(props: TypeButton) {
               }
             : undefined
         }
-        {...props}
         backgroundColor={props.type === "PLUS" ? "DEFAULT_DARK" : "CANCEL_DARK"}
         disabled={disabledPress || props.disabled}
         onPress={handlePress}

@@ -9,8 +9,13 @@ export default function IndexWeb() {
       <Typography size="LG" weight="BOLD">
         Rota para counter
       </Typography>
+      <input type="text" inputMode="numeric" />
+
       <Form
         onSubmit={(data) => console.log(JSON.stringify(data.data, null, 2))}
+        initialData={{
+          foo: 12,
+        }}
         schema={z.object({
           counter: z.object({
             padrao: z.object({
@@ -35,6 +40,21 @@ export default function IndexWeb() {
           }),
         })}
       >
+        <Form.Counter
+          name="foo"
+          labelPosition="LEFT"
+          label="Counter com grouped2"
+          groupElements
+          editable
+          maxCount={20}
+          minCount={5}
+          onChange={(value) => console.log(value)}
+        >
+          <Form.Counter.Badge text="37" renderInsidePill />
+          <Form.Counter.Minus />
+          <Form.Counter.Plus />
+          <Form.Counter.Display />
+        </Form.Counter>
         <Form.Vertical gap="SM">
           <Form.Counter name="counter.padrao.default" label="DEFAULT" />
           <Form.Counter

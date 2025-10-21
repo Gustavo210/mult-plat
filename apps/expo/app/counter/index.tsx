@@ -11,6 +11,9 @@ export default function IndexWeb() {
       </Typography>
       <Form
         onSubmit={(data) => console.log(JSON.stringify(data.data, null, 2))}
+        initialData={{
+          foo: 12,
+        }}
         schema={z.object({
           counter: z.object({
             padrao: z.object({
@@ -35,7 +38,22 @@ export default function IndexWeb() {
           }),
         })}
       >
-        <Form.Vertical gap="SM">
+        <Form.Counter
+          name="foo"
+          labelPosition="LEFT"
+          label="Counter com grouped2"
+          groupElements
+          editable
+          maxCount={20}
+          minCount={5}
+          onChange={(value) => console.log(value)}
+        >
+          <Form.Counter.Badge text="37" renderInsidePill />
+          <Form.Counter.Minus />
+          <Form.Counter.Plus />
+          <Form.Counter.Display />
+        </Form.Counter>
+        {/* <Form.Vertical gap="SM">
           <Form.Counter name="counter.padrao.default" label="DEFAULT" />
           <Form.Counter
             name="counter.padrao.grouped"
@@ -101,7 +119,7 @@ export default function IndexWeb() {
         >
           <Form.Counter.Plus text="Adicionar" />
           <Form.Counter.Minus text="Remover" />
-          <Form.Counter.Badge text="37" renderInsideThePill />
+          <Form.Counter.Badge text="37" renderInsidePill />
           <Form.Counter.Display />
         </Form.Counter>
         <Form.Counter
@@ -109,7 +127,7 @@ export default function IndexWeb() {
           groupElements
           onChange={(value) => console.log(value)}
         >
-          <Form.Counter.Badge text="37" renderInsideThePill />
+          <Form.Counter.Badge text="37" renderInsidePill />
           <Form.Counter.Plus />
           <Form.Counter.Minus />
           <Form.Counter.Display />
@@ -121,7 +139,7 @@ export default function IndexWeb() {
           label="Counter com grouped"
           onChange={(value) => console.log(value)}
         >
-          <Form.Counter.Badge text="37" renderInsideThePill />
+          <Form.Counter.Badge text="37" renderInsidePill />
           <Form.Counter.Minus />
           <Form.Counter.Display />
           <Form.Counter.Plus />
@@ -148,10 +166,23 @@ export default function IndexWeb() {
           >
             <Form.Counter.Badge text={value} />
             <Form.Counter.Minus />
-            <Form.Counter.Display />
             <Form.Counter.Plus />
+            <Form.Counter.Display />
           </Form.Counter>
-        ))}
+        ))} */}
+        <Form.Counter
+          name="counter.children4"
+          labelPosition="LEFT"
+          label="Counter com grouped2"
+          groupElements
+          editable
+          onChange={(value) => console.log(value)}
+        >
+          <Form.Counter.Badge text="37" renderInsidePill />
+          <Form.Counter.Minus />
+          <Form.Counter.Plus />
+          <Form.Counter.Display />
+        </Form.Counter>
         <Form.Button text="Enviar" />
       </Form>
     </ScrollView>

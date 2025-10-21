@@ -21,8 +21,8 @@ importers:
         specifier: ^15.0.2
         version: 15.0.2(expo-font@14.0.9(expo@54.0.13)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       '@mobilestock-native/badge':
-        specifier: ^0.0.7
-        version: 0.0.7(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
+        specifier: ^0.0.5
+        version: 0.0.5(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestock-native/button':
         specifier: ^1.0.11
         version: 1.0.11(react-dom@19.1.0(react@19.1.0))(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.14.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -33,8 +33,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestock-native/form':
-        specifier: ^0.1.2
-        version: 0.1.2(@babel/runtime@7.28.4)(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react-native-gesture-handler@2.28.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.5.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.14.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@4.1.12)
+        specifier: ^0.1.1
+        version: 0.1.1(@babel/runtime@7.28.4)(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react-native-gesture-handler@2.28.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.5.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.14.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@4.1.12)
       '@mobilestock-native/icons':
         specifier: ^0.0.6
         version: 0.0.6(react-native-svg@15.14.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -54,8 +54,8 @@ importers:
         specifier: ^0.0.6
         version: 0.0.6(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestock-native/theme':
-        specifier: ^1.0.2
-        version: 1.0.2(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+        specifier: ^1.0.0
+        version: 1.0.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       '@mobilestock-native/tools':
         specifier: ^0.0.10
         version: 0.0.10(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -184,8 +184,8 @@ importers:
   apps/next-app:
     dependencies:
       '@mobilestockweb/badge':
-        specifier: ^0.0.6
-        version: 0.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
+        specifier: ^0.0.4
+        version: 0.0.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestockweb/button':
         specifier: ^1.0.8
         version: 1.0.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -196,8 +196,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestockweb/form':
-        specifier: ^0.1.2
-        version: 0.1.2(@types/react@19.1.17)(chroma-js@3.1.2)(csstype@3.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@4.1.12)
+        specifier: ^0.1.1
+        version: 0.1.1(@types/react@19.1.17)(chroma-js@3.1.2)(csstype@3.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@4.1.12)
       '@mobilestockweb/icons':
         specifier: ^0.0.6
         version: 0.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -214,8 +214,8 @@ importers:
         specifier: ^1.0.6
         version: 1.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestockweb/theme':
-        specifier: ^1.0.2
-        version: 1.0.2
+        specifier: ^1.0.0
+        version: 1.0.0
       '@mobilestockweb/tools':
         specifier: ^0.0.16
         version: 0.0.16
@@ -1220,8 +1220,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@mobilestock-native/badge@0.0.7':
-    resolution: {integrity: sha512-AHex2yxC54q8xSOOjhLjUVcuiNNCF45G39Hu/QZMRn7boKG6LcGAHXByCe5aJwAB6Fq5BQgYVu7Zx3ndlxdH2g==}
+  '@mobilestock-native/badge@0.0.5':
+    resolution: {integrity: sha512-NKXjhCOWQd8Apt93Z/utewf8ZYuV9QUVqUP3knx/3Ghq5Vw3kX7qTC724Zj5Fp0yD2aGWTOSdFmcKpY79Pg63Q==}
     peerDependencies:
       react: 18.2.0
       react-native: 0.74.5
@@ -1251,8 +1251,8 @@ packages:
       react-native-safe-area-context: '>=4.10.5'
       styled-components: ^6.1.8
 
-  '@mobilestock-native/form@0.1.2':
-    resolution: {integrity: sha512-KnEXIDoclbhqDq3sUlFu0UKE8KcCNFoC/Kr2C0kg9Z7eRRfd5CyGxNE7GEQru2aDoY5k680kC3gtVZRvKGCtXw==}
+  '@mobilestock-native/form@0.1.1':
+    resolution: {integrity: sha512-D2i701upepDyOlIrf9K3cYFpU24LHHGzOADqQFHKmtt/Y10Jt7cFLo9Ce57xpYtfpQ+TrCicmiq6ONrr/AJfaQ==}
     peerDependencies:
       react: 18.2.0
       react-native: 0.74.5
@@ -1305,8 +1305,8 @@ packages:
       react-native: 0.74.5
       styled-components: ^6.1.8
 
-  '@mobilestock-native/theme@1.0.2':
-    resolution: {integrity: sha512-jRG3eCRfZhdWbf630WN7/tYDzGg6lPN/13aSQJplF+/HXShMd9U89RxoT2GhGt7nYOqIf9/7O16eEkncxC1f+w==}
+  '@mobilestock-native/theme@1.0.0':
+    resolution: {integrity: sha512-kdNCGEsu/dV0f0PhcnpNqjX1SVG8AwfSCMr23NJG7FtUTmESwbukI8qdqr7u65rF7oI6/ReczzRmZcMwiJCz2w==}
 
   '@mobilestock-native/tools@0.0.10':
     resolution: {integrity: sha512-8JW4J95rvurghQ/5rGtaMT5Z05E+8VLoy9oagDwagDLr/jsLIVzLKYNhGxarNLm/zoyTK82miq0bGAencZzeBg==}
@@ -1328,8 +1328,8 @@ packages:
       react-dom: 18.2.0
       styled-components: ^6.1.8
 
-  '@mobilestockweb/badge@0.0.6':
-    resolution: {integrity: sha512-/D/lNUuXCpH8Ugmzt5AEXnktYhuC2NeY01ocYi5JfWKoMH82plENFep5eu6odYUxhqQx2uo2K1JpMkG2+hKCgQ==}
+  '@mobilestockweb/badge@0.0.4':
+    resolution: {integrity: sha512-nA9cL8WsdSxg4CZ9GSmgqKP8eM3PtU7Y2tKHOksMul5Ad7FWplFVhgVBucp9Wn3eBvb+MEv0uXoTOv7BHVOEBA==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -1362,8 +1362,8 @@ packages:
       react-dom: 18.2.0
       styled-components: ^6.1.8
 
-  '@mobilestockweb/form@0.1.2':
-    resolution: {integrity: sha512-4O+MOrMFN6QKF0Yar+wKyQEZ5IRHdZyidmk30esi2JZ2/XqAvah2n59Acwnj2HPs1PqynFa4AHTAbfbdDPZVlg==}
+  '@mobilestockweb/form@0.1.1':
+    resolution: {integrity: sha512-0gyYE0sVxAAuGmzAwPiuKOHmEGneKXZ2AHN1jy4KVlL0rAqgJl9MJrDrWde07sdABJoX95qdNsQbi7GUYNVLRg==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -1417,8 +1417,8 @@ packages:
       react-dom: 18.2.0
       styled-components: ^6.1.8
 
-  '@mobilestockweb/theme@1.0.2':
-    resolution: {integrity: sha512-AY0JxkCvMsZmgSahzTSuqz8O7RXNjf1hBWMn420N4hxEoxRL22QMHJBSZV2XVl5qnD07JmAOR05hhXmU84RwLA==}
+  '@mobilestockweb/theme@1.0.0':
+    resolution: {integrity: sha512-LbwmZzv8/icPsmOBYxNysH1DgrTF6w2408Fj5jCLIK3cCU45H5ntg5rEAB2hhnEW5NyRSEbuEbgJMvynma66dA==}
 
   '@mobilestockweb/tools@0.0.16':
     resolution: {integrity: sha512-XpMrdKBie2j0AWKAlV3vYShV4kz/LLKaQm1C5SUNPhJyhYqsBq1zrob7eEFbResWrVvTNP5agZXTOiIsff/Zdg==}
@@ -6502,7 +6502,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@mobilestock-native/badge@0.0.7(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))':
+  '@mobilestock-native/badge@0.0.5(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))':
     dependencies:
       '@mobilestock-native/container': 0.1.0(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestock-native/tools': 0.0.10(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -6547,9 +6547,8 @@ snapshots:
       react-native-safe-area-context: 5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       styled-components: 6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
-  '@mobilestock-native/form@0.1.2(@babel/runtime@7.28.4)(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react-native-gesture-handler@2.28.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.5.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.14.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@4.1.12)':
+  '@mobilestock-native/form@0.1.1(@babel/runtime@7.28.4)(@types/react@19.1.17)(react-dom@19.1.0(react@19.1.0))(react-native-gesture-handler@2.28.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-reanimated@4.1.3(@babel/core@7.28.4)(react-native-worklets@0.5.1(@babel/core@7.28.4)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.14.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@4.1.12)':
     dependencies:
-      '@mobilestock-native/badge': 0.0.7(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestock-native/button': 1.0.11(react-dom@19.1.0(react@19.1.0))(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.14.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestock-native/clickable': 1.0.6(react-dom@19.1.0(react@19.1.0))(react-native-svg@15.14.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestock-native/container': 0.1.0(react-native-safe-area-context@5.6.1(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -6641,7 +6640,7 @@ snapshots:
       react-native: 0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0)
       styled-components: 6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
-  '@mobilestock-native/theme@1.0.2(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)':
+  '@mobilestock-native/theme@1.0.0(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@mobilestock-native/tools': 0.0.10(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       lodash: 4.17.21
@@ -6669,7 +6668,7 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
       styled-components: 6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
-  '@mobilestockweb/badge@0.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))':
+  '@mobilestockweb/badge@0.0.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))':
     dependencies:
       '@mobilestockweb/container': 0.1.0(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestockweb/tools': 0.0.16
@@ -6710,11 +6709,9 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
       styled-components: 6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
-  '@mobilestockweb/form@0.1.2(@types/react@19.1.17)(chroma-js@3.1.2)(csstype@3.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@4.1.12)':
+  '@mobilestockweb/form@0.1.1(@types/react@19.1.17)(chroma-js@3.1.2)(csstype@3.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@4.1.12)':
     dependencies:
-      '@mobilestockweb/badge': 0.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestockweb/button': 1.0.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
-      '@mobilestockweb/clickable': 1.0.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestockweb/container': 0.1.0(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestockweb/data-table': 1.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@mobilestockweb/snackbar': 0.0.13(chroma-js@3.1.2)(notistack@3.0.2(csstype@3.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -6794,7 +6791,7 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
       styled-components: 6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
-  '@mobilestockweb/theme@1.0.2':
+  '@mobilestockweb/theme@1.0.0':
     dependencies:
       '@mobilestockweb/tools': 0.0.16
       lodash: 4.17.21

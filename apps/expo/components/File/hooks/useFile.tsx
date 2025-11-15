@@ -22,7 +22,7 @@ type FileContextType = {
 };
 const FileContext = createContext<FileContextType>({} as FileContextType);
 
-export function FileProvider({ children }: { children?: ReactNode }) {
+export function FileInputProvider({ children }: { children?: ReactNode }) {
   const [images, setImagens] = useState<ImagePicker.ImagePickerAsset[] | null>(
     null,
   );
@@ -97,7 +97,7 @@ export function FileProvider({ children }: { children?: ReactNode }) {
   );
 }
 
-export function useFile() {
+export function useFileInput() {
   const context = useContext(FileContext);
   if (!context) {
     throw new Error("useFile must be used within a FileProvider");

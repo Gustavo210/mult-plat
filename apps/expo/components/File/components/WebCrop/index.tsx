@@ -3,7 +3,7 @@ import { Crop, ReactCrop } from "react-image-crop";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@mobilestock-native/button";
 import { Container } from "@mobilestock-native/container";
-import { useFile } from "../../hooks/useFile";
+import { useFileInput } from "../../hooks/useFile";
 import { FluidModal } from "../FluidModal";
 import { ImagePickerAsset } from "expo-image-picker";
 import { View } from "react-native";
@@ -21,7 +21,7 @@ type DisplaySizeProps = {
 };
 
 export function CropDemo() {
-  const FileInput = useFile();
+  const FileInput = useFileInput();
   const imageReference = useRef<HTMLImageElement>(null);
   const imageWrapperReference = useRef<HTMLDivElement>(null);
 

@@ -1,5 +1,5 @@
 import { Container } from "@mobilestock-native/container";
-import { useFile } from "../../hooks/useFile";
+import { useFileInput } from "../../hooks/useFile";
 import { Platform, useWindowDimensions, View, ViewStyle } from "react-native";
 import { ImageAdd } from "../ImageAdd";
 import { useTheme } from "styled-components/native";
@@ -20,7 +20,7 @@ export function ImageViewer({
   buttonAddDirection = "left",
 }: ImageViewerProps) {
   const tamanhoDaTela = useWindowDimensions();
-  const File = useFile();
+  const File = useFileInput();
   const Theme = useTheme();
   const [list, setList] = useState(File.images || []);
 

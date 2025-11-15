@@ -32,19 +32,22 @@ export function FluidModal({ children, ...props }: ModalProps) {
       </Modal>
     );
   }
+
   return (
     <Modal transparent statusBarTranslucent animationType="slide" {...props}>
       <Container.Vertical align="CENTER" full>
         <Container.Vertical
-          full
-          padding="MD"
+          padding="SM"
           style={{
             backgroundColor: "white",
             borderRadius: 8,
+            borderWidth: 1,
+            borderColor: "#ccc",
             maxWidth: Dimensions.get("window").width * 0.8,
             maxHeight: Dimensions.get("window").height * 0.8,
             width: "100%",
             height: "100%",
+            overflow: "hidden",
           }}
         >
           {children}

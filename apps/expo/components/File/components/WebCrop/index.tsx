@@ -6,7 +6,7 @@ import { Container } from "@mobilestock-native/container";
 import { useFile } from "../../hooks/useFile";
 import { FluidModal } from "../FluidModal";
 import { ImagePickerAsset } from "expo-image-picker";
-import { Dimensions } from "react-native";
+import { View } from "react-native";
 
 type LoadedImageProps = {
   displayWidth: number;
@@ -15,17 +15,25 @@ type LoadedImageProps = {
   naturalHeight: number;
 };
 
+type DisplaySizeProps = {
+  width: number;
+  height: number;
+};
+
 export function CropDemo() {
   const FileInput = useFile();
-  const REMOVEImageRef = useRef<HTMLImageElement>(null);
   const imageReference = useRef<HTMLImageElement>(null);
+  const imageWrapperReference = useRef<HTMLDivElement>(null);
+
   const [crop, setCrop] = useState<Crop>();
   const [loadedImage, setLoadedImage] = useState<LoadedImageProps>();
+  const [displaySize, setDisplaySize] = useState<DisplaySizeProps>();
 
   useEffect(() => {
     if (!FileInput.imageToCrop) {
       setCrop(undefined);
       setLoadedImage(undefined);
+      setDisplaySize(undefined);
       return;
     }
   }, [FileInput.imageToCrop, FileInput.openImageCropModal]);
@@ -143,38 +151,76 @@ export function CropDemo() {
 
   function onLoad(event: React.SyntheticEvent<HTMLImageElement, Event>) {
     const htmlImageElement = event.currentTarget;
+    const wrapperElement = imageWrapperReference.current;
+
+    if (!wrapperElement) {
+      return;
+    }
+
+    const availableWidth = wrapperElement.clientWidth;
+    const availableHeight = wrapperElement.clientHeight;
+
+    const naturalWidth = htmlImageElement.naturalWidth;
+    const naturalHeight = htmlImageElement.naturalHeight;
+
+    if (
+      !availableWidth ||
+      !availableHeight ||
+      !naturalWidth ||
+      !naturalHeight
+    ) {
+      return;
+    }
+
+    const scale = Math.min(
+      availableWidth / naturalWidth,
+      availableHeight / naturalHeight,
+    );
+
+    const displayWidth = naturalWidth * scale;
+    const displayHeight = naturalHeight * scale;
+
+    setDisplaySize({
+      width: displayWidth,
+      height: displayHeight,
+    });
 
     loadCutArea({
-      displayWidth: htmlImageElement.width,
-      displayHeight: htmlImageElement.height,
-      naturalWidth: htmlImageElement.naturalWidth,
-      naturalHeight: htmlImageElement.naturalHeight,
+      displayWidth,
+      displayHeight,
+      naturalWidth,
+      naturalHeight,
     });
   }
 
   return (
     <FluidModal visible={FileInput.openImageCropModal}>
-      <Container.Vertical full>
-        <Container.Vertical full align="CENTER">
+      <Container.Vertical full style={{ flex: 1 }}>
+        <Container.Vertical
+          full
+          align="CENTER"
+          style={{
+            width: "100%",
+            overflow: "hidden",
+          }}
+        >
           <Container.Vertical
+            ref={imageWrapperReference as unknown as React.Ref<View>}
             align="CENTER"
-            style={
-              FileInput.imageToCrop?.width < Dimensions.get("window").width
-                ? {
-                    width: Dimensions.get("window").width * 0.9,
-                  }
-                : undefined
-            }
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
           >
             <ReactCrop
               crop={crop}
               onChange={(changedCrop) => setCrop(changedCrop)}
               style={
-                FileInput.imageToCrop?.width < Dimensions.get("window").width
+                displaySize
                   ? {
-                      width: "100%",
-                      height: "100%",
-                      maxWidth: "80%",
+                      width: displaySize.width,
+                      height: displaySize.height,
+                      display: "inline-block",
                     }
                   : undefined
               }
@@ -182,33 +228,36 @@ export function CropDemo() {
               <img
                 src={FileInput.imageToCrop?.uri}
                 ref={imageReference}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  maxHeight: "80vh",
-                  objectFit: "contain",
-                }}
+                style={
+                  displaySize
+                    ? {
+                        width: "100%",
+                        height: "100%",
+                        display: "block",
+                      }
+                    : {
+                        display: "block",
+                      }
+                }
                 onLoad={onLoad}
               />
             </ReactCrop>
           </Container.Vertical>
         </Container.Vertical>
+
+        <Container.Horizontal gap="MD">
+          <Container.Vertical full>
+            <Button
+              onPress={FileInput.handleImageCropCancel}
+              text="Cancelar"
+              backgroundColor="CANCEL_DARK"
+            />
+          </Container.Vertical>
+          <Container.Vertical full>
+            <Button onPress={cutImage} text="Salvar" />
+          </Container.Vertical>
+        </Container.Horizontal>
       </Container.Vertical>
-
-      <img ref={REMOVEImageRef} alt="Teste" />
-
-      <Container.Horizontal gap="MD">
-        <Container.Vertical full>
-          <Button
-            onPress={FileInput.handleImageCropCancel}
-            text="Cancelar"
-            backgroundColor="CANCEL_DARK"
-          />
-        </Container.Vertical>
-        <Container.Vertical full>
-          <Button onPress={cutImage} text="Salvar" />
-        </Container.Vertical>
-      </Container.Horizontal>
     </FluidModal>
   );
 }

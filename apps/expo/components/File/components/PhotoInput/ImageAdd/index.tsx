@@ -1,6 +1,6 @@
-import { useFileInput } from "../../hooks/useFile";
 import { Button } from "@mobilestock-native/button";
 import { useTheme } from "styled-components/native";
+import { useFileInput } from "../../../hooks/useFile";
 
 export function ImageAdd() {
   const File = useFileInput();

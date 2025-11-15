@@ -3,10 +3,10 @@ import { Crop, ReactCrop } from "react-image-crop";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@mobilestock-native/button";
 import { Container } from "@mobilestock-native/container";
-import { useFileInput } from "../../hooks/useFile";
-import { FluidModal } from "../FluidModal";
 import { ImagePickerAsset } from "expo-image-picker";
 import { View } from "react-native";
+import { useFileInput } from "../../hooks/useFile";
+import { FluidModal } from "./components/FluidModal";
 
 type LoadedImageProps = {
   displayWidth: number;

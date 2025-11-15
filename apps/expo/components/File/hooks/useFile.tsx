@@ -6,9 +6,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ImageViewer } from "../components/ImageViewer";
 import * as MediaLibrary from "expo-media-library";
 import { Platform } from "react-native";
+import { ImageViewer } from "../components/PhotoInput/ImageViewer";
 
 type FileContextType = {
   showDeviceImage(): Promise<void>;

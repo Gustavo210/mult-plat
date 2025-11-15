@@ -1,6 +1,6 @@
 import { Container } from "@mobilestock-native/container";
-import { useFileInput } from "../../hooks/useFile";
-import { Platform, useWindowDimensions, View, ViewStyle } from "react-native";
+import { useFileInput } from "../../../hooks/useFile";
+import { Platform, useWindowDimensions, View } from "react-native";
 import { ImageAdd } from "../ImageAdd";
 import { useTheme } from "styled-components/native";
 import DraggableFlatList, {
@@ -9,7 +9,7 @@ import DraggableFlatList, {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ImageCardControll } from "../ImageCardControll";
 import { ImagePickerAsset } from "expo-image-picker";
-import { CropDemo } from "../WebCrop";
+import { CropDemo } from "../../WebCrop";
 
 interface ImageViewerProps {
   numberOfImagesVisible?: number;

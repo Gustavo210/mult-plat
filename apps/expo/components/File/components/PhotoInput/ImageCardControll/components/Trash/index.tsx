@@ -1,7 +1,7 @@
 import { Icon } from "@mobilestock-native/icons";
 import { ImagePickerAsset } from "expo-image-picker";
 import { Pressable } from "react-native";
-import { useFileInput } from "../../../../hooks/useFile";
+import { useFileInput } from "../../../../../hooks/useFile";
 
 export function Trash({ photo }: { photo: ImagePickerAsset }) {
   const File = useFileInput();

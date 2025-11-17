@@ -7,9 +7,9 @@ export default function IndexWeb() {
   return (
     <Container.Vertical>
       <Typography>Rota android para file-input</Typography>
-      <File.PhotoInput />
+      <File.PhotoInput multiple dragAndDrop />
       <Spacer size="2XL" />
-      <File.MultipleArchive />
+      <File.MultipleArchive accept={["jpeg"]} />
     </Container.Vertical>
   );
 }

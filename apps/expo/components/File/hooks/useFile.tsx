@@ -9,6 +9,7 @@ import {
 import * as MediaLibrary from "expo-media-library";
 import { Platform } from "react-native";
 import { TypeFiles } from "../enum/TypeFiles";
+import { DocumentPickerAsset } from "expo-document-picker";
 
 type FileContextType = {
   showDeviceImage(): Promise<void>;
@@ -19,8 +20,8 @@ type FileContextType = {
   imageToCrop: ImagePickerAsset | null;
   handleImageCropSave(croppedImage: ImagePickerAsset): void;
   handleImageCropCancel(): void;
-  files?: File[] | null;
-  handleSaveFiles(newFiles: File[]): void;
+  files?: DocumentPickerAsset[] | null;
+  handleSaveFiles(newFiles: DocumentPickerAsset[]): void;
   handleRemoveFile(hashToRemove: string): void;
   accept?: (keyof typeof TypeFiles)[];
   dragAndDrop?: boolean;
@@ -43,11 +44,11 @@ export type EventOnChangeCropSave = {
   event: "CROP_SAVE";
 };
 export type EventOnChangeAddFiles = {
-  value: File[];
+  value: DocumentPickerAsset[];
   event: "ADD_FILES";
 };
 export type EventOnChangeRemoveFile = {
-  value: File;
+  value: DocumentPickerAsset;
   event: "REMOVE_FILE";
 };
 export type TypeEventOnChange =
@@ -75,8 +76,10 @@ export function FileInputProvider({
   dragAndDrop,
 }: FileInputProviderProps) {
   const [images, setImagens] = useState<ImagePickerAsset[] | null>(null);
-  const [files, setFiles] = useState<File[] | null>(null);
-  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
+  const [files, setFiles] = useState<DocumentPickerAsset[] | null>(null);
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions({
+    granularPermissions: ["photo"],
+  });
   const [openImageCropModal, setOpenImageCropModal] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<ImagePickerAsset | null>(null);
 
@@ -115,7 +118,7 @@ export function FileInputProvider({
     if (!images) return;
     const filteredImages = images.filter((image) => image.uri !== uri);
     setImagens(filteredImages);
-    onChange({
+    onChange?.({
       value: images.find((image) => image.uri === uri) as ImagePickerAsset,
       event: "REMOVE_IMAGE",
     });
@@ -123,7 +126,7 @@ export function FileInputProvider({
 
   function reorderImages(newImages: ImagePickerAsset[]) {
     setImagens(newImages);
-    onChange({
+    onChange?.({
       value: newImages,
       event: "REORDER_IMAGES",
     });
@@ -135,13 +138,14 @@ export function FileInputProvider({
     );
     setOpenImageCropModal(false);
     setImageToCrop(null);
-    onChange({
+    onChange?.({
       value: croppedImage,
       event: "CROP_SAVE",
     });
   }
 
-  function handleSaveFiles(newFiles: File[]) {
+  function handleSaveFiles(newFiles: DocumentPickerAsset[]) {
+    console.log("handleSaveFiles", newFiles);
     const newFilesList = newFiles.map((file) => ({
       file,
       hash: `${file.name}-${file.size}`,
@@ -153,18 +157,6 @@ export function FileInputProvider({
     }));
 
     let permittedFiles = [...newFilesList, ...filesList];
-    if (accept?.some((type) => type !== "all")) {
-      permittedFiles = permittedFiles.filter((item) => {
-        const fileExtension = item.file.name.split(".").pop();
-        return accept.includes(
-          fileExtension?.toLowerCase() as keyof typeof TypeFiles
-        );
-      });
-
-      if (!permittedFiles.length) {
-        return;
-      }
-    }
 
     const uniqueFiles = Array.from(
       new Set(permittedFiles.map((file) => file.hash))
@@ -182,7 +174,7 @@ export function FileInputProvider({
 
     setFiles(uniqueFileObjects);
 
-    onChange({
+    onChange?.({
       value: uniquePermittedFiles.map((item) => item.file),
       event: "ADD_FILES",
     });
@@ -197,10 +189,10 @@ export function FileInputProvider({
 
     setFiles(filteredFiles);
 
-    onChange({
+    onChange?.({
       value: files.find(
         (file) => `${file.name}-${file.size}` === hashToRemove
-      ) as File,
+      ) as DocumentPickerAsset,
       event: "REMOVE_FILE",
     });
   }

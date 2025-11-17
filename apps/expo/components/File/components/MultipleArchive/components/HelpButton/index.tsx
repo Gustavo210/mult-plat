@@ -10,18 +10,17 @@ export function HelpButton() {
   async function handleSelectFile() {
     const result = await DocumentPicker.getDocumentAsync({
       multiple: true,
-      type: [
-        FileInput.accept.map((type) => TypeFiles[type]) as unknown as string,
-      ],
+      copyToCacheDirectory: true,
+      type: FileInput.accept?.map(
+        (type) => TypeFiles[type]
+      ) as unknown as string,
     });
 
     if (!result.assets) {
       return;
     }
 
-    const files = result.assets
-      .map((asset) => asset.file)
-      .filter(Boolean) as File[];
+    const files = result.assets;
 
     if (!files) {
       return;

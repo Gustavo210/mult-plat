@@ -2,6 +2,7 @@ import type React from "react";
 import { HTMLAttributes } from "react";
 import { useFileInput } from "../../../../hooks/useFile";
 import { Platform } from "react-native";
+import { DocumentPickerAsset } from "expo-document-picker";
 
 export function DropController(props: HTMLAttributes<HTMLDivElement>) {
   const FileInput = useFileInput();
@@ -12,7 +13,7 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
     const dataTransfer = event.dataTransfer;
     if (!dataTransfer) return;
 
-    const listaArquivosValidos: File[] = [];
+    const listaArquivosValidos: DocumentPickerAsset[] = [];
 
     if (dataTransfer.items && dataTransfer.items.length > 0) {
       for (
@@ -39,7 +40,14 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
           continue;
         }
 
-        listaArquivosValidos.push(arquivo);
+        listaArquivosValidos.push({
+          uri: URL.createObjectURL(arquivo),
+          name: arquivo.name,
+          size: arquivo.size,
+          mimeType: arquivo.type,
+          lastModified: arquivo.lastModified,
+          file: arquivo,
+        });
       }
     } else if (dataTransfer.files && dataTransfer.files.length > 0) {
       for (
@@ -49,7 +57,14 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
       ) {
         const arquivo = dataTransfer.files.item(indiceArquivo);
         if (arquivo) {
-          listaArquivosValidos.push(arquivo);
+          listaArquivosValidos.push({
+            uri: URL.createObjectURL(arquivo),
+            name: arquivo.name,
+            size: arquivo.size,
+            mimeType: arquivo.type,
+            lastModified: arquivo.lastModified,
+            file: arquivo,
+          });
         }
       }
     }

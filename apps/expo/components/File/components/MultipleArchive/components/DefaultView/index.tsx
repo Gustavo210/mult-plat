@@ -14,7 +14,7 @@ export function DefaultView() {
         <Title />
         <Spacer size="2XS" />
         <HelpButton />
-        {FileInput.accept.includes("all") ? null : <HelpText />}
+        {FileInput.accept?.includes("all") ? null : <HelpText />}
       </Container.Vertical>
       <Footer />
     </>

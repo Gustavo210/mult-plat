@@ -19,13 +19,18 @@ type FileContextType = {
   imageToCrop: ImagePicker.ImagePickerAsset | null;
   handleImageCropSave(croppedImage: ImagePicker.ImagePickerAsset): void;
   handleImageCropCancel(): void;
+  files?: File[] | null;
+  handleSaveFiles(newFiles: File[]): void;
+  handleRemoveFile(hashToRemove: string): void;
 };
+
 const FileContext = createContext<FileContextType>({} as FileContextType);
 
 export function FileInputProvider({ children }: { children?: ReactNode }) {
   const [images, setImagens] = useState<ImagePicker.ImagePickerAsset[] | null>(
     null,
   );
+  const [files, setFiles] = useState<File[] | null>(null);
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const [openImageCropModal, setOpenImageCropModal] = useState(false);
   const [imageToCrop, setImageToCrop] =
@@ -72,6 +77,24 @@ export function FileInputProvider({ children }: { children?: ReactNode }) {
     setOpenImageCropModal(false);
     setImageToCrop(null);
   }
+  function handleSaveFiles(newFiles: File[]) {
+    const filesList = [...newFiles].map((file) => ({
+      file,
+      hash: `${file.name}-${file.size}`,
+    }));
+    const uniqueFiles = Array.from(new Set(filesList.map((file) => file.hash)))
+      .map((hash) => filesList.find((file) => file.hash === hash)!)
+      .map(({ hash, ...file }) => file);
+
+    setFiles(uniqueFiles.map((item) => item.file));
+  }
+  function handleRemoveFile(hashToRemove: string) {
+    if (!files) return;
+    const filteredFiles = files.filter(
+      (file) => `${file.name}-${file.size}` !== hashToRemove,
+    );
+    setFiles(filteredFiles);
+  }
 
   function handleImageCropCancel() {
     setOpenImageCropModal(false);
@@ -89,10 +112,12 @@ export function FileInputProvider({ children }: { children?: ReactNode }) {
         imageToCrop,
         handleImageCropCancel,
         handleImageCropSave,
+        files,
+        handleSaveFiles,
+        handleRemoveFile,
       }}
     >
       {children}
-      <ImageViewer />
     </FileContext.Provider>
   );
 }

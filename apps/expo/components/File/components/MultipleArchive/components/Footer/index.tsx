@@ -102,14 +102,10 @@ export function Footer() {
       </Container.Horizontal>
       <Animated.ScrollView style={containerAnimationStyle}>
         {FileInput.files?.map((item, index) => (
-          <Container.Horizontal
-            key={index}
-            align="START_CENTER"
-            onPointerEnter={console.log}
-          >
+          <Container.Horizontal key={index} align="START_CENTER">
             <Container.Horizontal gap="SM" full>
               <Typography size="XS" weight="MEDIUM">
-                {item.name}
+                {item.name.slice(0, 20)}
               </Typography>
               <Typography size="XS">
                 {converterBytesParaFormatoLegivel(item.size)}

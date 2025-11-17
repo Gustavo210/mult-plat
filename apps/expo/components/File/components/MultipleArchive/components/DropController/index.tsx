@@ -1,6 +1,7 @@
 import type React from "react";
 import { HTMLAttributes } from "react";
 import { useFileInput } from "../../../../hooks/useFile";
+import { Platform } from "react-native";
 
 export function DropController(props: HTMLAttributes<HTMLDivElement>) {
   const FileInput = useFileInput();
@@ -61,7 +62,9 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
 
     FileInput.handleSaveFiles(listaArquivosValidos);
   }
-
+  if (Platform.OS !== "web") {
+    return <>{props.children}</>;
+  }
   return (
     <div
       onDragOver={(event) => {

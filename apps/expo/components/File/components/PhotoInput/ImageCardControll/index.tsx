@@ -5,12 +5,14 @@ import { RenderItemParams } from "react-native-draggable-flatlist";
 import { useTheme } from "styled-components/native";
 import { DragControll } from "./components/DragControll";
 import { Trash } from "./components/Trash";
+import { useFileInput } from "../../../hooks/useFile";
 
 function ImageCardControllComponent({
   item,
   drag,
   isActive,
 }: RenderItemParams<any>) {
+  const FileInput = useFileInput();
   const Theme = useTheme();
 
   return (
@@ -34,7 +36,9 @@ function ImageCardControllComponent({
     >
       <Trash photo={item} />
       <Img src={{ uri: item.uri }} alt="image" size="SM" />
-      <DragControll drag={drag} isActive={isActive} />
+      {FileInput.dragAndDrop && (
+        <DragControll drag={drag} isActive={isActive} />
+      )}
     </Container.Vertical>
   );
 }

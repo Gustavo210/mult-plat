@@ -23,6 +23,7 @@ type FileContextType = {
   handleSaveFiles(newFiles: File[]): void;
   handleRemoveFile(hashToRemove: string): void;
   accept?: (keyof typeof TypeFiles)[];
+  dragAndDrop?: boolean;
 };
 
 const FileContext = createContext<FileContextType>({} as FileContextType);
@@ -63,6 +64,7 @@ export type FileInputProviderProps<
   accept?: (keyof typeof TypeFiles)[];
   onChange: (event: TypeEventOnChangeGeneric) => void;
   multiple?: boolean;
+  dragAndDrop?: boolean;
 };
 
 export function FileInputProvider({
@@ -70,6 +72,7 @@ export function FileInputProvider({
   accept,
   onChange,
   multiple,
+  dragAndDrop,
 }: FileInputProviderProps) {
   const [images, setImagens] = useState<ImagePickerAsset[] | null>(null);
   const [files, setFiles] = useState<File[] | null>(null);
@@ -221,6 +224,7 @@ export function FileInputProvider({
         files,
         handleSaveFiles,
         accept,
+        dragAndDrop,
         handleRemoveFile,
       }}
     >

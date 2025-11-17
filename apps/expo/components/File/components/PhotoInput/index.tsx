@@ -17,14 +17,20 @@ interface PhotoInputProps<
 > {
   onChange?: (event: TypeEventOnChangeGeneric) => void;
   multiple?: boolean;
+  dragAndDrop?: boolean;
 }
 export function PhotoInput<
   TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
->({ onChange, multiple }: PhotoInputProps<TypeEventOnChangeGeneric>) {
+>({
+  onChange,
+  multiple,
+  dragAndDrop,
+}: PhotoInputProps<TypeEventOnChangeGeneric>) {
   return (
     <FileInputProvider
       onChange={onChange as FileInputProviderProps["onChange"]}
       multiple={multiple}
+      dragAndDrop={dragAndDrop}
     >
       <ImageViewer />
     </FileInputProvider>

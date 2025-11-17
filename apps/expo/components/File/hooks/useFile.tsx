@@ -1,4 +1,4 @@
-import * as ImagePicker from "expo-image-picker";
+import { ImagePickerAsset, launchImageLibraryAsync } from "expo-image-picker";
 import {
   createContext,
   ReactNode,
@@ -8,33 +8,74 @@ import {
 } from "react";
 import * as MediaLibrary from "expo-media-library";
 import { Platform } from "react-native";
-import { ImageViewer } from "../components/PhotoInput/ImageViewer";
+import { TypeFiles } from "../enum/TypeFiles";
 
 type FileContextType = {
   showDeviceImage(): Promise<void>;
-  images: ImagePicker.ImagePickerAsset[] | null;
+  images: ImagePickerAsset[] | null;
   removeImage(uri: string): void;
-  reorderImages(newImages: ImagePicker.ImagePickerAsset[]): void;
+  reorderImages(newImages: ImagePickerAsset[]): void;
   openImageCropModal: boolean;
-  imageToCrop: ImagePicker.ImagePickerAsset | null;
-  handleImageCropSave(croppedImage: ImagePicker.ImagePickerAsset): void;
+  imageToCrop: ImagePickerAsset | null;
+  handleImageCropSave(croppedImage: ImagePickerAsset): void;
   handleImageCropCancel(): void;
   files?: File[] | null;
   handleSaveFiles(newFiles: File[]): void;
   handleRemoveFile(hashToRemove: string): void;
+  accept?: (keyof typeof TypeFiles)[];
 };
 
 const FileContext = createContext<FileContextType>({} as FileContextType);
 
-export function FileInputProvider({ children }: { children?: ReactNode }) {
-  const [images, setImagens] = useState<ImagePicker.ImagePickerAsset[] | null>(
-    null,
-  );
+export type EventOnChangeRemoveImage = {
+  value: ImagePickerAsset;
+  event: "REMOVE_IMAGE";
+};
+
+export type EventOnChangeReorderImages = {
+  value: ImagePickerAsset[];
+  event: "REORDER_IMAGES";
+};
+
+export type EventOnChangeCropSave = {
+  value: ImagePickerAsset;
+  event: "CROP_SAVE";
+};
+export type EventOnChangeAddFiles = {
+  value: File[];
+  event: "ADD_FILES";
+};
+export type EventOnChangeRemoveFile = {
+  value: File;
+  event: "REMOVE_FILE";
+};
+export type TypeEventOnChange =
+  | EventOnChangeRemoveImage
+  | EventOnChangeReorderImages
+  | EventOnChangeCropSave
+  | EventOnChangeAddFiles
+  | EventOnChangeRemoveFile;
+
+export type FileInputProviderProps<
+  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
+> = {
+  children: ReactNode;
+  accept?: (keyof typeof TypeFiles)[];
+  onChange: (event: TypeEventOnChangeGeneric) => void;
+  multiple?: boolean;
+};
+
+export function FileInputProvider({
+  children,
+  accept,
+  onChange,
+  multiple,
+}: FileInputProviderProps) {
+  const [images, setImagens] = useState<ImagePickerAsset[] | null>(null);
   const [files, setFiles] = useState<File[] | null>(null);
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const [openImageCropModal, setOpenImageCropModal] = useState(false);
-  const [imageToCrop, setImageToCrop] =
-    useState<ImagePicker.ImagePickerAsset | null>(null);
+  const [imageToCrop, setImageToCrop] = useState<ImagePickerAsset | null>(null);
 
   useEffect(() => {
     if (!permissionResponse?.granted) {
@@ -42,21 +83,28 @@ export function FileInputProvider({ children }: { children?: ReactNode }) {
     }
   }, [permissionResponse, requestPermission]);
 
+  useEffect(() => {
+    setFiles(null);
+    setImagens(null);
+    setOpenImageCropModal(false);
+    setImageToCrop(null);
+  }, [accept]);
+
   async function showDeviceImage() {
-    const result = await ImagePicker.launchImageLibraryAsync({
+    const result = await launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
       quality: 1,
-      allowsMultipleSelection: false,
+      allowsMultipleSelection: multiple,
     });
 
-    if (Platform.OS === "web" && result.assets && result.assets.length === 1) {
+    if (Platform.OS === "web" && result.assets && !multiple) {
       setOpenImageCropModal(true);
       setImageToCrop(result.assets[0]);
       return;
     }
     setImagens((previewsImage) =>
-      [...(previewsImage || []), ...(result.assets || [])].reverse(),
+      [...(previewsImage || []), ...(result.assets || [])].reverse()
     );
   }
 
@@ -64,36 +112,94 @@ export function FileInputProvider({ children }: { children?: ReactNode }) {
     if (!images) return;
     const filteredImages = images.filter((image) => image.uri !== uri);
     setImagens(filteredImages);
+    onChange({
+      value: images.find((image) => image.uri === uri) as ImagePickerAsset,
+      event: "REMOVE_IMAGE",
+    });
   }
 
-  function reorderImages(newImages: ImagePicker.ImagePickerAsset[]) {
+  function reorderImages(newImages: ImagePickerAsset[]) {
     setImagens(newImages);
+    onChange({
+      value: newImages,
+      event: "REORDER_IMAGES",
+    });
   }
 
-  function handleImageCropSave(croppedImage: ImagePicker.ImagePickerAsset) {
+  function handleImageCropSave(croppedImage: ImagePickerAsset) {
     setImagens((previewsImage) =>
-      [...(previewsImage || []), croppedImage].reverse(),
+      [...(previewsImage || []), croppedImage].reverse()
     );
     setOpenImageCropModal(false);
     setImageToCrop(null);
+    onChange({
+      value: croppedImage,
+      event: "CROP_SAVE",
+    });
   }
+
   function handleSaveFiles(newFiles: File[]) {
-    const filesList = [...newFiles].map((file) => ({
+    const newFilesList = newFiles.map((file) => ({
       file,
       hash: `${file.name}-${file.size}`,
     }));
-    const uniqueFiles = Array.from(new Set(filesList.map((file) => file.hash)))
-      .map((hash) => filesList.find((file) => file.hash === hash)!)
-      .map(({ hash, ...file }) => file);
 
-    setFiles(uniqueFiles.map((item) => item.file));
+    const filesList = (files || []).map((file) => ({
+      file,
+      hash: `${file.name}-${file.size}`,
+    }));
+
+    let permittedFiles = [...newFilesList, ...filesList];
+    if (accept?.some((type) => type !== "all")) {
+      permittedFiles = permittedFiles.filter((item) => {
+        const fileExtension = item.file.name.split(".").pop();
+        return accept.includes(
+          fileExtension?.toLowerCase() as keyof typeof TypeFiles
+        );
+      });
+
+      if (!permittedFiles.length) {
+        return;
+      }
+    }
+
+    const uniqueFiles = Array.from(
+      new Set(permittedFiles.map((file) => file.hash))
+    ).map((hash) => permittedFiles.find((file) => file.hash === hash)!);
+
+    const uniquePermittedFiles = uniqueFiles.filter((item) =>
+      newFilesList.some((newItem) => newItem.hash === item.hash)
+    );
+
+    if (!uniquePermittedFiles.length) {
+      return;
+    }
+
+    const uniqueFileObjects = uniqueFiles.map((item) => item.file);
+
+    setFiles(uniqueFileObjects);
+
+    onChange({
+      value: uniquePermittedFiles.map((item) => item.file),
+      event: "ADD_FILES",
+    });
   }
+
   function handleRemoveFile(hashToRemove: string) {
     if (!files) return;
+
     const filteredFiles = files.filter(
-      (file) => `${file.name}-${file.size}` !== hashToRemove,
+      (file) => `${file.name}-${file.size}` !== hashToRemove
     );
+
     setFiles(filteredFiles);
+
+    onChange({
+      value: files.find(
+        (file) => `${file.name}-${file.size}` === hashToRemove
+      ) as File,
+      event: "REMOVE_FILE",
+    });
   }
 
   function handleImageCropCancel() {
@@ -114,6 +220,7 @@ export function FileInputProvider({ children }: { children?: ReactNode }) {
         handleImageCropSave,
         files,
         handleSaveFiles,
+        accept,
         handleRemoveFile,
       }}
     >

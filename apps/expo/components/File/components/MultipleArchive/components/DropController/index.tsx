@@ -5,6 +5,7 @@ import { Platform } from "react-native";
 
 export function DropController(props: HTMLAttributes<HTMLDivElement>) {
   const FileInput = useFileInput();
+
   function captureFiles(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault();
 
@@ -13,7 +14,6 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
 
     const listaArquivosValidos: File[] = [];
 
-    // Preferimos usar dataTransfer.items para diferenciar arquivos e pastas
     if (dataTransfer.items && dataTransfer.items.length > 0) {
       for (
         let indiceItem = 0;
@@ -30,7 +30,6 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
           (itemTransferencia as any).webkitGetAsEntry?.() ||
           (itemTransferencia as any).getAsEntry?.();
 
-        // Se detectarmos diretório, ignoramos
         if (entradaSistemaArquivos && entradaSistemaArquivos.isDirectory) {
           continue;
         }
@@ -43,7 +42,6 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
         listaArquivosValidos.push(arquivo);
       }
     } else if (dataTransfer.files && dataTransfer.files.length > 0) {
-      // Fallback para navegadores mais antigos
       for (
         let indiceArquivo = 0;
         indiceArquivo < dataTransfer.files.length;
@@ -62,9 +60,11 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
 
     FileInput.handleSaveFiles(listaArquivosValidos);
   }
+
   if (Platform.OS !== "web") {
     return <>{props.children}</>;
   }
+
   return (
     <div
       onDragOver={(event) => {

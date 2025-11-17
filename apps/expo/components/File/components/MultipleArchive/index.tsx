@@ -1,15 +1,54 @@
 import { Container } from "@mobilestock-native/container";
-import { Spacer } from "@mobilestock-native/spacer";
 import { DropController } from "./components/DropController";
-import { Footer } from "./components/Footer";
-import { HelpButton } from "./components/HelpButton";
-import { HelpText } from "./components/HelpText";
-import { Title } from "./components/Title";
-import { FileInputProvider } from "../../hooks/useFile";
+import {
+  EventOnChangeAddFiles,
+  EventOnChangeRemoveFile,
+  FileInputProvider,
+  FileInputProviderProps,
+} from "../../hooks/useFile";
+import { TypeFiles } from "../../enum/TypeFiles";
+import { useMemo } from "react";
+import { DefaultView } from "./components/DefaultView";
 
-export function MultipleArchive({ children }: { children?: React.ReactNode }) {
+type TypeEventOnChange = EventOnChangeAddFiles | EventOnChangeRemoveFile;
+
+interface MultipleArchiveProps<
+  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
+> {
+  children?: React.ReactNode;
+  accept?: (keyof typeof TypeFiles)[] | string;
+  onChange?: (event: TypeEventOnChangeGeneric) => void;
+}
+
+export function MultipleArchive<
+  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
+>({
+  children,
+  accept,
+  onChange,
+}: MultipleArchiveProps<TypeEventOnChangeGeneric>) {
+  const acceptArray = useMemo(() => {
+    if (!accept) {
+      return ["all"] as (keyof typeof TypeFiles)[];
+    }
+
+    const separators = ["|", ",", ";", " ", "\n", "\t", "\r"];
+
+    if (typeof accept === "string") {
+      return accept
+        .split(new RegExp(separators.map((s) => `\\${s}`).join("|")))
+        .map((item) => item.trim().replace(".", ""))
+        .filter((item) => item.length > 0) as (keyof typeof TypeFiles)[];
+    }
+
+    return accept;
+  }, [accept]);
+
   return (
-    <FileInputProvider>
+    <FileInputProvider
+      accept={acceptArray}
+      onChange={onChange as FileInputProviderProps["onChange"]}
+    >
       <Container.Vertical
         style={{
           borderWidth: 1,
@@ -20,19 +59,7 @@ export function MultipleArchive({ children }: { children?: React.ReactNode }) {
         }}
         padding="MD"
       >
-        <DropController>
-          {children || (
-            <>
-              <Container.Vertical align="CENTER">
-                <Title />
-                <Spacer size="2XS" />
-                <HelpButton />
-                <HelpText />
-              </Container.Vertical>
-              <Footer />
-            </>
-          )}
-        </DropController>
+        <DropController>{children || <DefaultView />}</DropController>
       </Container.Vertical>
     </FileInputProvider>
   );

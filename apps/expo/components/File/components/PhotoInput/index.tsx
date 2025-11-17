@@ -1,9 +1,31 @@
-import { FileInputProvider } from "../../hooks/useFile";
+import {
+  EventOnChangeCropSave,
+  EventOnChangeRemoveImage,
+  EventOnChangeReorderImages,
+  FileInputProvider,
+  FileInputProviderProps,
+} from "../../hooks/useFile";
 import { ImageViewer } from "./ImageViewer";
 
-export function PhotoInput() {
+type TypeEventOnChange =
+  | EventOnChangeRemoveImage
+  | EventOnChangeReorderImages
+  | EventOnChangeCropSave;
+
+interface PhotoInputProps<
+  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
+> {
+  onChange?: (event: TypeEventOnChangeGeneric) => void;
+  multiple?: boolean;
+}
+export function PhotoInput<
+  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
+>({ onChange, multiple }: PhotoInputProps<TypeEventOnChangeGeneric>) {
   return (
-    <FileInputProvider>
+    <FileInputProvider
+      onChange={onChange as FileInputProviderProps["onChange"]}
+      multiple={multiple}
+    >
       <ImageViewer />
     </FileInputProvider>
   );

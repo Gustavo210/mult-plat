@@ -1,29 +1,15 @@
 import { Container } from "@mobilestock-native/container";
+import { Spacer } from "@mobilestock-native/spacer";
 import { Typography } from "@mobilestock-native/typography";
 import { File } from "../../components/File";
-import { Spacer } from "@mobilestock-native/spacer";
-import {
-  EventOnChangeCropSave,
-  EventOnChangeRemoveFile,
-} from "../../components/File/hooks/useFile";
 
 export default function IndexWeb() {
   return (
     <Container.Vertical>
       <Typography>Rota Web para file-input</Typography>
-      <File.PhotoInput
-        onChange={(event: EventOnChangeCropSave) => {
-          event;
-        }}
-        multiple
-      />
+      <File.PhotoInput onChange={console.log} multiple={false} dragAndDrop />
       <Spacer size="2XL" />
-      <File.MultipleArchive
-        accept="jpg, png, gif"
-        onChange={(event: EventOnChangeRemoveFile) => {
-          event;
-        }}
-      />
+      <File.MultipleArchive accept="jpg|png|gif|json" onChange={console.log} />
     </Container.Vertical>
   );
 }

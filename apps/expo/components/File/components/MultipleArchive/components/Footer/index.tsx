@@ -1,3 +1,4 @@
+import { Button } from "@mobilestock-native/button";
 import { Clickable } from "@mobilestock-native/clickable";
 import { Container } from "@mobilestock-native/container";
 import { Icon } from "@mobilestock-native/icons";
@@ -10,7 +11,6 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { useFileInput } from "../../../../hooks/useFile";
-import { Button } from "@mobilestock-native/button";
 
 export function Footer() {
   const FileInput = useFileInput();
@@ -107,9 +107,11 @@ export function Footer() {
               <Typography size="XS" weight="MEDIUM">
                 {item.name.slice(0, 20)}
               </Typography>
-              <Typography size="XS">
-                {converterBytesParaFormatoLegivel(item.size)}
-              </Typography>
+              {item.size && (
+                <Typography size="XS">
+                  {converterBytesParaFormatoLegivel(item.size)}
+                </Typography>
+              )}
             </Container.Horizontal>
             <Button
               variant="TRANSPARENT"

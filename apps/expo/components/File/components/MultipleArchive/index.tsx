@@ -1,14 +1,14 @@
 import { Container } from "@mobilestock-native/container";
-import { DropController } from "./components/DropController";
+import { useMemo } from "react";
+import { TypeFiles } from "../../enum/TypeFiles";
 import {
   EventOnChangeAddFiles,
   EventOnChangeRemoveFile,
   FileInputProvider,
   FileInputProviderProps,
 } from "../../hooks/useFile";
-import { TypeFiles } from "../../enum/TypeFiles";
-import { useMemo } from "react";
 import { DefaultView } from "./components/DefaultView";
+import { DropController } from "./components/DropController";
 
 type TypeEventOnChange = EventOnChangeAddFiles | EventOnChangeRemoveFile;
 

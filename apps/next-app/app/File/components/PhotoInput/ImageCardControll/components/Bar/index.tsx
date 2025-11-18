@@ -1,19 +1,16 @@
-import { View } from "react-native";
-import { useTheme } from "styled-components/native";
+import { useSortable } from "@dnd-kit/sortable";
 
-export function Bar({ isActive }: { isActive: boolean }) {
-  const Theme = useTheme();
-
+export function Bar({ id }: { id: string }) {
+  const { isDragging } = useSortable({ id });
   return (
-    <View
-      style={[
-        {
-          height: 2,
-          width: parseInt(Theme.sizeImage.sm) * 0.7,
-          backgroundColor: "#222",
-        },
-        isActive && { backgroundColor: "#f9e30f" },
-      ]}
+    <div
+      style={{
+        height: 5,
+        width: "90%",
+
+        backgroundColor: "#222",
+        ...(isDragging && { backgroundColor: "#f9e30f" }),
+      }}
     />
   );
 }

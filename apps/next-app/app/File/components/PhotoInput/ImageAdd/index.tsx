@@ -1,18 +1,17 @@
-import { Button } from "@mobilestock-native/button";
-import { useTheme } from "styled-components/native";
-import { useFileInput } from "../../../hooks/useFile";
+import { Button } from "@mobilestockweb/button";
+import { useTheme } from "styled-components";
 
 export function ImageAdd() {
-  const File = useFileInput();
   const Theme = useTheme();
   return (
     <Button
       icon="Plus"
       variant="OUTLINE"
-      onPress={File.showDeviceImage}
       style={{
-        height: parseInt(Theme.sizeImage.sm),
-        width: parseInt(Theme.sizeImage.sm),
+        height: Theme.sizeImage.sm,
+        width: Theme.sizeImage.sm,
+        minWidth: Theme.sizeImage.sm,
+        minHeight: Theme.sizeImage.sm,
       }}
     />
   );

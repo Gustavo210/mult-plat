@@ -3,30 +3,24 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
-  DragOverlay,
   KeyboardSensor,
   MouseSensor,
-  PointerSensor,
   TouchSensor,
   UniqueIdentifier,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
 import { useId, useState } from "react";
-import {
-  restrictToFirstScrollableAncestor,
-  restrictToHorizontalAxis,
-  restrictToParentElement,
-  restrictToVerticalAxis,
-  restrictToWindowEdges,
-} from "@dnd-kit/modifiers";
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import {
   arrayMove,
   horizontalListSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
-import { SortableItem } from "../SortableItem";
+import { ImageCardControll } from "../ImageCardControll";
+import { ImageAdd } from "../ImageAdd";
+import { Container } from "@mobilestockweb/container";
 
 const LIST = [
   {
@@ -71,7 +65,10 @@ const LIST = [
   },
 ];
 
-export function ImageViewer() {
+export function ImageViewer({
+  numberOfImagesVisible = 0,
+  buttonAddDirection = "left",
+}) {
   const dragAndDropContextIdentifier = useId();
   const [items, setItems] = useState(LIST);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -116,20 +113,25 @@ export function ImageViewer() {
       onDragEnd={handleDragEnd}
       modifiers={[restrictToHorizontalAxis]}
     >
-      <div
-        style={{
-          display: "flex",
-          gap: "8px",
-          overflowX: "scroll",
-          padding: "8px",
-        }}
-      >
-        <SortableContext items={LIST} strategy={horizontalListSortingStrategy}>
-          {items.map((id) => (
-            <SortableItem key={id.id} id={id.id} />
-          ))}
+      <Container.Horizontal align="CENTER" gap="XS">
+        {buttonAddDirection === "left" && <ImageAdd />}
+        <SortableContext items={items} strategy={horizontalListSortingStrategy}>
+          <div
+            style={{
+              display: "flex",
+              flexBasis: "max-content",
+              gap: "8px",
+              overflowX: "scroll",
+              padding: "8px",
+            }}
+          >
+            {items.map((id) => (
+              <ImageCardControll key={id.id} id={id.id} />
+            ))}
+          </div>
         </SortableContext>
-      </div>
+        {buttonAddDirection === "right" && <ImageAdd />}
+      </Container.Horizontal>
     </DndContext>
   );
 }

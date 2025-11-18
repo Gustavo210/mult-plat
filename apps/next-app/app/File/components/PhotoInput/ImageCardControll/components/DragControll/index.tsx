@@ -1,31 +1,25 @@
-import { Pressable } from "react-native";
+import { Container } from "@mobilestockweb/container";
 import { Bar } from "../Bar";
+import { useSortable } from "@dnd-kit/sortable";
+import { useTheme } from "styled-components";
 
-export function DragControll({
-  drag,
-  isActive,
-}: {
-  drag: () => void;
-  isActive: boolean;
-}) {
+export function DragControll({ id }: { id: string }) {
+  const Theme = useTheme();
+  const { listeners, attributes } = useSortable({ id });
   return (
-    <Pressable
+    <Container.Horizontal
       style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingHorizontal: 12,
-        paddingVertical: 4,
         position: "absolute",
-        bottom: 0,
+        width: Theme.sizeImage.sm,
         backgroundColor: "rgba(255, 255, 255, 0.6)",
+        padding: 4,
+        bottom: 0,
       }}
-      onLongPress={drag}
-      onTouchMove={drag}
-      onTouchStart={drag}
-      onPressIn={drag}
+      align="CENTER"
+      {...listeners}
+      {...attributes}
     >
-      <Bar isActive={isActive} />
-    </Pressable>
+      <Bar id={id} />
+    </Container.Horizontal>
   );
 }

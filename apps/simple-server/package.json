@@ -1,6 +1,13 @@
 {
-  "name": "simple-server",
+  "name": "@mult-plat/simple-server",
   "version": "0.0.1",
   "main": "index.ts",
-  "scripts": {}
+  "scripts": {
+    "start": "tsnd --respawn index.ts"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.5",
+    "express": "^5.1.0",
+    "ts-node-dev": "^2.0.0"
+  }
 }

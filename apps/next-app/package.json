@@ -8,6 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/modifiers": "^9.0.0",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@mobilestockweb/badge": "^0.0.4",
     "@mobilestockweb/button": "^1.0.8",
     "@mobilestockweb/clickable": "^1.0.4",

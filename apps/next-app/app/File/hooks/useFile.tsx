@@ -7,11 +7,10 @@ import {
   useState,
 } from "react";
 import { TypeFiles } from "../enum/TypeFiles";
-import { File } from "buffer";
 
 type FileContextType = {
   files?: File[] | null;
-  handleSaveFiles(newFiles: File[]): void;
+  handleSaveFiles(newFiles: FileList): void;
   handleRemoveFile(hashToRemove: string): void;
   accept?: (keyof typeof TypeFiles)[];
   multiple?: boolean;
@@ -20,20 +19,6 @@ type FileContextType = {
 
 const FileContext = createContext<FileContextType>({} as FileContextType);
 
-export type EventOnChangeRemoveImage = {
-  value: File;
-  event: "REMOVE_IMAGE";
-};
-
-export type EventOnChangeReorderImages = {
-  value: File[];
-  event: "REORDER_IMAGES";
-};
-
-export type EventOnChangeCropSave = {
-  value: File;
-  event: "CROP_SAVE";
-};
 export type EventOnChangeAddFiles = {
   value: File[];
   event: "ADD_FILES";
@@ -42,12 +27,7 @@ export type EventOnChangeRemoveFile = {
   value: File;
   event: "REMOVE_FILE";
 };
-export type TypeEventOnChange =
-  | EventOnChangeRemoveImage
-  | EventOnChangeReorderImages
-  | EventOnChangeCropSave
-  | EventOnChangeAddFiles
-  | EventOnChangeRemoveFile;
+export type TypeEventOnChange = EventOnChangeAddFiles | EventOnChangeRemoveFile;
 
 export type FileInputProviderProps<
   TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange,
@@ -72,12 +52,15 @@ export function FileInputProvider({
     setFiles(null);
   }, [accept]);
 
-  function handleSaveFiles(newFiles: File[]) {
-    console.log("handleSaveFiles", newFiles);
-    const newFilesList = newFiles.map((file) => ({
-      file,
-      hash: `${file.name}-${file.size}`,
-    }));
+  function handleSaveFiles(newFiles: FileList) {
+    let newFilesList = [];
+
+    for (const file of newFiles) {
+      newFilesList.push({
+        file,
+        hash: `${file.name}-${file.size}`,
+      });
+    }
 
     const filesList = (files || []).map((file) => ({
       file,

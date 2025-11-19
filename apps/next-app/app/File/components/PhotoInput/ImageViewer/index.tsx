@@ -75,7 +75,7 @@ export function ImageViewer({
       onDragEnd={handleDragEnd}
       modifiers={[restrictToHorizontalAxis]}
     >
-      <Container.Horizontal align="CENTER" gap="XS">
+      <Container.Horizontal align="START_CENTER" gap="XS">
         {buttonAddDirection === "left" && <ImageAdd />}
         <SortableContext
           items={

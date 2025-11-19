@@ -1,33 +1,33 @@
 import { Container } from "@mobilestock-native/container";
-import { useFileInput } from "../../../hooks/useFile";
+import { ImagePickerAsset } from "expo-image-picker";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Platform, useWindowDimensions, View } from "react-native";
-import { ImageAdd } from "../ImageAdd";
-import { useTheme } from "styled-components/native";
 import DraggableFlatList, {
   DragEndParams,
 } from "react-native-draggable-flatlist";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTheme } from "styled-components/native";
+import { usePhotoList } from "../../hooks/usePhotoList";
+import { AddButton } from "../AddButton";
 import { ImageCardControll } from "../ImageCardControll";
-import { ImagePickerAsset } from "expo-image-picker";
-import { CropDemo } from "../../WebCrop";
+import { CropDemo } from "../WebCrop";
 
 interface ImageViewerProps {
   numberOfImagesVisible?: number;
   buttonAddDirection?: "left" | "right";
 }
-export function ImageViewer({
+export function Viewer({
   numberOfImagesVisible = 0,
   buttonAddDirection = "left",
 }: ImageViewerProps) {
   const tamanhoDaTela = useWindowDimensions();
-  const File = useFileInput();
+  const File = usePhotoList();
   const Theme = useTheme();
   const [list, setList] = useState(File.images || []);
 
   const gapSize = useMemo(() => parseInt(Theme.gaps["2xs"]), [Theme.gaps]);
   const imageSize = useMemo(
     () => parseInt(Theme.sizeImage.sm),
-    [Theme.sizeImage],
+    [Theme.sizeImage]
   );
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export function ImageViewer({
     (dragEndResult: DragEndParams<ImagePickerAsset>) => {
       File.reorderImages(dragEndResult.data);
     },
-    [File],
+    [File]
   );
 
   const maxWidth = useMemo(() => {
@@ -55,7 +55,7 @@ export function ImageViewer({
   return (
     <>
       <Container.Horizontal gap="2XS">
-        {buttonAddDirection === "left" && <ImageAdd />}
+        {buttonAddDirection === "left" && <AddButton />}
         {list && (
           <Container.Horizontal full>
             <DraggableFlatList
@@ -72,7 +72,7 @@ export function ImageViewer({
             />
           </Container.Horizontal>
         )}
-        {buttonAddDirection === "right" && <ImageAdd />}
+        {buttonAddDirection === "right" && <AddButton />}
       </Container.Horizontal>
       {Platform.OS === "web" && <CropDemo />}
     </>

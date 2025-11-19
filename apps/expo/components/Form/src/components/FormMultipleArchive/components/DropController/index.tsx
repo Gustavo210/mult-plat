@@ -1,96 +1,87 @@
-import { DocumentPickerAsset } from 'expo-document-picker'
-import type React from 'react'
-import { HTMLAttributes } from 'react'
-import { Platform } from 'react-native'
+import type React from "react";
+import { HTMLAttributes } from "react";
+import { Platform } from "react-native";
 
-import { TypeFiles } from '../../enum/TypeFiles'
-import { useFileInput } from '../../hooks/useMultipleArchive'
+import { TypeFiles } from "../../enum/TypeFiles";
+import { useMultipleArchive } from "../../hooks/useMultipleArchive";
 
 export function DropController(props: HTMLAttributes<HTMLDivElement>) {
-  const FileInput = useFileInput()
+  const MultipleArchive = useMultipleArchive();
 
   function captureFiles(event: React.DragEvent<HTMLDivElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
-    const dataTransfer = event.dataTransfer
-    if (!dataTransfer) return
+    const dataTransfer = event.dataTransfer;
+    if (!dataTransfer) return;
 
-    let listaArquivosValidos: DocumentPickerAsset[] = []
+    let validFileList: File[] = [];
 
     if (dataTransfer.items && dataTransfer.items.length > 0) {
-      for (let indiceItem = 0; indiceItem < dataTransfer.items.length; indiceItem++) {
-        const itemTransferencia = dataTransfer.items[indiceItem]
+      for (
+        let itemIndex = 0;
+        itemIndex < dataTransfer.items.length;
+        itemIndex++
+      ) {
+        const transferItem = dataTransfer.items[itemIndex];
 
-        if (itemTransferencia.kind !== 'file') {
-          continue
+        if (transferItem.kind !== "file") {
+          continue;
         }
 
-        const entradaSistemaArquivos = itemTransferencia.webkitGetAsEntry()
+        const systemFileEntry = transferItem.webkitGetAsEntry();
 
-        if (entradaSistemaArquivos && entradaSistemaArquivos.isDirectory) {
-          continue
+        if (systemFileEntry && systemFileEntry.isDirectory) {
+          continue;
         }
 
-        const arquivo = itemTransferencia.getAsFile()
-        if (!arquivo) {
-          continue
+        const file = transferItem.getAsFile();
+        if (!file) {
+          continue;
         }
 
-        listaArquivosValidos.push({
-          uri: URL.createObjectURL(arquivo),
-          name: arquivo.name,
-          size: arquivo.size,
-          mimeType: arquivo.type,
-          lastModified: arquivo.lastModified,
-          file: arquivo
-        })
+        validFileList.push(file);
       }
     } else if (dataTransfer.files && dataTransfer.files.length > 0) {
-      for (let indiceArquivo = 0; indiceArquivo < dataTransfer.files.length; indiceArquivo++) {
-        const arquivo = dataTransfer.files.item(indiceArquivo)
-        if (arquivo) {
-          listaArquivosValidos.push({
-            uri: URL.createObjectURL(arquivo),
-            name: arquivo.name,
-            size: arquivo.size,
-            mimeType: arquivo.type,
-            lastModified: arquivo.lastModified,
-            file: arquivo
-          })
+      for (
+        let fileIndex = 0;
+        fileIndex < dataTransfer.files.length;
+        fileIndex++
+      ) {
+        const file = dataTransfer.files.item(fileIndex);
+        if (file) {
+          validFileList.push(file);
         }
       }
     }
 
-    if (listaArquivosValidos.length === 0) {
-      return
+    if (validFileList.length === 0) {
+      return;
     }
-    if (FileInput.accept?.some(type => type !== 'all')) {
-      listaArquivosValidos = listaArquivosValidos.filter(item => {
-        const fileExtension = item.file?.name.split('.').pop()
-        return FileInput.accept?.includes(fileExtension?.toLowerCase() as keyof typeof TypeFiles)
-      })
+    if (MultipleArchive.accept?.some((type) => type !== "all")) {
+      validFileList = validFileList.filter((item) => {
+        const fileExtension = item.name.split(".").pop();
+        return MultipleArchive.accept?.includes(
+          fileExtension?.toLowerCase() as keyof typeof TypeFiles
+        );
+      });
 
-      if (!listaArquivosValidos.length) {
-        return
+      if (!validFileList.length) {
+        return;
       }
     }
-    FileInput.handleSaveFiles(listaArquivosValidos)
+    MultipleArchive.handleSaveFiles(validFileList);
   }
 
-  if (Platform.OS !== 'web') {
-    return <>{props.children}</>
+  if (Platform.OS !== "web") {
+    return <>{props.children}</>;
   }
 
   return (
     <div
-      onDragOver={event => {
-        event.preventDefault()
-      }}
+      onDragOver={(event) => event.preventDefault()}
       onDrop={captureFiles}
-      onDragLeave={event => {
-        event.preventDefault()
-      }}
+      onDragLeave={(event) => event.preventDefault()}
       {...props}
     />
-  )
+  );
 }

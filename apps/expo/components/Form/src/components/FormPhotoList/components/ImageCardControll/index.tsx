@@ -3,16 +3,16 @@ import { Img } from "@mobilestock-native/image";
 import { memo } from "react";
 import { RenderItemParams } from "react-native-draggable-flatlist";
 import { useTheme } from "styled-components/native";
+import { usePhotoList } from "../../hooks/usePhotoList";
 import { DragControll } from "./components/DragControll";
 import { Trash } from "./components/Trash";
-import { useFileInput } from "../../../hooks/useFile";
 
 function ImageCardControllComponent({
   item,
   drag,
   isActive,
 }: RenderItemParams<any>) {
-  const FileInput = useFileInput();
+  const FileInput = usePhotoList();
   const Theme = useTheme();
 
   return (

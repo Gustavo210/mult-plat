@@ -1,13 +1,14 @@
 import { Typography } from "@mobilestock-native/typography";
-
-import { useFileInput } from "../../hooks/useMultipleArchive";
+import { useMultipleArchive } from "../../hooks/useMultipleArchive";
 
 export function HelpText() {
-  const FileInput = useFileInput();
+  const MultipleArchive = useMultipleArchive();
   return (
     <>
       <Typography size="XS">Arquivos suportados</Typography>
-      <Typography size="XS">( {FileInput.accept?.join(", ")} )</Typography>
+      <Typography size="XS">
+        ( {MultipleArchive.accept?.join(", ")} )
+      </Typography>
     </>
   );
 }

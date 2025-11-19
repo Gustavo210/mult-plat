@@ -1,11 +1,11 @@
-import "react-image-crop/dist/ReactCrop.css";
-import { Crop, ReactCrop } from "react-image-crop";
-import { useEffect, useRef, useState } from "react";
 import { Button } from "@mobilestock-native/button";
 import { Container } from "@mobilestock-native/container";
 import { ImagePickerAsset } from "expo-image-picker";
+import { useEffect, useRef, useState } from "react";
+import { Crop, ReactCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 import { View } from "react-native";
-import { useFileInput } from "../../hooks/useFile";
+import { usePhotoList } from "../../hooks/usePhotoList";
 import { FluidModal } from "./components/FluidModal";
 
 type LoadedImageProps = {
@@ -21,7 +21,7 @@ type DisplaySizeProps = {
 };
 
 export function CropDemo() {
-  const FileInput = useFileInput();
+  const FileInput = usePhotoList();
   const imageReference = useRef<HTMLImageElement>(null);
   const imageWrapperReference = useRef<HTMLDivElement>(null);
 
@@ -120,7 +120,7 @@ export function CropDemo() {
       0,
       0,
       cropWidth,
-      cropHeight,
+      cropHeight
     );
 
     const generatedBlob = await offscreenCanvas.convertToBlob({
@@ -143,7 +143,7 @@ export function CropDemo() {
         {
           type: generatedBlob.type,
           lastModified: Date.now(),
-        },
+        }
       ),
     };
     FileInput.handleImageCropSave(croppedImageObject);
@@ -174,7 +174,7 @@ export function CropDemo() {
 
     const scale = Math.min(
       availableWidth / naturalWidth,
-      availableHeight / naturalHeight,
+      availableHeight / naturalHeight
     );
 
     const displayWidth = naturalWidth * scale;

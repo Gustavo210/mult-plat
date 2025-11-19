@@ -12,22 +12,22 @@ import { Container } from "@mobilestock-native/container";
 import { Icon } from "@mobilestock-native/icons";
 import { Typography } from "@mobilestock-native/typography";
 
-import { useFileInput } from "../../hooks/useMultipleArchive";
+import { useMultipleArchive } from "../../hooks/useMultipleArchive";
 import { utils } from "../../utils";
 
 export function Footer() {
-  const FileInput = useFileInput();
+  const MultipleArchive = useMultipleArchive();
   const flipIcon = useSharedValue(false);
   const containerRef = useRef<Ref<View>>(null);
-  const fileCount = useSharedValue(FileInput.files?.length || 0);
+  const fileCount = useSharedValue(MultipleArchive.files?.length || 0);
 
   useEffect(() => {
-    fileCount.value = FileInput.files?.length || 0;
-  }, [FileInput.files, fileCount]);
+    fileCount.value = MultipleArchive.files?.length || 0;
+  }, [MultipleArchive.files, fileCount]);
 
   useEffect(() => {
-    flipIcon.value = !!FileInput.files?.length;
-  }, [flipIcon, FileInput.files]);
+    flipIcon.value = !!MultipleArchive.files?.length;
+  }, [flipIcon, MultipleArchive.files]);
 
   const animationStyle = useAnimatedStyle(() => {
     return {
@@ -58,6 +58,7 @@ export function Footer() {
         height = 100;
         break;
     }
+
     return {
       height: withSpring(flipIcon.value ? height : 0),
       opacity: withSpring(flipIcon.value ? 1 : 0),
@@ -67,11 +68,11 @@ export function Footer() {
   return (
     <>
       <Container.Horizontal align="END">
-        {!!FileInput.files?.length && (
+        {!!MultipleArchive.files?.length && (
           <Clickable onPress={() => (flipIcon.value = !flipIcon.value)}>
             <Container.Horizontal align="CENTER">
               <Typography size="XS">
-                {FileInput.files?.length} arquivos
+                {MultipleArchive.files?.length} arquivos
               </Typography>
               <Animated.View style={animationStyle}>
                 <Icon name="ChevronDown" size="XS" />
@@ -81,7 +82,7 @@ export function Footer() {
         )}
       </Container.Horizontal>
       <Animated.ScrollView style={containerAnimationStyle}>
-        {FileInput.files?.map((item, index) => (
+        {MultipleArchive.files?.map((item, index) => (
           <Container.Horizontal key={index} align="START_CENTER">
             <Container.Horizontal gap="SM" full>
               <Typography size="XS" weight="MEDIUM">
@@ -99,7 +100,7 @@ export function Footer() {
               backgroundColor="CANCEL_DARK"
               size="XS"
               onPress={() =>
-                FileInput.handleRemoveFile(`${item.name}-${item.size}`)
+                MultipleArchive.handleRemoveFile(`${item.name}-${item.size}`)
               }
             />
           </Container.Horizontal>

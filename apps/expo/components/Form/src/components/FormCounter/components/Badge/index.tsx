@@ -1,29 +1,49 @@
-import { Badge as BadgeRaw } from "@mobilestock-native/badge";
-import { Container } from "@mobilestock-native/container";
-import { Typography } from "@mobilestock-native/typography";
-import { useCounter } from "../../hooks/useCount";
-import { Slot } from "../Slot";
+import styled, { DefaultTheme } from 'styled-components/native'
 
-export function Badge(props: { text: string; renderInsideThePill?: boolean }) {
-  const { groupElements } = useCounter();
-  // o badge tem um margin bottom padrao de 2px tem que ser removido
+import { Badge as BadgeRaw, BadgeType } from '@mobilestock-native/badge'
+import { Container } from '@mobilestock-native/container'
+import tools from '@mobilestock-native/tools'
+import { Typography } from '@mobilestock-native/typography'
+
+import { useCounter } from '../../hooks/useCount'
+import { Slot } from '../Slot'
+
+export interface BadgeProps {
+  text: string
+  renderInsidePill?: boolean
+  type?: BadgeType
+}
+
+export function Badge(props: BadgeProps) {
+  const { groupElements } = useCounter()
   return (
     <Slot>
-      {groupElements && props.renderInsideThePill ? (
-        <Container.Vertical
-          style={{
-            backgroundColor: "black",
-            flex: 1,
-            width: "100%",
-          }}
-          align="CENTER"
-        >
-          <Typography color="CONTRAST">{props.text}</Typography>
-        </Container.Vertical>
+      {groupElements && props.renderInsidePill ? (
+        <ContainerInfo $type={props.type} full align="CENTER">
+          <Text $type={props.type}>{props.text}</Text>
+        </ContainerInfo>
       ) : (
-        <BadgeRaw text={props.text} size="XS" />
+        <BadgeRaw text={props.text} type={props.type} size="XS" />
       )}
     </Slot>
-  );
+  )
 }
-Badge.displayName = "Form.FormCounter.Badge";
+function getKeyOfBadgeType(type: BadgeType | undefined, theme: DefaultTheme) {
+  return Object.keys(theme.colors.badge).find(key => key.toLowerCase() === type?.toLowerCase()) || 'default'
+}
+
+const ContainerInfo = styled(Container.Vertical)<{ $type?: BadgeType }>`
+  background-color: ${({ $type, theme }) => {
+    const key = getKeyOfBadgeType($type, theme)
+    return theme.colors.badge[key]
+  }};
+  width: 100%;
+`
+const Text = styled(Typography)<{ $type?: BadgeType }>`
+  color: ${({ $type, theme }) => {
+    const key = getKeyOfBadgeType($type, theme)
+    return tools.defineTextColor(theme.colors.badge[key])
+  }};
+`
+
+Badge.displayName = 'Form.FormCounter.Badge'

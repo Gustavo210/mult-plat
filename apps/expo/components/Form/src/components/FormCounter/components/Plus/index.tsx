@@ -1,7 +1,7 @@
-import { Button, TypeButton } from "../Button";
+import { Button, TypeButton } from '../Button'
 
-export function Plus(props: Partial<TypeButton>) {
-  return <Button {...props} size="SM" type="PLUS" />;
+export function Plus(props: Partial<Omit<TypeButton, 'type'>>) {
+  return <Button {...props} type="PLUS" />
 }
 
-Plus.displayName = "Form.Counter.Plus";
+Plus.displayName = 'Form.FormCounter.Plus'

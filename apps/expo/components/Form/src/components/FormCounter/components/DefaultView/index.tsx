@@ -1,25 +1,30 @@
-import { Container } from "@mobilestock-native/container";
-import { useCounter } from "../../hooks/useCount";
-import { Button } from "../Button";
-import { ContainerPill } from "../ContainerPiil";
-import { Display } from "../Display";
-import { Error } from "../Error";
-import { Label } from "../Label";
+import { Container } from '@mobilestock-native/container'
+
+import { useCounter } from '../../hooks/useCount'
+import { Button } from '../Button'
+import { ContainerPill } from '../ContainerPill'
+import { Display } from '../Display'
+import { Error } from '../Error'
+import { Label } from '../Label'
 
 export function DefaultView() {
-  const { label, labelPosition, error } = useCounter();
+  const { label, labelPosition, error } = useCounter()
   return (
     <Container.Vertical align="CENTER_START">
-      {labelPosition === "TOP_START" && label && (
-        <Container.Horizontal gap="XS">
+      {labelPosition === 'TOP_START' && label && (
+        <Container.Horizontal padding="NONE_NONE_2XS_NONE" gap="2XS">
           <Label>{label}</Label>
           {error && <Error>{error}</Error>}
         </Container.Horizontal>
       )}
-      {labelPosition !== "LEFT" && (
+      {labelPosition !== 'LEFT' && (
         <Container.Vertical align="CENTER">
-          {labelPosition === "TOP_CENTER" && label && <Label>{label}</Label>}
-          {labelPosition === "TOP_CENTER" && error && <Error>{error}</Error>}
+          {labelPosition !== 'TOP_START' && (label || error) && (
+            <Container.Vertical align="CENTER" padding="NONE_NONE_2XS_NONE">
+              {label && <Label>{label}</Label>}
+              {error && <Error>{error}</Error>}
+            </Container.Vertical>
+          )}
           <ContainerPill>
             <Button type="MINUS" />
             <Display />
@@ -27,13 +32,15 @@ export function DefaultView() {
           </ContainerPill>
         </Container.Vertical>
       )}
-      {labelPosition === "LEFT" && (
+      {labelPosition === 'LEFT' && (
         <Container.Vertical>
-          <Container.Horizontal gap="XS" align="CENTER">
-            <Container.Vertical>
-              {label && <Label>{label}</Label>}
-              {error && <Error>{error}</Error>}
-            </Container.Vertical>
+          <Container.Horizontal align="CENTER">
+            {(label || error) && (
+              <Container.Vertical padding="NONE_2XS_NONE_NONE">
+                {label && <Label>{label}</Label>}
+                {error && <Error>{error}</Error>}
+              </Container.Vertical>
+            )}
             <ContainerPill>
               <Button type="MINUS" />
               <Display />
@@ -43,5 +50,5 @@ export function DefaultView() {
         </Container.Vertical>
       )}
     </Container.Vertical>
-  );
+  )
 }

@@ -18,6 +18,7 @@ export function HelpButton() {
       if (input.files) {
         FileInput.handleSaveFiles(input.files);
       }
+      document.body.removeChild(input);
     });
     const event = new MouseEvent("click");
     input.dispatchEvent(event);

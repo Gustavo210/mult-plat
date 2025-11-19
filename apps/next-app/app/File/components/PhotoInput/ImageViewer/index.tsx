@@ -21,56 +21,14 @@ import {
 import { ImageCardControll } from "../ImageCardControll";
 import { ImageAdd } from "../ImageAdd";
 import { Container } from "@mobilestockweb/container";
-
-const LIST = [
-  {
-    id: "draggable-1",
-    content: "Item 1",
-  },
-  {
-    id: "draggable-2",
-    content: "Item 2",
-  },
-  {
-    id: "draggable-3",
-    content: "Item 3",
-  },
-  {
-    id: "draggable-4",
-    content: "Item 4",
-  },
-  {
-    id: "draggable-5",
-    content: "Item 5",
-  },
-  {
-    id: "draggable-6",
-    content: "Item 6",
-  },
-  {
-    id: "draggable-7",
-    content: "Item 7",
-  },
-  {
-    id: "draggable-8",
-    content: "Item 8",
-  },
-  {
-    id: "draggable-9",
-    content: "Item 9",
-  },
-  {
-    id: "draggable-10",
-    content: "Item 10",
-  },
-];
+import { useFileInput } from "@/app/File/hooks/useFile";
 
 export function ImageViewer({
   numberOfImagesVisible = 0,
   buttonAddDirection = "left",
 }) {
+  const FileInput = useFileInput();
   const dragAndDropContextIdentifier = useId();
-  const [items, setItems] = useState(LIST);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -81,7 +39,8 @@ export function ImageViewer({
   );
 
   const getIndex = (id: UniqueIdentifier) =>
-    items.findIndex((item) => item.id === id);
+    FileInput.images?.findIndex((item) => `${item.name}-${item.size}` === id) ||
+    0;
   const activeIndex = activeId ? getIndex(activeId) : -1;
 
   function handleDragEnd({ over }: DragEndEvent) {
@@ -89,9 +48,12 @@ export function ImageViewer({
     if (over) {
       const overIndex = getIndex(over.id);
       if (activeIndex !== overIndex) {
-        setItems((items) => {
-          return arrayMove(items, activeIndex, overIndex);
-        });
+        const newOrdem = arrayMove(
+          FileInput.images as File[],
+          activeIndex,
+          overIndex,
+        );
+        FileInput.reorderImages(newOrdem);
       }
     }
   }
@@ -115,7 +77,12 @@ export function ImageViewer({
     >
       <Container.Horizontal align="CENTER" gap="XS">
         {buttonAddDirection === "left" && <ImageAdd />}
-        <SortableContext items={items} strategy={horizontalListSortingStrategy}>
+        <SortableContext
+          items={
+            FileInput.images?.map((item) => `${item.name}-${item.size}`) || []
+          }
+          strategy={horizontalListSortingStrategy}
+        >
           <div
             style={{
               display: "flex",
@@ -125,8 +92,11 @@ export function ImageViewer({
               padding: "8px",
             }}
           >
-            {items.map((id) => (
-              <ImageCardControll key={id.id} id={id.id} />
+            {FileInput.images?.map((item) => (
+              <ImageCardControll
+                key={`${item.name}-${item.size}`}
+                file={item}
+              />
             ))}
           </div>
         </SortableContext>

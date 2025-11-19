@@ -14,7 +14,11 @@ type FileContextType = {
   handleRemoveFile(hashToRemove: string): void;
   accept?: (keyof typeof TypeFiles)[];
   multiple?: boolean;
+  images?: File[] | null;
+  handleSaveImages(newFiles: FileList): void;
+  handleRemoveImage(hashToRemove: string): void;
   dragAndDrop?: boolean;
+  reorderImages(newImages: File[]): void;
 };
 
 const FileContext = createContext<FileContextType>({} as FileContextType);
@@ -47,6 +51,7 @@ export function FileInputProvider({
   dragAndDrop,
 }: FileInputProviderProps) {
   const [files, setFiles] = useState<File[] | null>(null);
+  const [images, setImages] = useState<File[] | null>(null);
 
   useEffect(() => {
     setFiles(null);
@@ -108,6 +113,66 @@ export function FileInputProvider({
     });
   }
 
+  function handleSaveImages(newFiles: FileList) {
+    let newFilesList = [];
+
+    for (const file of newFiles) {
+      newFilesList.push({
+        file,
+        hash: `${file.name}-${file.size}`,
+      });
+    }
+
+    const filesList = (images || []).map((file) => ({
+      file,
+      hash: `${file.name}-${file.size}`,
+    }));
+
+    let permittedFiles = [...newFilesList, ...filesList];
+
+    const uniqueFiles = Array.from(
+      new Set(permittedFiles.map((file) => file.hash)),
+    ).map((hash) => permittedFiles.find((file) => file.hash === hash)!);
+
+    const uniquePermittedFiles = uniqueFiles.filter((item) =>
+      newFilesList.some((newItem) => newItem.hash === item.hash),
+    );
+
+    if (!uniquePermittedFiles.length) {
+      return;
+    }
+
+    const uniqueFileObjects = uniqueFiles.map((item) => item.file);
+
+    setImages(uniqueFileObjects);
+
+    onChange?.({
+      value: uniquePermittedFiles.map((item) => item.file),
+      event: "ADD_FILES",
+    });
+  }
+
+  function handleRemoveImage(hashToRemove: string) {
+    if (!images) return;
+
+    const filteredFiles = images.filter(
+      (file) => `${file.name}-${file.size}` !== hashToRemove,
+    );
+
+    setImages(filteredFiles);
+
+    onChange?.({
+      value: images.find(
+        (file) => `${file.name}-${file.size}` === hashToRemove,
+      ) as File,
+      event: "REMOVE_FILE",
+    });
+  }
+
+  function reorderImages(newImages: File[]) {
+    setImages(newImages);
+  }
+
   return (
     <FileContext.Provider
       value={{
@@ -116,7 +181,11 @@ export function FileInputProvider({
         accept,
         multiple,
         dragAndDrop,
+        images,
+        handleSaveImages,
+        handleRemoveImage,
         handleRemoveFile,
+        reorderImages,
       }}
     >
       {children}

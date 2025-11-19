@@ -1,16 +1,17 @@
 import { Container } from "@mobilestockweb/container";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 import { useTheme } from "styled-components";
-import { Img } from "@mobilestockweb/image";
 import { DragControll } from "./components/DragControll";
 import { Trash } from "./components/Trash";
-function ImageCardControllComponent({ id }: { id: string }) {
+function ImageCardControllComponent({ file }: { file: File }) {
   const Theme = useTheme();
   const { setNodeRef, transform, transition, isDragging } = useSortable({
-    id,
+    id: `${file.name}-${file.size}`,
   });
+
+  const uri = useMemo(() => URL.createObjectURL(file), [file]);
 
   return (
     <Container.Horizontal
@@ -32,14 +33,16 @@ function ImageCardControllComponent({ id }: { id: string }) {
         overflow: "hidden",
       }}
     >
-      <Trash />
-      <Img
-        size="SM"
+      <Trash id={`${file.name}-${file.size}`} />
+      <img
         alt="image"
-        borderRadius="NONE"
-        src="https://images.unsplash.com/photo-1742201876600-fbb37a2ff6ca?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        style={{
+          width: "100%",
+          objectFit: "cover",
+        }}
+        src={uri}
       />
-      <DragControll id={id} />
+      <DragControll id={`${file.name}-${file.size}`} />
     </Container.Horizontal>
   );
 }

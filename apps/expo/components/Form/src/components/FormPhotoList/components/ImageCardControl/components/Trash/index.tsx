@@ -4,10 +4,15 @@ import { utils } from "../../../../../../utils";
 import { usePhotoList } from "../../../../hooks/usePhotoList";
 
 export function Trash({ photo }: { photo: File }) {
-  const Photo = usePhotoList();
+  const PhotoList = usePhotoList();
+
+  function handleClick() {
+    PhotoList.removeImage(utils.getHashFile(photo));
+  }
+
   return (
     <Clickable
-      onPress={() => Photo.removeImage(utils.getHashFile(photo))}
+      onPress={handleClick}
       style={{
         position: "absolute",
         top: 0,

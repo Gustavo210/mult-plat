@@ -3,6 +3,7 @@ import { useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions, View } from "react-native";
 import DraggableFlatList, {
   DragEndParams,
+  RenderItemParams,
 } from "react-native-draggable-flatlist";
 import { usePhotoList } from "../../hooks/usePhotoList";
 import { AddButton } from "../AddButton";
@@ -63,7 +64,11 @@ export function Viewer({
               ItemSeparatorComponent={() => (
                 <View style={{ width: PhotoList.gapComponent }} />
               )}
-              renderItem={(item) => <ImageCardControl {...item} />}
+              renderItem={(item) => (
+                <ImageCardControl
+                  {...(item as RenderItemParams<File & { uri: string }>)}
+                />
+              )}
             />
           </Container.Horizontal>
         )}

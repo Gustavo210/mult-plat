@@ -7,7 +7,6 @@ export function Bar({ id }: { id: string }) {
       style={{
         height: 5,
         width: "90%",
-
         backgroundColor: "#222",
         ...(isDragging && { backgroundColor: "#f9e30f" }),
       }}

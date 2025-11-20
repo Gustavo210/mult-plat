@@ -20,8 +20,8 @@ type FileContextType = {
   imageToCrop: File | null;
   handleImageCropSave(croppedImage: File): void;
   handleImageCropCancel(): void;
-  sizeComponent: number;
-  gapComponent: number;
+  sizeComponent: string;
+  gapComponent: string;
   dragAndDrop?: boolean;
 };
 
@@ -88,9 +88,9 @@ export function PhotoListProvider({
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
     input.setAttribute("id", String(Math.random()));
-    // if (FileInput.multiple) {
-    // }
-    input.setAttribute("multiple", "multiple");
+    if (multiple) {
+      input.setAttribute("multiple", "multiple");
+    }
     document.body.appendChild(input);
     input.addEventListener("change", async () => {
       if (input.files) {

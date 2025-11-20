@@ -35,11 +35,9 @@ export default function Index() {
       <Form onSubmit={onSubmit}>
         <Form.Input name="fileInput" label="File Input" />
         <Form.PhotoList name="photoList" multiple onChange={console.log} />
-        <Form.MultipleArchive
-          name="multipleArchive"
-          accept={["jpeg", "json"]}
-          onChange={console.log}
-        />
+        <Container.Horizontal>
+          <Form.MultipleArchive name="multipleArchive" onChange={console.log} />
+        </Container.Horizontal>
         <Form.Button text="Enviar" />
       </Form>
     </Container.Vertical>

@@ -25,15 +25,11 @@ export function Footer() {
     fileCount.value = MultipleArchive.files?.length || 0;
   }, [MultipleArchive.files, fileCount]);
 
-  useEffect(() => {
-    flipIcon.value = !!MultipleArchive.files?.length;
-  }, [flipIcon, MultipleArchive.files]);
-
   const animationStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          rotate: withSpring(flipIcon.value ? "0deg" : "180deg"),
+          rotate: withSpring(flipIcon.value ? "180deg" : "0deg"),
         },
       ],
     };

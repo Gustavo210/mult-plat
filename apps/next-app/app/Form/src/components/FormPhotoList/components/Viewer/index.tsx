@@ -3,6 +3,7 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
+  DragStartEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
@@ -18,16 +19,17 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { Container } from "@mobilestockweb/container";
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
+import { utils } from "../../../../utils";
 import { usePhotoList } from "../../hooks/usePhotoList";
 import { AddButton } from "../AddButton";
 import { ImageCardControl } from "../ImageCardControl";
 
 export function Viewer({
-  numberOfImagesVisible = 0,
+  numberOfImagesVisible = 4,
   buttonAddDirection = "left",
 }) {
-  const FileInput = usePhotoList();
+  const PhotoList = usePhotoList();
   const dragAndDropContextIdentifier = useId();
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
@@ -39,8 +41,7 @@ export function Viewer({
   );
 
   const getIndex = (id: UniqueIdentifier) =>
-    FileInput.images?.findIndex((item) => `${item.name}-${item.size}` === id) ||
-    0;
+    PhotoList.images?.findIndex((item) => utils.getHashFile(item) === id) || 0;
   const activeIndex = activeId ? getIndex(activeId) : -1;
 
   function handleDragEnd({ over }: DragEndEvent) {
@@ -49,51 +50,57 @@ export function Viewer({
       const overIndex = getIndex(over.id);
       if (activeIndex !== overIndex) {
         const newOrdem = arrayMove(
-          FileInput.images as File[],
+          PhotoList.images as File[],
           activeIndex,
           overIndex
         );
-        FileInput.reorderImages(newOrdem);
+        PhotoList.reorderImages(newOrdem);
       }
     }
   }
+
+  function handleDragStart({ active }: DragStartEvent) {
+    if (!active) {
+      return;
+    }
+    setActiveId(active.id);
+  }
+
+  const maxWidth = useMemo(() => {
+    if (!!numberOfImagesVisible) {
+      return `calc(${PhotoList.sizeComponent} * ${numberOfImagesVisible} + (${PhotoList.gapComponent} * ${numberOfImagesVisible}))`;
+    }
+
+    return `calc(100% - ${PhotoList.sizeComponent} - ${PhotoList.gapComponent})`;
+  }, [numberOfImagesVisible, PhotoList.sizeComponent, PhotoList.gapComponent]);
 
   return (
     <DndContext
       id={dragAndDropContextIdentifier}
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragCancel={() => {
-        setActiveId(null);
-      }}
-      onDragStart={({ active }) => {
-        if (!active) {
-          return;
-        }
-        setActiveId(active.id);
-      }}
+      onDragCancel={() => setActiveId(null)}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       modifiers={[restrictToHorizontalAxis]}
     >
       <Container.Horizontal align="START_CENTER" gap="2XS">
         {buttonAddDirection === "left" && <AddButton />}
         <SortableContext
-          items={
-            FileInput.images?.map((item) => `${item.name}-${item.size}`) || []
-          }
+          items={PhotoList.images?.map((item) => utils.getHashFile(item)) || []}
           strategy={horizontalListSortingStrategy}
         >
           <div
             style={{
               display: "flex",
               flexBasis: "max-content",
-              gap: "8px",
               overflowX: "scroll",
-              padding: "8px",
+              gap: PhotoList.gapComponent,
+              maxWidth,
             }}
           >
-            {FileInput.images?.map((item) => (
-              <ImageCardControl key={`${item.name}-${item.size}`} file={item} />
+            {PhotoList.images?.map((item) => (
+              <ImageCardControl key={utils.getHashFile(item)} file={item} />
             ))}
           </div>
         </SortableContext>

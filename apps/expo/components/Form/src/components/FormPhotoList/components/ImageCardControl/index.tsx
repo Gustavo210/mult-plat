@@ -11,7 +11,7 @@ function ImageCardControlComponent({
   item,
   drag,
   isActive,
-}: RenderItemParams<any>) {
+}: RenderItemParams<File & { uri: string }>) {
   const PhotoList = usePhotoList();
 
   const uri = useMemo(

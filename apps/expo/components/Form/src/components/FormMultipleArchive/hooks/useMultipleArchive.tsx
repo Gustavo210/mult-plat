@@ -16,13 +16,12 @@ import { TypeEventOnChange } from "../@types/event";
 import { TypeFiles } from "../enum/TypeFiles";
 
 type FileContextType = {
-  openImageCropModal: boolean;
-  files?: File[] | null;
   handleSaveFiles(newFiles: File[]): void;
   handleRemoveFile(hashToRemove: string): void;
   handleSelectFile(): void;
-  accept?: (keyof typeof TypeFiles)[];
   dragAndDrop?: boolean;
+  accept?: (keyof typeof TypeFiles)[];
+  files?: File[] | null;
   name: string;
 };
 
@@ -50,7 +49,6 @@ export function MultipleArchiveProvider({
   const [permissionResponse, requestPermission] = usePermissions({
     granularPermissions: ["photo"],
   });
-  const [openImageCropModal, setOpenImageCropModal] = useState(false);
 
   const handleSaveFiles = useCallback(
     (newFiles: File[]) => {
@@ -125,7 +123,6 @@ export function MultipleArchiveProvider({
 
   useEffect(() => {
     setFiles(null);
-    setOpenImageCropModal(false);
   }, [accept]);
 
   function handleRemoveFile(hashToRemove: string) {
@@ -186,7 +183,6 @@ export function MultipleArchiveProvider({
         handleSelectFile,
         handleSaveFiles,
         handleRemoveFile,
-        openImageCropModal,
         accept,
         files,
         name,

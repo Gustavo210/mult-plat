@@ -1,15 +1,15 @@
-import { View } from "react-native";
-import { useTheme } from "styled-components/native";
+import { Container } from "@mobilestock-native/container";
+import { usePhotoList } from "../../../../hooks/usePhotoList";
 
 export function Bar({ isActive }: { isActive: boolean }) {
-  const Theme = useTheme();
+  const PhotoList = usePhotoList();
 
   return (
-    <View
+    <Container.Horizontal
       style={[
         {
           height: 2,
-          width: parseInt(Theme.sizeImage.sm) * 0.7,
+          width: PhotoList.sizeComponent * 0.7,
           backgroundColor: "#222",
         },
         isActive && { backgroundColor: "#f9e30f" },

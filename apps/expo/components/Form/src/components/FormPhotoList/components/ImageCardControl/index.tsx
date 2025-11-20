@@ -3,18 +3,16 @@ import { Img } from "@mobilestock-native/image";
 import { memo, useMemo } from "react";
 import { Platform } from "react-native";
 import { RenderItemParams } from "react-native-draggable-flatlist";
-import { useTheme } from "styled-components/native";
 import { usePhotoList } from "../../hooks/usePhotoList";
-import { DragControll } from "./components/DragControll";
+import { DragControl } from "./components/DragControl";
 import { Trash } from "./components/Trash";
 
-function ImageCardControllComponent({
+function ImageCardControlComponent({
   item,
   drag,
   isActive,
 }: RenderItemParams<any>) {
-  const FileInput = usePhotoList();
-  const Theme = useTheme();
+  const PhotoList = usePhotoList();
 
   const uri = useMemo(
     () => (Platform.OS === "web" ? URL.createObjectURL(item) : item.uri),
@@ -29,7 +27,7 @@ function ImageCardControllComponent({
           borderRadius: 8,
           overflow: "hidden",
           marginBottom: 8,
-          width: parseInt(Theme.sizeImage.sm),
+          width: PhotoList.sizeComponent,
           borderWidth: 1,
           position: "relative",
           borderColor: "#e0e0e0",
@@ -41,11 +39,9 @@ function ImageCardControllComponent({
     >
       <Trash photo={item} />
       <Img src={{ uri }} alt="image" size="SM" />
-      {FileInput.dragAndDrop && (
-        <DragControll drag={drag} isActive={isActive} />
-      )}
+      {PhotoList.dragAndDrop && <DragControl drag={drag} isActive={isActive} />}
     </Container.Vertical>
   );
 }
 
-export const ImageCardControll = memo(ImageCardControllComponent);
+export const ImageCardControl = memo(ImageCardControlComponent);

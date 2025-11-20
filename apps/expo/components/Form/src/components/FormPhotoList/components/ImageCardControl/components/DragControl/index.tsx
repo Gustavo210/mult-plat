@@ -1,7 +1,7 @@
-import { Pressable } from "react-native";
+import { Clickable } from "@mobilestock-native/clickable";
 import { Bar } from "../Bar";
 
-export function DragControll({
+export function DragControl({
   drag,
   isActive,
 }: {
@@ -9,7 +9,7 @@ export function DragControll({
   isActive: boolean;
 }) {
   return (
-    <Pressable
+    <Clickable
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -26,6 +26,6 @@ export function DragControll({
       onPressIn={drag}
     >
       <Bar isActive={isActive} />
-    </Pressable>
+    </Clickable>
   );
 }

@@ -7,9 +7,11 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { Platform } from "react-native";
+import { useTheme } from "styled-components/native";
 import { TypeEventOnChange } from "../@types/event";
 
 type FileContextType = {
@@ -21,6 +23,8 @@ type FileContextType = {
   imageToCrop: File | null;
   handleImageCropSave(croppedImage: File): void;
   handleImageCropCancel(): void;
+  sizeComponent: number;
+  gapComponent: number;
   dragAndDrop?: boolean;
 };
 
@@ -43,6 +47,7 @@ export function PhotoListProvider({
   dragAndDrop,
   name,
 }: PhotoListProviderProps) {
+  const Theme = useTheme();
   const { fieldName, registerField, defaultValue } = useField(name);
   const [permissionResponse, requestPermission] = usePermissions({
     granularPermissions: ["photo"],
@@ -50,6 +55,8 @@ export function PhotoListProvider({
   const [images, setImagens] = useState<File[] | null>(null);
   const [openImageCropModal, setOpenImageCropModal] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<File | null>(null);
+  const sizeComponent = useMemo(() => parseInt(Theme.sizeImage.sm), [Theme]);
+  const gapComponent = useMemo(() => parseInt(Theme.gaps["2xs"]), [Theme]);
 
   const handleSaveImages = useCallback(
     (imagesList: File[]) => {
@@ -162,6 +169,8 @@ export function PhotoListProvider({
         imageToCrop,
         handleImageCropCancel,
         handleImageCropSave,
+        sizeComponent,
+        gapComponent,
         dragAndDrop,
       }}
     >

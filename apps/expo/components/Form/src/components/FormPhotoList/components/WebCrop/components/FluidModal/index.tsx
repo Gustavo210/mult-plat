@@ -13,17 +13,18 @@ export function FluidModal({ children, ...props }: ModalProps) {
     );
   }, []);
 
+  const handleResize = useCallback(() => {
+    setIsMobile(handleVerifyIsMobile());
+  }, [handleVerifyIsMobile]);
+
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(handleVerifyIsMobile());
-    };
     window.addEventListener("resize", handleResize);
 
     setIsMobile(handleVerifyIsMobile());
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [handleVerifyIsMobile]);
+  }, [handleVerifyIsMobile, handleResize]);
 
   if (isMobile) {
     return (

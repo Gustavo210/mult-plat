@@ -1,13 +1,12 @@
 import { Container } from "@mobilestock-native/container";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Platform, useWindowDimensions, View } from "react-native";
 import DraggableFlatList, {
   DragEndParams,
 } from "react-native-draggable-flatlist";
-import { useTheme } from "styled-components/native";
 import { usePhotoList } from "../../hooks/usePhotoList";
 import { AddButton } from "../AddButton";
-import { ImageCardControll } from "../ImageCardControll";
+import { ImageCardControl } from "../ImageCardControl";
 import { CropDemo } from "../WebCrop";
 
 interface ImageViewerProps {
@@ -18,48 +17,42 @@ export function Viewer({
   numberOfImagesVisible = 0,
   buttonAddDirection = "left",
 }: ImageViewerProps) {
-  const tamanhoDaTela = useWindowDimensions();
-  const File = usePhotoList();
-  const Theme = useTheme();
-  const [list, setList] = useState(File.images || []);
-
-  const gapSize = useMemo(() => parseInt(Theme.gaps["2xs"]), [Theme.gaps]);
-  const imageSize = useMemo(
-    () => parseInt(Theme.sizeImage.sm),
-    [Theme.sizeImage]
-  );
-
-  useEffect(() => {
-    setList(File.images || []);
-  }, [File.images]);
+  const screenDimensions = useWindowDimensions();
+  const PhotoList = usePhotoList();
 
   const handleDragEnd = useCallback(
     (dragEndResult: DragEndParams<File>) => {
-      File.reorderImages(dragEndResult.data);
+      PhotoList.reorderImages(dragEndResult.data);
     },
-    [File]
+    [PhotoList]
   );
 
   const maxWidth = useMemo(() => {
     if (!!numberOfImagesVisible) {
       return (
-        imageSize * numberOfImagesVisible +
-        gapSize * (numberOfImagesVisible - 1)
+        PhotoList.sizeComponent * numberOfImagesVisible +
+        PhotoList.gapComponent * (numberOfImagesVisible - 1)
       );
     }
 
-    return tamanhoDaTela.width - imageSize - gapSize;
-  }, [numberOfImagesVisible, tamanhoDaTela.width, imageSize, gapSize]);
+    return (
+      screenDimensions.width - PhotoList.sizeComponent - PhotoList.gapComponent
+    );
+  }, [
+    numberOfImagesVisible,
+    screenDimensions.width,
+    PhotoList.sizeComponent,
+    PhotoList.gapComponent,
+  ]);
 
-  console.log("RENDER VIEWER", list);
   return (
     <>
       <Container.Horizontal gap="2XS">
         {buttonAddDirection === "left" && <AddButton />}
-        {list && (
+        {PhotoList.images && (
           <Container.Horizontal full>
             <DraggableFlatList
-              data={list}
+              data={PhotoList.images}
               keyExtractor={(item) => `${item.name}-${item.size}`}
               horizontal
               onDragEnd={handleDragEnd}
@@ -67,8 +60,10 @@ export function Viewer({
               style={{
                 maxWidth,
               }}
-              ItemSeparatorComponent={() => <View style={{ width: gapSize }} />}
-              renderItem={(item) => <ImageCardControll {...item} />}
+              ItemSeparatorComponent={() => (
+                <View style={{ width: PhotoList.gapComponent }} />
+              )}
+              renderItem={(item) => <ImageCardControl {...item} />}
             />
           </Container.Horizontal>
         )}

@@ -1,11 +1,11 @@
+import { Clickable } from "@mobilestock-native/clickable";
 import { Icon } from "@mobilestock-native/icons";
-import { Pressable } from "react-native";
 import { usePhotoList } from "../../../../hooks/usePhotoList";
 
 export function Trash({ photo }: { photo: File }) {
   const Photo = usePhotoList();
   return (
-    <Pressable
+    <Clickable
       onPress={() => Photo.removeImage(`${photo.name}-${photo.size}`)}
       style={{
         position: "absolute",
@@ -17,6 +17,6 @@ export function Trash({ photo }: { photo: File }) {
       }}
     >
       <Icon name="X" size="XS" color="#fff" />
-    </Pressable>
+    </Clickable>
   );
 }

@@ -34,8 +34,8 @@ export default function Index() {
       <Typography>Rota para file-input</Typography>
       <Form onSubmit={onSubmit}>
         <Form.Input name="fileInput" label="File Input" />
-        <Form.PhotoList name="photoList" />
-        <Form.MultipleArchive name="multipleArchive" />
+        <Form.PhotoList name="photoList" multiple onChange={console.log} />
+        <Form.MultipleArchive name="multipleArchive" onChange={console.log} />
         <Form.Button text="Enviar" />
       </Form>
     </Container.Vertical>

@@ -1,17 +1,15 @@
-import { ImagePickerAsset } from "expo-image-picker";
-
 export type EventOnChangeRemoveImage = {
-  value: ImagePickerAsset;
+  value: File;
   event: "REMOVE_IMAGE";
 };
 
 export type EventOnChangeReorderImages = {
-  value: ImagePickerAsset[];
+  value: File[];
   event: "REORDER_IMAGES";
 };
 
 export type EventOnChangeCropSave = {
-  value: ImagePickerAsset;
+  value: File;
   event: "CROP_SAVE";
 };
 export type TypeEventOnChange =

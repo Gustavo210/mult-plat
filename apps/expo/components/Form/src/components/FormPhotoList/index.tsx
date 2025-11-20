@@ -17,16 +17,16 @@ export function FormPhotoList<
   TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
 >({
   onChange,
-  multiple,
-  dragAndDrop,
+  multiple = true,
+  dragAndDrop = true,
   name,
 }: PhotoInputProps<TypeEventOnChangeGeneric>) {
   return (
     <PhotoListProvider
       name={name}
       onChange={onChange as PhotoListProviderProps["onChange"]}
-      multiple={multiple || true}
-      dragAndDrop={dragAndDrop || true}
+      multiple={multiple}
+      dragAndDrop={dragAndDrop}
     >
       <Viewer />
     </PhotoListProvider>

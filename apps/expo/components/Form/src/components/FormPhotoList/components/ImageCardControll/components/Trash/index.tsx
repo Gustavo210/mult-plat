@@ -1,13 +1,12 @@
 import { Icon } from "@mobilestock-native/icons";
-import { ImagePickerAsset } from "expo-image-picker";
 import { Pressable } from "react-native";
 import { usePhotoList } from "../../../../hooks/usePhotoList";
 
-export function Trash({ photo }: { photo: ImagePickerAsset }) {
+export function Trash({ photo }: { photo: File }) {
   const Photo = usePhotoList();
   return (
     <Pressable
-      onPress={() => Photo.removeImage(photo.uri)}
+      onPress={() => Photo.removeImage(`${photo.name}-${photo.size}`)}
       style={{
         position: "absolute",
         top: 0,

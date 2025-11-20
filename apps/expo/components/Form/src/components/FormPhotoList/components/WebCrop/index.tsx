@@ -1,7 +1,6 @@
 import { Button } from "@mobilestock-native/button";
 import { Container } from "@mobilestock-native/container";
-import { ImagePickerAsset } from "expo-image-picker";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Crop, ReactCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { View } from "react-native";
@@ -103,7 +102,7 @@ export function CropDemo() {
     }
 
     const originalImage = new Image();
-    originalImage.src = FileInput.imageToCrop.uri;
+    originalImage.src = URL.createObjectURL(FileInput.imageToCrop);
 
     await new Promise<void>((resolve, reject) => {
       originalImage.onload = () => resolve();
@@ -128,25 +127,16 @@ export function CropDemo() {
       quality: 1,
     });
 
-    const croppedImageUrl = URL.createObjectURL(generatedBlob);
-    const croppedImageObject: ImagePickerAsset = {
-      uri: croppedImageUrl,
-      width: cropHeight,
-      height: cropWidth,
-      fileName: FileInput.imageToCrop.fileName,
-      fileSize: generatedBlob.size,
-      mimeType: generatedBlob.type,
-      type: "image",
-      file: new File(
+    FileInput.handleImageCropSave(
+      new File(
         [generatedBlob],
-        FileInput.imageToCrop.fileName ?? "cropped-image.png",
+        FileInput.imageToCrop.name ?? "cropped-image.png",
         {
           type: generatedBlob.type,
           lastModified: Date.now(),
         }
-      ),
-    };
-    FileInput.handleImageCropSave(croppedImageObject);
+      )
+    );
   }
 
   function onLoad(event: React.SyntheticEvent<HTMLImageElement, Event>) {
@@ -192,6 +182,13 @@ export function CropDemo() {
       naturalHeight,
     });
   }
+  const uri = useMemo(
+    () =>
+      FileInput.imageToCrop
+        ? URL.createObjectURL(FileInput.imageToCrop)
+        : undefined,
+    [FileInput.imageToCrop]
+  );
 
   return (
     <FluidModal visible={FileInput.openImageCropModal}>
@@ -226,7 +223,7 @@ export function CropDemo() {
               }
             >
               <img
-                src={FileInput.imageToCrop?.uri}
+                src={uri}
                 ref={imageReference}
                 style={
                   displaySize

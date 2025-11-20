@@ -1,6 +1,7 @@
 import { Container } from "@mobilestock-native/container";
 import { Img } from "@mobilestock-native/image";
-import { memo } from "react";
+import { memo, useMemo } from "react";
+import { Platform } from "react-native";
 import { RenderItemParams } from "react-native-draggable-flatlist";
 import { useTheme } from "styled-components/native";
 import { usePhotoList } from "../../hooks/usePhotoList";
@@ -15,6 +16,10 @@ function ImageCardControllComponent({
   const FileInput = usePhotoList();
   const Theme = useTheme();
 
+  const uri = useMemo(
+    () => (Platform.OS === "web" ? URL.createObjectURL(item) : item.uri),
+    [item]
+  );
   return (
     <Container.Vertical
       align="CENTER"
@@ -35,7 +40,7 @@ function ImageCardControllComponent({
       ]}
     >
       <Trash photo={item} />
-      <Img src={{ uri: item.uri }} alt="image" size="SM" />
+      <Img src={{ uri }} alt="image" size="SM" />
       {FileInput.dragAndDrop && (
         <DragControll drag={drag} isActive={isActive} />
       )}

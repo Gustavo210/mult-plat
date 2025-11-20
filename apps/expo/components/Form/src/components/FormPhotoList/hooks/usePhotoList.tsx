@@ -1,9 +1,10 @@
 import { useField } from "@unform/core";
-import { ImagePickerAsset, launchImageLibraryAsync } from "expo-image-picker";
+import { launchImageLibraryAsync } from "expo-image-picker";
 import { usePermissions } from "expo-media-library";
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -13,12 +14,12 @@ import { TypeEventOnChange } from "../@types/event";
 
 type FileContextType = {
   showDeviceImage(): Promise<void>;
-  images: ImagePickerAsset[] | null;
+  images: File[] | null;
   removeImage(uri: string): void;
-  reorderImages(newImages: ImagePickerAsset[]): void;
+  reorderImages(newImages: File[]): void;
   openImageCropModal: boolean;
-  imageToCrop: ImagePickerAsset | null;
-  handleImageCropSave(croppedImage: ImagePickerAsset): void;
+  imageToCrop: File | null;
+  handleImageCropSave(croppedImage: File): void;
   handleImageCropCancel(): void;
   dragAndDrop?: boolean;
 };
@@ -42,22 +43,42 @@ export function PhotoListProvider({
   dragAndDrop,
   name,
 }: PhotoListProviderProps) {
-  const { fieldName, registerField, error, defaultValue } = useField(name);
+  const { fieldName, registerField, defaultValue } = useField(name);
   const [permissionResponse, requestPermission] = usePermissions({
     granularPermissions: ["photo"],
   });
-  const [images, setImagens] = useState<ImagePickerAsset[] | null>(null);
+  const [images, setImagens] = useState<File[] | null>(null);
   const [openImageCropModal, setOpenImageCropModal] = useState(false);
-  const [imageToCrop, setImageToCrop] = useState<ImagePickerAsset | null>(null);
+  const [imageToCrop, setImageToCrop] = useState<File | null>(null);
+
+  const handleSaveImages = useCallback(
+    (imagesList: File[]) => {
+      setImagens((previewsImage) =>
+        [...(previewsImage || []), ...(imagesList || [])].reverse()
+      );
+    },
+    [setImagens]
+  );
+
+  const configureForm = useCallback(
+    (imageList: File[] | null) => {
+      if (!imageList) {
+        setImagens(null);
+        return;
+      }
+      handleSaveImages(imageList);
+    },
+    [handleSaveImages]
+  );
 
   useEffect(() => {
     registerField({
       name: fieldName,
-      getValue: () => images?.map((image) => image.file),
-      setValue: (_, value) => setImagens(value),
+      getValue: () => images,
+      setValue: (_, value) => configureForm(value || defaultValue),
       clearValue: () => setImagens(null),
     });
-  }, [fieldName, registerField, images]);
+  }, [fieldName, registerField, images, configureForm, defaultValue]);
 
   useEffect(() => {
     if (!permissionResponse?.granted) {
@@ -72,28 +93,42 @@ export function PhotoListProvider({
       quality: 1,
       allowsMultipleSelection: multiple,
     });
+    console.log(Platform.OS, result.assets, multiple);
 
     if (Platform.OS === "web" && result.assets && !multiple) {
       setOpenImageCropModal(true);
-      setImageToCrop(result.assets[0]);
+      setImageToCrop(result.assets[0].file as File);
       return;
     }
-    setImagens((previewsImage) =>
-      [...(previewsImage || []), ...(result.assets || [])].reverse()
+    handleSaveImages(
+      result.assets?.map((asset) =>
+        Platform.OS === "web"
+          ? (asset.file as File)
+          : ({
+              uri: asset.uri,
+              name: asset.fileName,
+              type: asset.mimeType,
+            } as unknown as File)
+      ) || []
     );
   }
 
-  function removeImage(uri: string) {
+  function removeImage(hash: string) {
     if (!images) return;
-    const filteredImages = images.filter((image) => image.uri !== uri);
+    console.log("REMOVER IMAGE", hash, JSON.stringify(images, null, 2));
+    const filteredImages = images.filter(
+      (file) => `${file.name}-${file.size}` !== hash
+    );
     setImagens(filteredImages);
     onChange?.({
-      value: images.find((image) => image.uri === uri) as ImagePickerAsset,
+      value: images.find(
+        (file) => `${file.name}-${file.size}` === hash
+      ) as File,
       event: "REMOVE_IMAGE",
     });
   }
 
-  function reorderImages(newImages: ImagePickerAsset[]) {
+  function reorderImages(newImages: File[]) {
     setImagens(newImages);
     onChange?.({
       value: newImages,
@@ -101,10 +136,8 @@ export function PhotoListProvider({
     });
   }
 
-  function handleImageCropSave(croppedImage: ImagePickerAsset) {
-    setImagens((previewsImage) =>
-      [...(previewsImage || []), croppedImage].reverse()
-    );
+  function handleImageCropSave(croppedImage: File) {
+    handleSaveImages([croppedImage]);
     setOpenImageCropModal(false);
     setImageToCrop(null);
     onChange?.({

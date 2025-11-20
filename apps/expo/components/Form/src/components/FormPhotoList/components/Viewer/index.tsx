@@ -1,5 +1,4 @@
 import { Container } from "@mobilestock-native/container";
-import { ImagePickerAsset } from "expo-image-picker";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Platform, useWindowDimensions, View } from "react-native";
 import DraggableFlatList, {
@@ -35,7 +34,7 @@ export function Viewer({
   }, [File.images]);
 
   const handleDragEnd = useCallback(
-    (dragEndResult: DragEndParams<ImagePickerAsset>) => {
+    (dragEndResult: DragEndParams<File>) => {
       File.reorderImages(dragEndResult.data);
     },
     [File]
@@ -52,6 +51,7 @@ export function Viewer({
     return tamanhoDaTela.width - imageSize - gapSize;
   }, [numberOfImagesVisible, tamanhoDaTela.width, imageSize, gapSize]);
 
+  console.log("RENDER VIEWER", list);
   return (
     <>
       <Container.Horizontal gap="2XS">
@@ -60,7 +60,7 @@ export function Viewer({
           <Container.Horizontal full>
             <DraggableFlatList
               data={list}
-              keyExtractor={(item) => item.uri}
+              keyExtractor={(item) => `${item.name}-${item.size}`}
               horizontal
               onDragEnd={handleDragEnd}
               activationDistance={10}

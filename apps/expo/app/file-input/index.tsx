@@ -21,13 +21,10 @@ export default function Index() {
           formData.append(`files`, file);
         });
       }
-      const serverResponse = await fetch(
-        "http://192.168.0.115:3333/api/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      await fetch("http://192.168.0.115:3333/api/upload", {
+        method: "POST",
+        body: formData,
+      });
     } catch (error) {
       console.error(error);
     }

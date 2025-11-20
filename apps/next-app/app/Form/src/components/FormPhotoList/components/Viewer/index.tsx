@@ -26,6 +26,7 @@ import { AddButton } from "../AddButton";
 import { ErrorLabel } from "../ErrorLabel";
 import { ImageCardControl } from "../ImageCardControl";
 import { Label } from "../Label";
+import { CropDemo } from "../WebCrop";
 
 interface ImageViewerProps {
   numberOfImagesVisible?: number;
@@ -127,6 +128,7 @@ export function Viewer({
         </Container.Horizontal>
       </DndContext>
       <ErrorLabel />
+      <CropDemo />
     </>
   );
 }

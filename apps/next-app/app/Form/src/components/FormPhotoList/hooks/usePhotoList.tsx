@@ -90,12 +90,18 @@ export function PhotoListProvider({
     input.setAttribute("accept", "image/*");
     input.setAttribute("id", String(Math.random()));
     if (multiple) {
+      console.log("Multiple files allowed");
       input.setAttribute("multiple", "multiple");
     }
     document.body.appendChild(input);
     input.addEventListener("change", async () => {
-      if (input.files) {
+      if (!input.files) return;
+
+      if (multiple) {
         handleSaveImages(Array.from(input.files));
+      } else {
+        setOpenImageCropModal(true);
+        setImageToCrop(Array.from(input.files)[0] as File);
       }
       document.body.removeChild(input);
     });

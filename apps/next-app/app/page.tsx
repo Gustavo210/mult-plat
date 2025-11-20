@@ -47,7 +47,7 @@ export default function Index() {
       <Form onSubmit={onSubmit} schema={schema}>
         <Form.PhotoList
           name="photoList"
-          multiple
+          multiple={false}
           onChange={console.log}
           label="Photo List"
         />

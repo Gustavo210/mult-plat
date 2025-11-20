@@ -1,10 +1,10 @@
 import type React from "react";
 import { HTMLAttributes } from "react";
-import { TypeFiles } from "../../../../enum/TypeFiles";
-import { useFileInput } from "../../../../hooks/useFile";
+import { TypeFiles } from "../../enum/TypeFiles";
+import { useMultipleArchive } from "../../hooks/useMultipleArchive";
 
 export function DropController(props: HTMLAttributes<HTMLDivElement>) {
-  const MultipleArchive = useFileInput();
+  const MultipleArchive = useMultipleArchive();
 
   function captureFiles(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault();

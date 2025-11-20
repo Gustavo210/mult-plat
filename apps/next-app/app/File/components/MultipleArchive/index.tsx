@@ -10,11 +10,12 @@ import {
 } from "../../hooks/useFile";
 import { DefaultView } from "./components/DefaultView";
 import { DropController } from "./components/DropController";
+import { Footer } from "./components/Footer";
 
 type TypeEventOnChange = EventOnChangeAddFiles | EventOnChangeRemoveFile;
 
 interface MultipleArchiveProps<
-  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange,
+  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
 > {
   children?: React.ReactNode;
   accept?: (keyof typeof TypeFiles)[] | string;
@@ -23,7 +24,7 @@ interface MultipleArchiveProps<
 }
 
 export function MultipleArchive<
-  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange,
+  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
 >({
   children,
   accept,
@@ -64,6 +65,7 @@ export function MultipleArchive<
         padding="MD"
       >
         <DropController>{children || <DefaultView />}</DropController>
+        <Footer />
       </Container.Vertical>
     </FileInputProvider>
   );

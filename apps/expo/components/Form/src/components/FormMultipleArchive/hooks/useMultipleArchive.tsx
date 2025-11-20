@@ -1,4 +1,3 @@
-import * as MediaLibrary from "expo-media-library";
 import {
   ReactNode,
   createContext,
@@ -9,14 +8,19 @@ import {
 } from "react";
 
 import { useField } from "@unform/core";
+import * as DocumentPicker from "expo-document-picker";
+import { usePermissions } from "expo-media-library";
+import { Platform } from "react-native";
 import { TypeEventOnChange } from "../@types/event";
 import { TypeFiles } from "../enum/TypeFiles";
+import { utils } from "../utils";
 
 type FileContextType = {
   openImageCropModal: boolean;
   files?: File[] | null;
   handleSaveFiles(newFiles: File[]): void;
   handleRemoveFile(hashToRemove: string): void;
+  handleSelectFile(): void;
   accept?: (keyof typeof TypeFiles)[];
   dragAndDrop?: boolean;
   name: string;
@@ -43,7 +47,7 @@ export function MultipleArchiveProvider({
 }: MultipleArchiveProviderProps) {
   const { fieldName, registerField, defaultValue } = useField(name);
   const [files, setFiles] = useState<File[] | null>(null);
-  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions({
+  const [permissionResponse, requestPermission] = usePermissions({
     granularPermissions: ["photo"],
   });
   const [openImageCropModal, setOpenImageCropModal] = useState(false);
@@ -52,12 +56,12 @@ export function MultipleArchiveProvider({
     (newFiles: File[]) => {
       const newFilesList = newFiles.map((file) => ({
         file,
-        hash: `${file.name}-${file.size}`,
+        hash: utils.getHashFile(file),
       }));
 
       const filesList = (files || []).map((file) => ({
         file,
-        hash: `${file.name}-${file.size}`,
+        hash: utils.getHashFile(file),
       }));
 
       const permittedFiles = [...newFilesList, ...filesList];
@@ -98,7 +102,7 @@ export function MultipleArchiveProvider({
         setFiles(null);
         return;
       }
-      const files = filesList.filter((file): file is File => !!file);
+      const files = filesList.filter((file) => !!file);
       handleSaveFiles(files);
     },
     [handleSaveFiles, setFiles]
@@ -128,22 +132,58 @@ export function MultipleArchiveProvider({
     if (!files) return;
 
     const filteredFiles = files.filter(
-      (file) => `${file.name}-${file.size}` !== hashToRemove
+      (file) => utils.getHashFile(file) !== hashToRemove
     );
 
     setFiles(filteredFiles);
 
     onChange?.({
       value: files.find(
-        (file) => `${file.name}-${file.size}` === hashToRemove
+        (file) => utils.getHashFile(file) === hashToRemove
       ) as File,
       event: "REMOVE_FILE",
     });
   }
 
+  async function handleSelectFile() {
+    const result = await DocumentPicker.getDocumentAsync({
+      multiple: true,
+      type: accept?.map((type) => TypeFiles[type]) as unknown as string,
+    });
+
+    if (!result.assets) {
+      return;
+    }
+
+    if (Platform.OS === "android") {
+      handleSaveFiles(
+        result.assets.map(
+          (asset) =>
+            ({
+              uri: asset.uri,
+              name: asset.name,
+              type: asset.mimeType,
+            } as unknown as File)
+        )
+      );
+      return;
+    }
+
+    const files = result.assets
+      .map((asset) => asset.file)
+      .filter((file) => !!file);
+
+    if (!files) {
+      return;
+    }
+
+    handleSaveFiles(files);
+  }
+
   return (
     <MultipleArchiveContext.Provider
       value={{
+        handleSelectFile,
         handleSaveFiles,
         handleRemoveFile,
         openImageCropModal,

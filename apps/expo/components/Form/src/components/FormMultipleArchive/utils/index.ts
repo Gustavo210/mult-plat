@@ -1,3 +1,5 @@
+import { TypeFiles } from "../enum/TypeFiles";
+
 export const utils = {
   convertBytesToReadableFormat(rawBytes: number): string {
     const kilobyte = 1024;
@@ -15,5 +17,26 @@ export const utils = {
     } else {
       return rawBytes + " B";
     }
+  },
+  parseAcceptString(
+    accept: (keyof typeof TypeFiles)[] | string | undefined
+  ): (keyof typeof TypeFiles)[] {
+    if (!accept) {
+      return ["all"] as (keyof typeof TypeFiles)[];
+    }
+
+    const separators = ["|", ",", ";", " ", "\n", "\t", "\r"];
+
+    if (typeof accept === "string") {
+      return accept
+        .split(new RegExp(separators.map((s) => `\\${s}`).join("|")))
+        .map((item) => item.trim().replace(".", ""))
+        .filter((item) => item.length > 0) as (keyof typeof TypeFiles)[];
+    }
+
+    return accept;
+  },
+  getHashFile(file: File): string {
+    return `${file.name}-${file.size}`;
   },
 };

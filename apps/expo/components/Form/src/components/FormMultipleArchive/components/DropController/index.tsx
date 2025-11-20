@@ -81,6 +81,7 @@ export function DropController(props: HTMLAttributes<HTMLDivElement>) {
       onDragOver={(event) => event.preventDefault()}
       onDrop={captureFiles}
       onDragLeave={(event) => event.preventDefault()}
+      onClick={MultipleArchive.handleSelectFile}
       {...props}
     />
   );

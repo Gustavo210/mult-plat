@@ -2,55 +2,30 @@ import { useMemo } from "react";
 
 import { Container } from "@mobilestock-native/container";
 
-import { TypeEventOnChange } from "./@types/event";
 import { DefaultView } from "./components/DefaultView";
 import { DropController } from "./components/DropController";
+import { Footer } from "./components/Footer";
 import { TypeFiles } from "./enum/TypeFiles";
 import {
   MultipleArchiveProvider,
   MultipleArchiveProviderProps,
 } from "./hooks/useMultipleArchive";
+import { utils } from "./utils";
 
-interface MultipleArchiveProps<
-  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
-> {
+interface MultipleArchiveProps
+  extends Omit<MultipleArchiveProviderProps, "children" | "accept"> {
   children?: React.ReactNode;
   accept?: (keyof typeof TypeFiles)[] | string;
-  onChange?(event: TypeEventOnChangeGeneric): void;
-  name: string;
 }
 
-export function FormMultipleArchive<
-  TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
->({
-  children,
+export function FormMultipleArchive({
   accept,
-  onChange,
-  name,
-}: MultipleArchiveProps<TypeEventOnChangeGeneric>) {
-  const acceptArray = useMemo(() => {
-    if (!accept) {
-      return ["all"] as (keyof typeof TypeFiles)[];
-    }
-
-    const separators = ["|", ",", ";", " ", "\n", "\t", "\r"];
-
-    if (typeof accept === "string") {
-      return accept
-        .split(new RegExp(separators.map((s) => `\\${s}`).join("|")))
-        .map((item) => item.trim().replace(".", ""))
-        .filter((item) => item.length > 0) as (keyof typeof TypeFiles)[];
-    }
-
-    return accept;
-  }, [accept]);
+  ...props
+}: MultipleArchiveProps) {
+  const acceptArray = useMemo(() => utils.parseAcceptString(accept), [accept]);
 
   return (
-    <MultipleArchiveProvider
-      name={name}
-      accept={acceptArray}
-      onChange={onChange as MultipleArchiveProviderProps["onChange"]}
-    >
+    <MultipleArchiveProvider {...props} accept={acceptArray}>
       <Container.Vertical
         style={{
           borderWidth: 1,
@@ -61,7 +36,8 @@ export function FormMultipleArchive<
         }}
         padding="MD"
       >
-        <DropController>{children || <DefaultView />}</DropController>
+        <DropController>{props.children || <DefaultView />}</DropController>
+        <Footer />
       </Container.Vertical>
     </MultipleArchiveProvider>
   );

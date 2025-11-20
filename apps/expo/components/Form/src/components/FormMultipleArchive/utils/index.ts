@@ -36,7 +36,4 @@ export const utils = {
 
     return accept;
   },
-  getHashFile(file: File): string {
-    return `${file.name}-${file.size}`;
-  },
 };

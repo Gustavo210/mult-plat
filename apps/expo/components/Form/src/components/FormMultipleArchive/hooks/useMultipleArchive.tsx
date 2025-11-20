@@ -11,9 +11,9 @@ import { useField } from "@unform/core";
 import * as DocumentPicker from "expo-document-picker";
 import { usePermissions } from "expo-media-library";
 import { Platform } from "react-native";
+import { utils } from "../../../utils";
 import { TypeEventOnChange } from "../@types/event";
 import { TypeFiles } from "../enum/TypeFiles";
-import { utils } from "../utils";
 
 type FileContextType = {
   openImageCropModal: boolean;

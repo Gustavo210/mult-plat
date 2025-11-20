@@ -1,12 +1,13 @@
 import { Clickable } from "@mobilestock-native/clickable";
 import { Icon } from "@mobilestock-native/icons";
+import { utils } from "../../../../../../utils";
 import { usePhotoList } from "../../../../hooks/usePhotoList";
 
 export function Trash({ photo }: { photo: File }) {
   const Photo = usePhotoList();
   return (
     <Clickable
-      onPress={() => Photo.removeImage(`${photo.name}-${photo.size}`)}
+      onPress={() => Photo.removeImage(utils.getHashFile(photo))}
       style={{
         position: "absolute",
         top: 0,

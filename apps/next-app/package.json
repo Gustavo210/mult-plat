@@ -22,7 +22,7 @@
     "@mobilestockweb/list": "^0.0.6",
     "@mobilestockweb/loading-spinner": "^0.0.10",
     "@mobilestockweb/spacer": "^1.0.6",
-    "@mobilestockweb/theme": "^1.0.0",
+    "@mobilestockweb/theme": "^1.1.0",
     "@mobilestockweb/tools": "^0.0.16",
     "@mobilestockweb/typography": "^0.0.6",
     "@unform/core": "^2.1.6",

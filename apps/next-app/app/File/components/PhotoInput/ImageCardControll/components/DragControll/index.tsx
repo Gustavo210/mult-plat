@@ -1,7 +1,7 @@
-import { Container } from "@mobilestockweb/container";
-import { Bar } from "../Bar";
 import { useSortable } from "@dnd-kit/sortable";
+import { Container } from "@mobilestockweb/container";
 import { useTheme } from "styled-components";
+import { Bar } from "../Bar";
 
 export function DragControll({ id }: { id: string }) {
   const Theme = useTheme();

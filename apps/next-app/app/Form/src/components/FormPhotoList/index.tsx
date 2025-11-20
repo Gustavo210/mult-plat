@@ -12,6 +12,8 @@ interface PhotoInputProps<
   multiple?: boolean;
   dragAndDrop?: boolean;
   name: string;
+  label?: string;
+  alignLabel?: "END" | "CENTER" | "START";
 }
 export function FormPhotoList<
   TypeEventOnChangeGeneric extends TypeEventOnChange = TypeEventOnChange
@@ -20,6 +22,8 @@ export function FormPhotoList<
   multiple = true,
   dragAndDrop = true,
   name,
+  label,
+  alignLabel,
 }: PhotoInputProps<TypeEventOnChangeGeneric>) {
   return (
     <PhotoListProvider
@@ -28,7 +32,7 @@ export function FormPhotoList<
       multiple={multiple}
       dragAndDrop={dragAndDrop}
     >
-      <Viewer />
+      <Viewer label={label} alignLabel={alignLabel} />
     </PhotoListProvider>
   );
 }

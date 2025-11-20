@@ -7,16 +7,22 @@ import DraggableFlatList, {
 } from "react-native-draggable-flatlist";
 import { usePhotoList } from "../../hooks/usePhotoList";
 import { AddButton } from "../AddButton";
+import { ErrorLabel } from "../ErrorLabel";
 import { ImageCardControl } from "../ImageCardControl";
+import { Label } from "../Label";
 import { CropDemo } from "../WebCrop";
 
 interface ImageViewerProps {
   numberOfImagesVisible?: number;
   buttonAddDirection?: "left" | "right";
+  label?: string;
+  alignLabel?: "END" | "CENTER" | "START";
 }
 export function Viewer({
   numberOfImagesVisible = 0,
   buttonAddDirection = "left",
+  label,
+  alignLabel,
 }: ImageViewerProps) {
   const screenDimensions = useWindowDimensions();
   const PhotoList = usePhotoList();
@@ -48,6 +54,11 @@ export function Viewer({
 
   return (
     <>
+      {!!label && (
+        <Container.Horizontal align={alignLabel || "START"}>
+          <Label>{label}</Label>
+        </Container.Horizontal>
+      )}
       <Container.Horizontal gap="2XS">
         {buttonAddDirection === "left" && <AddButton />}
         {PhotoList.images && (
@@ -74,6 +85,7 @@ export function Viewer({
         )}
         {buttonAddDirection === "right" && <AddButton />}
       </Container.Horizontal>
+      <ErrorLabel />
       {Platform.OS === "web" && <CropDemo />}
     </>
   );

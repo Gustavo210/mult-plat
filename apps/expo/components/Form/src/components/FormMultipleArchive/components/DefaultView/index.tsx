@@ -3,6 +3,7 @@ import { Spacer } from "@mobilestock-native/spacer";
 
 import { Platform } from "react-native";
 import { useMultipleArchive } from "../../hooks/useMultipleArchive";
+import { ErrorLabel } from "../ErrorLabel";
 import { HelpButton } from "../HelpButton";
 import { HelpText } from "../HelpText";
 import { Title } from "../Title";
@@ -14,6 +15,7 @@ export function DefaultView() {
       {Platform.OS === "web" ? <Title /> : null}
       <Spacer size="2XS" />
       <HelpButton />
+      <ErrorLabel />
       {MultipleArchive.accept?.includes("all") ? null : <HelpText />}
     </Container.Vertical>
   );

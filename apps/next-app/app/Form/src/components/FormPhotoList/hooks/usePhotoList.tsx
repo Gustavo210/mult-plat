@@ -23,6 +23,7 @@ type FileContextType = {
   sizeComponent: string;
   gapComponent: string;
   dragAndDrop?: boolean;
+  name: string;
 };
 
 const PhotoListContext = createContext<FileContextType>({} as FileContextType);
@@ -154,6 +155,7 @@ export function PhotoListProvider({
         sizeComponent,
         gapComponent,
         dragAndDrop,
+        name,
       }}
     >
       {children}

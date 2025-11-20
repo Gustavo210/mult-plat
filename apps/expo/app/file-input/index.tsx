@@ -1,6 +1,17 @@
 import { Container } from "@mobilestock-native/container";
 import { Typography } from "@mobilestock-native/typography";
+import z from "zod";
 import { Form } from "../../components/Form/src";
+
+const schema = z.object({
+  name: z.string().min(1, { message: "O campo é obrigatório" }),
+  photoList: z.array(z.instanceof(File), {
+    error: "É necessário enviar ao menos uma foto",
+  }),
+  multipleArchive: z.array(z.instanceof(File), {
+    error: "É necessário enviar ao menos um arquivo",
+  }),
+});
 
 export default function Index() {
   async function onSubmit({ data }: any) {
@@ -32,11 +43,21 @@ export default function Index() {
   return (
     <Container.Vertical>
       <Typography>Rota para file-input</Typography>
-      <Form onSubmit={onSubmit}>
-        <Form.Input name="fileInput" label="File Input" />
-        <Form.PhotoList name="photoList" multiple onChange={console.log} />
+      <Form onSubmit={onSubmit} schema={schema}>
+        <Form.Input name="name" label="File Input" />
+        <Form.PhotoList
+          name="photoList"
+          multiple
+          onChange={console.log}
+          label="Photo List"
+        />
         <Container.Horizontal>
-          <Form.MultipleArchive name="multipleArchive" onChange={console.log} />
+          <Form.MultipleArchive
+            name="multipleArchive"
+            label="Multiple Archive"
+            accept={["jpeg"]}
+            onChange={console.log}
+          />
         </Container.Horizontal>
         <Form.Button text="Enviar" />
       </Form>

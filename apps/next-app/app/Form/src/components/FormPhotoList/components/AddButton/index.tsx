@@ -6,6 +6,7 @@ export function AddButton() {
 
   return (
     <Button
+      type="button"
       icon="Plus"
       variant="OUTLINE"
       onClick={PhotoList.showDeviceImage}

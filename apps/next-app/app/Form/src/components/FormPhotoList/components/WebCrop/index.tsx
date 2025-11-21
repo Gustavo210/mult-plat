@@ -194,14 +194,10 @@ export function CropDemo() {
     <FluidModal isOpen={FileInput.openImageCropModal}>
       <Container.Vertical
         full
+        padding="NONE_XS_XS_XS"
         style={{
-          flex: 1,
           height: "100%",
           maxHeight: "100%",
-          display: "flex",
-          flexDirection: "column",
-          padding: 16,
-          paddingTop: 0,
           boxSizing: "border-box",
         }}
         gap="MD"
@@ -210,9 +206,6 @@ export function CropDemo() {
           full
           align="CENTER"
           style={{
-            width: "100%",
-            overflow: "hidden",
-            flex: 1,
             minHeight: 0,
           }}
         >
@@ -221,11 +214,10 @@ export function CropDemo() {
             align="CENTER"
             style={{
               width: "100%",
-              flex: 1,
+              maxWidth: "100%",
               minHeight: 0,
-              overflow: "hidden",
-              paddingTop: 16,
-              paddingBottom: 16,
+              paddingLeft: 16,
+              paddingRight: 16,
             }}
           >
             <ReactCrop
@@ -238,14 +230,12 @@ export function CropDemo() {
                       height: displaySize.height,
                       maxWidth: "100%",
                       maxHeight: "100%",
-                      margin: "1rem",
                     }
                   : {
                       width: "100%",
                       height: "100%",
                       maxWidth: "100%",
                       maxHeight: "100%",
-                      margin: "1rem",
                     }
               }
             >
@@ -257,8 +247,6 @@ export function CropDemo() {
                   height: "100%",
                   maxWidth: "100%",
                   maxHeight: "100%",
-                  display: "block",
-                  objectFit: "contain",
                 }}
                 onLoad={onLoad}
               />

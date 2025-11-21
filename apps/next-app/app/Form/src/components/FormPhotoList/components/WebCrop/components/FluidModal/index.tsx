@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import Modal, { Props } from "react-modal";
+import { useTheme } from "styled-components";
 import { UAParser } from "ua-parser-js";
 
 export function FluidModal({ children, ...props }: Props) {
+  const Theme = useTheme();
   const [isMobile, setIsMobile] = useState(false);
   const [viewportHeight, setViewportHeight] = useState<number | undefined>(
     undefined
@@ -35,9 +37,6 @@ export function FluidModal({ children, ...props }: Props) {
     return (
       <Modal
         style={{
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-          },
           content: {
             top: 0,
             left: 0,
@@ -47,9 +46,6 @@ export function FluidModal({ children, ...props }: Props) {
             margin: 0,
             borderRadius: 0,
             border: "none",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
             height: viewportHeight ? `${viewportHeight}px` : "100vh",
             maxHeight: viewportHeight ? `${viewportHeight}px` : "100vh",
             boxSizing: "border-box",
@@ -67,7 +63,7 @@ export function FluidModal({ children, ...props }: Props) {
       {...props}
       style={{
         overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          backgroundColor: Theme.colors.container.shadow,
         },
         content: {
           top: "50%",
@@ -79,9 +75,6 @@ export function FluidModal({ children, ...props }: Props) {
           transform: "translate(-50%, -50%)",
           borderRadius: 8,
           border: "none",
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
           width: "min(900px, 100vw - 32px)",
           height: "min(700px, 100vh - 32px)",
           maxWidth: "calc(100vw - 32px)",

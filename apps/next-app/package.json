@@ -32,14 +32,19 @@
     "notistack": "^3.0.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-image-crop": "^11.0.10",
+    "react-modal": "^3.16.3",
     "react-select": "^5.10.2",
     "styled-components": "^6.1.19",
+    "ua-parser-js": "^2.0.6",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-modal": "^3.16.3",
+    "add": "^2.0.6",
     "typescript": "^5.9.3"
   }
 }

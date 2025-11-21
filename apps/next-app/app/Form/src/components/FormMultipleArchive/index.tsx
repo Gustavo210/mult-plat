@@ -44,7 +44,7 @@ export function FormMultipleArchive({
             borderColor: error ? "#ff4d4f" : "#d9d9d9",
             borderRadius: 8,
             borderStyle: "solid",
-            minWidth: 400,
+            minWidth: "25rem",
           }}
           padding="MD"
         >

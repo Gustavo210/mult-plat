@@ -52,6 +52,7 @@ export function FluidModal({ children, ...props }: Props) {
             flexDirection: "column",
             height: viewportHeight ? `${viewportHeight}px` : "100vh",
             maxHeight: viewportHeight ? `${viewportHeight}px` : "100vh",
+            boxSizing: "border-box",
           },
         }}
         {...props}
@@ -65,6 +66,9 @@ export function FluidModal({ children, ...props }: Props) {
     <Modal
       {...props}
       style={{
+        overlay: {
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+        },
         content: {
           top: "50%",
           left: "50%",
@@ -73,6 +77,16 @@ export function FluidModal({ children, ...props }: Props) {
           padding: 0,
           margin: 0,
           transform: "translate(-50%, -50%)",
+          borderRadius: 8,
+          border: "none",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          width: "min(900px, 100vw - 32px)",
+          height: "min(700px, 100vh - 32px)",
+          maxWidth: "calc(100vw - 32px)",
+          maxHeight: "calc(100vh - 32px)",
+          boxSizing: "border-box",
         },
       }}
     >

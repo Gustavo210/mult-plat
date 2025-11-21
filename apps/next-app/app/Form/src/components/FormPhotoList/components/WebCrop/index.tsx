@@ -200,6 +200,9 @@ export function CropDemo() {
           maxHeight: "100%",
           display: "flex",
           flexDirection: "column",
+          padding: 16,
+          paddingTop: 0,
+          boxSizing: "border-box",
         }}
         gap="MD"
       >
@@ -221,6 +224,8 @@ export function CropDemo() {
               flex: 1,
               minHeight: 0,
               overflow: "hidden",
+              paddingTop: 16,
+              paddingBottom: 16,
             }}
           >
             <ReactCrop
@@ -233,12 +238,14 @@ export function CropDemo() {
                       height: displaySize.height,
                       maxWidth: "100%",
                       maxHeight: "100%",
+                      margin: "1rem",
                     }
                   : {
                       width: "100%",
                       height: "100%",
                       maxWidth: "100%",
                       maxHeight: "100%",
+                      margin: "1rem",
                     }
               }
             >
@@ -259,13 +266,7 @@ export function CropDemo() {
           </Container.Vertical>
         </Container.Vertical>
 
-        <Container.Horizontal
-          gap="MD"
-          style={{
-            padding: 16,
-            flexShrink: 0,
-          }}
-        >
+        <Container.Horizontal gap="MD">
           <Container.Vertical full>
             <Button
               onClick={FileInput.handleImageCropCancel}

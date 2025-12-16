@@ -59,7 +59,9 @@ export default function Screen() {
             borderRadius: 10,
           }}
         >
-          <Typography family="MONOCRAFT">pnpm create-route</Typography>
+          <Typography family="MONOCRAFT">
+            pnpm --filter @mult-plat/create-route start
+          </Typography>
         </Container.Horizontal>
       </Container.Vertical>
     </Container.Vertical>

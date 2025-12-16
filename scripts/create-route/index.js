@@ -55,21 +55,49 @@ rl.question(
       return;
     }
 
-    fs.mkdirSync(routePath, { recursive: true });
-    console.log(`Diretório da rota criado: ${routePath}`);
+    rl.question("Deseja criar as rotas .web e .android? (s/n) ", (answer) => {
+      fs.mkdirSync(routePath, { recursive: true });
+      console.log(`Diretório da rota criado: ${routePath}`);
+      if (answer.toLowerCase() === "s") {
+        createRouteFiles(routePath, routeName, componentName);
+      } else {
+        createSinleRouteFiles(routePath, routeName, componentName);
+        rl.close();
+      }
+    });
+    function createSinleRouteFiles(routePath, routeName, componentName) {
+      const indexContent = `import { Container } from "@mobilestock-native/container";
+import { Typography } from "@mobilestock-native/typography";
 
-    const layoutContent = `import { Slot } from "expo-router";
+export default function Index() {
+  return (
+    <Container.Vertical>
+      <Typography>Rota para ${componentName}</Typography>
+    </Container.Vertical>
+  );
+}
+`;
+
+      fs.writeFileSync(path.join(routePath, "index.tsx"), indexContent);
+
+      console.log("Arquivo de rota criado com sucesso:");
+      console.log(`- ${path.join(routeName, "index.tsx")}`);
+
+      updateRotesJson(routeName);
+    }
+    function createRouteFiles(routePath, routeName, componentName) {
+      const layoutContent = `import { Slot } from "expo-router";
 
 export default function Layout() {
   return <Slot/>;
 }
 `;
 
-    const indexContent = `export default function Index() {
+      const indexContent = `export default function Index() {
   return <></>
 }`;
 
-    const androidContent = `import { Container } from "@mobilestock-native/container";
+      const androidContent = `import { Container } from "@mobilestock-native/container";
 import { Typography } from "@mobilestock-native/typography";
 
 export default function IndexAndroid() {
@@ -81,7 +109,7 @@ export default function IndexAndroid() {
 }
 `;
 
-    const webContent = `import { Container } from "@mobilestock-native/container";
+      const webContent = `import { Container } from "@mobilestock-native/container";
 import { Typography } from "@mobilestock-native/typography";
 
 export default function IndexWeb() {
@@ -93,19 +121,23 @@ export default function IndexWeb() {
 }
 `;
 
-    fs.writeFileSync(path.join(routePath, "_layout.tsx"), layoutContent);
-    fs.writeFileSync(path.join(routePath, "index.tsx"), indexContent);
-    fs.writeFileSync(path.join(routePath, "index.android.tsx"), androidContent);
-    fs.writeFileSync(path.join(routePath, "index.web.tsx"), webContent);
+      fs.writeFileSync(path.join(routePath, "_layout.tsx"), layoutContent);
+      fs.writeFileSync(path.join(routePath, "index.tsx"), indexContent);
+      fs.writeFileSync(
+        path.join(routePath, "index.android.tsx"),
+        androidContent
+      );
+      fs.writeFileSync(path.join(routePath, "index.web.tsx"), webContent);
 
-    console.log("Arquivos de rota criados com sucesso:");
-    console.log(`- ${path.join(routeName, "_layout.tsx")}`);
-    console.log(`- ${path.join(routeName, "index.tsx")}`);
-    console.log(`- ${path.join(routeName, "index.android.tsx")}`);
-    console.log(`- ${path.join(routeName, "index.web.tsx")}`);
+      console.log("Arquivos de rota criados com sucesso:");
+      console.log(`- ${path.join(routeName, "_layout.tsx")}`);
+      console.log(`- ${path.join(routeName, "index.tsx")}`);
+      console.log(`- ${path.join(routeName, "index.android.tsx")}`);
+      console.log(`- ${path.join(routeName, "index.web.tsx")}`);
 
-    rl.close();
+      rl.close();
 
-    updateRotesJson(routeName);
+      updateRotesJson(routeName);
+    }
   }
 );

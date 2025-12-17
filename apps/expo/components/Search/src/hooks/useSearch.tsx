@@ -26,6 +26,7 @@ interface SearchContextType<T extends dataType> {
   inputContentRef: React.RefObject<string>;
   searchWhenTyping?: boolean;
   cancelOngoingRequest: () => void;
+  iconSearchButton?: "Search" | "ChevronRight" | "ArrowRight";
 }
 const SearchContext = createContext<SearchContextType<dataType> | null>(null);
 
@@ -35,6 +36,7 @@ export interface SearchProviderProps<T extends dataType> {
   valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
   defaultData?: T[];
   searchWhenTyping?: boolean;
+  iconSearchButton?: "Search" | "ChevronRight" | "ArrowRight";
   // onChange?: (data: {
   //   value: T[]
   //   event: 'search' | 'select' | "searchClick" | "clearClick"
@@ -46,6 +48,7 @@ export function SearchProvider<T extends dataType>({
   valueSuggestionKey,
   searchWhenTyping,
   defaultData = [],
+  iconSearchButton,
 }: SearchProviderProps<T>) {
   const [isLoading, setIsLoading] = useState(false);
   const [cachedData, setCachedData] = useState<T[]>(defaultData ?? []);
@@ -290,6 +293,7 @@ export function SearchProvider<T extends dataType>({
         debounceSearch,
         clearResults,
         search,
+        iconSearchButton,
         searchWhenTyping,
         inputContentRef,
         searchResults,

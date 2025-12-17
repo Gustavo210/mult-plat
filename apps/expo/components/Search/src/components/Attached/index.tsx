@@ -23,6 +23,7 @@ export function Attached() {
         >
           <Container.Horizontal
             style={{
+              backgroundColor: "#fff",
               borderColor: "#cecece",
               borderWidth: 1,
               borderRadius: 8,

@@ -1,8 +1,8 @@
-// import { Attached } from "./components/Attached";
 import { SearchProvider } from "./hooks/useSearch";
 
 import { Attached } from "./components/Attached";
 import { Detached } from "./components/Detached";
+import { NoButton } from "./components/NoButton";
 
 export type dataType = object | string;
 
@@ -39,16 +39,22 @@ export type LeafObjectKeyPath<
 
 interface PropsSearch<T extends object | string> {
   defaultData?: T[];
-  fetchOnQuery?: (query?: string) => Promise<T[]>;
+  fetchOnQuery?: (query?: string, signal?: AbortSignal) => Promise<T[]>;
   onSelectItem?: (item: T) => void;
   valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
-  variant?: "attached" | "detached";
+  variant?: "attached" | "detached" | "no-button";
 }
 
 export function Search<T extends dataType>(props: PropsSearch<T>) {
   return (
     <SearchProvider {...props}>
-      {props.variant === "attached" ? <Attached /> : <Detached />}
+      {props.variant === "attached" ? (
+        <Attached />
+      ) : props.variant === "detached" ? (
+        <Detached />
+      ) : (
+        <NoButton />
+      )}
     </SearchProvider>
   );
 }

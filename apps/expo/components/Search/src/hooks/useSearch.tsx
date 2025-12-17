@@ -22,6 +22,9 @@ interface SearchContextType<T extends dataType> {
   }[];
   isLoading: boolean;
   clearResults: () => void;
+  search: (query: string) => Promise<void>;
+  inputContentRef: React.RefObject<string>;
+  searchWhenTyping?: boolean;
   cancelOngoingRequest: () => void;
 }
 const SearchContext = createContext<SearchContextType<dataType> | null>(null);
@@ -31,12 +34,17 @@ export interface SearchProviderProps<T extends dataType> {
   fetchOnQuery?: (query?: string, signal?: AbortSignal) => Promise<T[]>;
   valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
   defaultData?: T[];
-  cancelOngoingRequest?: () => void;
+  searchWhenTyping?: boolean;
+  // onChange?: (data: {
+  //   value: T[]
+  //   event: 'search' | 'select' | "searchClick" | "clearClick"
+  // })
 }
 export function SearchProvider<T extends dataType>({
   children,
   fetchOnQuery,
   valueSuggestionKey,
+  searchWhenTyping,
   defaultData = [],
 }: SearchProviderProps<T>) {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +59,7 @@ export function SearchProvider<T extends dataType>({
   const debouncedTimeoutSearch = useRef<number | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const componentAreaRef = useRef<View>(null);
+  const inputContentRef = useRef<string>("");
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (componentAreaRef.current) {
@@ -280,6 +289,9 @@ export function SearchProvider<T extends dataType>({
         cancelOngoingRequest,
         debounceSearch,
         clearResults,
+        search,
+        searchWhenTyping,
+        inputContentRef,
         searchResults,
         isLoading,
       }}

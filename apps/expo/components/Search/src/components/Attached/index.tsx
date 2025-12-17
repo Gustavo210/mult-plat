@@ -29,7 +29,7 @@ export function Attached() {
               overflow: "hidden",
             }}
           >
-            <Input />
+            <Input hiddenLoadingIndicator />
             <SearchButton />
           </Container.Horizontal>
           <SuggestionArea />

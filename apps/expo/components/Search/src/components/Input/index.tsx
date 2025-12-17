@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { ActivityIndicator, TextInput } from "react-native";
 import { useSearch } from "../../hooks/useSearch";
 
-export function Input() {
+export function Input({ hiddenLoadingIndicator = false }) {
   const Search = useSearch();
   const [showXButton, setShowXButton] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -38,12 +38,18 @@ export function Input() {
         }}
         onChangeText={(text) => {
           setShowXButton(text.length > 0);
-          Search.debounceSearch(text);
+          if (Search.searchWhenTyping) {
+            Search.debounceSearch(text);
+          } else {
+            Search.inputContentRef.current = text;
+          }
         }}
         placeholder="Digite"
         clearButtonMode="never"
       />
-      {Search.isLoading && <ActivityIndicator color={"#cecece"} />}
+      {!hiddenLoadingIndicator && Search.isLoading && (
+        <ActivityIndicator color={"#cecece"} />
+      )}
       {showXButton && (
         <Container.Horizontal align="CENTER">
           <Clickable onPress={clearInput}>

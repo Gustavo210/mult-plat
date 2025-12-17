@@ -31,7 +31,7 @@ export function Detached() {
                 overflow: "hidden",
               }}
             >
-              <Input />
+              <Input hiddenLoadingIndicator />
             </Container.Horizontal>
             <SuggestionArea />
           </Container.Vertical>

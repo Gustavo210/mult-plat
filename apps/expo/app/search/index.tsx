@@ -73,7 +73,11 @@ export default function Index() {
           },
         ]}
         valueSuggestionKey="batatinha[*].sabor"
-        // variant="attached"
+        variant="no-button"
+        fetchOnQuery={async (query, signal) => {
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          return [];
+        }}
         // defaultData={["Nova sugestão 1", "Nova sugestão 2", "Nova sugestão 3"]}
       />
       {/* <Form>

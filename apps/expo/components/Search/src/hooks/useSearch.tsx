@@ -1,6 +1,15 @@
+import { Container } from "@mobilestock-native/container";
 import Fuse from "fuse.js";
 import { get } from "lodash";
-import { createContext, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Platform, View } from "react-native";
 import { v4 as uuid } from "uuid";
 import { dataType, LeafObjectKeyPath } from "..";
 
@@ -12,6 +21,8 @@ interface SearchContextType<T extends dataType> {
     value: string;
   }[];
   isLoading: boolean;
+  clearResults: () => void;
+  cancelOngoingRequest: () => void;
 }
 const SearchContext = createContext<SearchContextType<dataType> | null>(null);
 
@@ -20,6 +31,7 @@ export interface SearchProviderProps<T extends dataType> {
   fetchOnQuery?: (query?: string, signal?: AbortSignal) => Promise<T[]>;
   valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
   defaultData?: T[];
+  cancelOngoingRequest?: () => void;
 }
 export function SearchProvider<T extends dataType>({
   children,
@@ -38,6 +50,25 @@ export function SearchProvider<T extends dataType>({
   >([]);
   const debouncedTimeoutSearch = useRef<number | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const componentAreaRef = useRef<View>(null);
+
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (componentAreaRef.current) {
+      const area = componentAreaRef.current as unknown as HTMLElement;
+      if (!area.contains(event.target as Node)) {
+        setSearchResults([]);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [handleClickOutside]);
 
   function getKeyPaths(obj: any, prefix = ""): string[] {
     let keys: string[] = [];
@@ -53,6 +84,10 @@ export function SearchProvider<T extends dataType>({
       }
     }
     return keys;
+  }
+
+  function clearResults() {
+    setSearchResults([]);
   }
 
   function filterData(currentData: T[], query: string) {
@@ -83,6 +118,7 @@ export function SearchProvider<T extends dataType>({
   function isPrimitiveSuggestionValue(value: unknown) {
     return ["string", "number", "boolean"].includes(typeof value);
   }
+
   function getValueBySuggestionKeyPath(
     item: unknown,
     valueSuggestionKeyPath: string
@@ -149,11 +185,16 @@ export function SearchProvider<T extends dataType>({
 
     setSearchResults(resultsWithId);
   }
-  function debounceSearch(query: string) {
+
+  function cancelOngoingRequest() {
     if (debouncedTimeoutSearch.current) {
       abortControllerRef.current?.abort();
       clearTimeout(debouncedTimeoutSearch.current);
     }
+  }
+
+  function debounceSearch(query: string) {
+    cancelOngoingRequest();
 
     if (query.trim().length <= 2) {
       return;
@@ -236,12 +277,14 @@ export function SearchProvider<T extends dataType>({
   return (
     <SearchContext.Provider
       value={{
+        cancelOngoingRequest,
         debounceSearch,
+        clearResults,
         searchResults,
         isLoading,
       }}
     >
-      {children}
+      <Container.Vertical ref={componentAreaRef}>{children}</Container.Vertical>
     </SearchContext.Provider>
   );
 }

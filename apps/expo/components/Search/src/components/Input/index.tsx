@@ -1,20 +1,28 @@
-import { TextInput } from "react-native";
+import { Container } from "@mobilestock-native/container";
+import { ActivityIndicator, TextInput } from "react-native";
 import { useSearch } from "../../hooks/useSearch";
 
 export function Input() {
   const Search = useSearch();
   return (
-    <TextInput
+    <Container.Horizontal
+      full
       style={{
-        height: 40,
         backgroundColor: "white",
-        padding: 10,
-        width: "100%",
-        outline: "none",
       }}
-      onChangeText={Search.search}
-      placeholder="Digite"
-      clearButtonMode="always"
-    />
+      padding="NONE_XS"
+    >
+      <TextInput
+        style={{
+          height: 40,
+          width: "100%",
+          outline: "none",
+        }}
+        onChangeText={Search.debounceSearch}
+        placeholder="Digite"
+        clearButtonMode="always"
+      />
+      {Search.isLoading && <ActivityIndicator color={"#cecece"} />}
+    </Container.Horizontal>
   );
 }

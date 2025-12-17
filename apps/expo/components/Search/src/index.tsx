@@ -1,4 +1,4 @@
-import { SearchProvider } from "./hooks/useSearch";
+import { SearchProvider, SearchProviderProps } from "./hooks/useSearch";
 
 import { JSX } from "react";
 import { Attached } from "./components/Attached";
@@ -93,7 +93,6 @@ type ValueSuggestionKeyForItem<typeItem> =
     : never;
 
 interface PropsSearchBase<typeItem> {
-  onSelectItem?: (item: NormalizeSearchItem<typeItem>) => void;
   variant?: "attached" | "detached" | "no-button";
   valueSuggestionKey?: ValueSuggestionKeyForItem<typeItem>;
 }
@@ -102,7 +101,10 @@ export function Search<typeDefaultData extends readonly unknown[]>(
   props: PropsSearchBase<InferItemFromArray<typeDefaultData>> & {
     defaultData: typeDefaultData;
     fetchOnQuery?: FetchOnQueryFunction<InferItemFromArray<typeDefaultData>>;
-  }
+  } & Omit<
+      SearchProviderProps<dataType>,
+      "valueSuggestionKey" | "defaultData" | "children"
+    >
 ): JSX.Element;
 
 export function Search<
@@ -114,12 +116,21 @@ export function Search<
   props: PropsSearchBase<InferItemFromFetchOnQuery<typeFetchOnQuery>> & {
     defaultData?: undefined;
     fetchOnQuery: typeFetchOnQuery;
-  }
+  } & Omit<
+      SearchProviderProps<dataType>,
+      "valueSuggestionKey" | "defaultData" | "children"
+    >
 ): JSX.Element;
 
-export function Search(props: PropsSearchBase<string>) {
+export function Search(
+  props: PropsSearchBase<string> &
+    Omit<
+      SearchProviderProps<dataType>,
+      "valueSuggestionKey" | "defaultData" | "children"
+    >
+) {
   return (
-    <SearchProvider {...props}>
+    <SearchProvider searchWhenTyping={props.variant === "no-button"} {...props}>
       {props.variant === "attached" ? (
         <Attached />
       ) : props.variant === "detached" ? (

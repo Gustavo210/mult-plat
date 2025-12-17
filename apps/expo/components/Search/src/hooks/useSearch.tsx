@@ -1,30 +1,33 @@
 import Fuse from "fuse.js";
 import { get } from "lodash";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { dataType, LeafObjectKeyPath } from "..";
 
 interface SearchContextType<T extends dataType> {
-  search: (query: string) => Promise<void>;
+  debounceSearch: (query: string) => void;
   searchResults: {
     id: string;
     item: T;
     value: string;
   }[];
+  isLoading: boolean;
 }
 const SearchContext = createContext<SearchContextType<dataType> | null>(null);
 
+export interface SearchProviderProps<T extends dataType> {
+  children: React.ReactNode;
+  fetchOnQuery?: (query?: string, signal?: AbortSignal) => Promise<T[]>;
+  valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
+  defaultData?: T[];
+}
 export function SearchProvider<T extends dataType>({
   children,
   fetchOnQuery,
   valueSuggestionKey,
   defaultData = [],
-}: {
-  children: React.ReactNode;
-  fetchOnQuery?: (query?: string) => Promise<T[]>;
-  valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
-  defaultData?: T[];
-}) {
+}: SearchProviderProps<T>) {
+  const [isLoading, setIsLoading] = useState(false);
   const [cachedData, setCachedData] = useState<T[]>(defaultData ?? []);
   const [searchResults, setSearchResults] = useState<
     {
@@ -33,6 +36,8 @@ export function SearchProvider<T extends dataType>({
       value: string;
     }[]
   >([]);
+  const debouncedTimeoutSearch = useRef<number | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   function getKeyPaths(obj: any, prefix = ""): string[] {
     let keys: string[] = [];
@@ -71,24 +76,7 @@ export function SearchProvider<T extends dataType>({
     });
 
     const result = fuse.search(query.trim());
-    console.log(
-      "Filtering data with query:",
-      query,
-      currentData,
-      result,
-      typeof fieldsExample,
-      valueSuggestionKey
-        ? [
-            String(valueSuggestionKey)
-              .replace(/\[\d+\]/g, "")
-              .replace(/\[\*\]/g, ""),
-          ]
-        : typeof fieldsExample === "string"
-        ? []
-        : getKeyPaths(fieldsExample).filter(
-            (item, index, self) => self.indexOf(item) === index
-          )
-    );
+
     return result.map(({ item }) => item);
   }
 
@@ -161,55 +149,96 @@ export function SearchProvider<T extends dataType>({
 
     setSearchResults(resultsWithId);
   }
-
-  async function search(query: string) {
-    setSearchResults([]);
-    let filteredResults: T[] = [];
-    if (cachedData.length > 0) {
-      filteredResults = filterData(cachedData, query);
-      if (filteredResults.length > 0) {
-        saveSearchResults(filteredResults);
-        return;
-      }
+  function debounceSearch(query: string) {
+    if (debouncedTimeoutSearch.current) {
+      abortControllerRef.current?.abort();
+      clearTimeout(debouncedTimeoutSearch.current);
     }
 
-    if (cachedData.length === 0 || filteredResults.length === 0) {
-      console.log("Searching for:", query);
-      if (typeof fetchOnQuery === "function") {
-        if (fetchOnQuery.length === 0) {
-          const fetchedData = await fetchOnQuery();
-          if (!fetchedData) {
-            setCachedData([]);
-            setSearchResults([]);
-            return;
-          }
-          setCachedData(fetchedData);
-          const filteredResults = filterData(fetchedData, query);
-          if (!filteredResults) {
-            setSearchResults([]);
-            return;
-          }
-          saveSearchResults(filteredResults);
+    if (query.trim().length <= 2) {
+      return;
+    }
+
+    debouncedTimeoutSearch.current = setTimeout(() => {
+      search(query);
+    }, 300);
+  }
+
+  async function search(query: string) {
+    try {
+      setSearchResults([]);
+      setIsLoading(true);
+
+      if (cachedData.length > 0) {
+        const filteredCachedResults = filterData(cachedData, query);
+
+        if (filteredCachedResults.length > 0) {
+          saveSearchResults(filteredCachedResults);
           return;
         }
+      }
 
-        setCachedData([]);
-        const fetchedData = await fetchOnQuery(query);
+      if (typeof fetchOnQuery === "undefined") {
+        return;
+      }
+
+      if (typeof fetchOnQuery !== "function") {
+        throw new Error("fetchOnQuery function is not provided");
+      }
+
+      if (fetchOnQuery.length === 0) {
+        const fetchedData = await fetchOnQuery();
+
         if (!fetchedData) {
+          setCachedData([]);
           setSearchResults([]);
           return;
         }
-        saveSearchResults(fetchedData);
+
+        setCachedData(fetchedData);
+
+        const filteredFetchedResults = filterData(fetchedData, query);
+
+        if (filteredFetchedResults.length === 0) {
+          setSearchResults([]);
+          return;
+        }
+
+        saveSearchResults(filteredFetchedResults);
         return;
       }
+
+      setCachedData([]);
+
+      let fetchedData: T[];
+
+      if (fetchOnQuery.length === 2) {
+        abortControllerRef.current = new AbortController();
+        fetchedData = await fetchOnQuery(
+          query,
+          abortControllerRef.current.signal
+        );
+      } else {
+        fetchedData = await fetchOnQuery(query);
+      }
+
+      if (!fetchedData) {
+        setSearchResults([]);
+        return;
+      }
+
+      saveSearchResults(fetchedData);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <SearchContext.Provider
       value={{
-        search,
+        debounceSearch,
         searchResults,
+        isLoading,
       }}
     >
       {children}

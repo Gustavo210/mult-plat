@@ -29,7 +29,7 @@ export function SuggestionArea() {
           <List.Item.Horizontal
             padding="SM_2XS"
             align="START_CENTER"
-            onPress={console.log}
+            onPress={() => Search.configureSelectedItem(value)}
           >
             <List.Item.Text>{value}</List.Item.Text>
           </List.Item.Horizontal>

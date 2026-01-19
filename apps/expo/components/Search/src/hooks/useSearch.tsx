@@ -20,7 +20,10 @@ interface SearchContextType<T extends dataType> {
     item: T;
     value: string;
   }[];
+  selectedItem: T | null;
+  configureSelectedItem: (item: dataType | null) => void;
   isLoading: boolean;
+  getKeyPaths: (obj: any, prefix?: string) => string[];
   clearResults: () => void;
   search: (query: string) => Promise<void>;
   inputContentRef: React.RefObject<string>;
@@ -59,6 +62,7 @@ export function SearchProvider<T extends dataType>({
       value: string;
     }[]
   >([]);
+  const [selectedItem, setSelectedItem] = useState<dataType | null>(null);
   const debouncedTimeoutSearch = useRef<number | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const componentAreaRef = useRef<View>(null);
@@ -116,10 +120,10 @@ export function SearchProvider<T extends dataType>({
               .replace(/\[\*\]/g, ""),
           ]
         : typeof fieldsExample === "string"
-        ? []
-        : getKeyPaths(fieldsExample).filter(
-            (item, index, self) => self.indexOf(item) === index
-          ),
+          ? []
+          : getKeyPaths(fieldsExample).filter(
+              (item, index, self) => self.indexOf(item) === index,
+            ),
     });
 
     const result = fuse.search(query.trim());
@@ -133,7 +137,7 @@ export function SearchProvider<T extends dataType>({
 
   function getValueBySuggestionKeyPath(
     item: unknown,
-    valueSuggestionKeyPath: string
+    valueSuggestionKeyPath: string,
   ) {
     if (!valueSuggestionKeyPath.includes("[*]")) {
       const resolvedValue = get(item as any, valueSuggestionKeyPath);
@@ -190,8 +194,8 @@ export function SearchProvider<T extends dataType>({
       id: uuid(),
       item,
       value: valueSuggestionKey
-        ? getValueBySuggestionKeyPath(item, String(valueSuggestionKey)) ??
-          getFirstPrimitiveKeyRecursively(item)
+        ? (getValueBySuggestionKeyPath(item, String(valueSuggestionKey)) ??
+          getFirstPrimitiveKeyRecursively(item))
         : getFirstPrimitiveKeyRecursively(item),
     }));
 
@@ -269,7 +273,7 @@ export function SearchProvider<T extends dataType>({
         abortControllerRef.current = new AbortController();
         fetchedData = await fetchOnQuery(
           query,
-          abortControllerRef.current.signal
+          abortControllerRef.current.signal,
         );
       } else {
         fetchedData = await fetchOnQuery(query);
@@ -286,17 +290,25 @@ export function SearchProvider<T extends dataType>({
     }
   }
 
+  function configureSelectedItem(item: dataType | null) {
+    setSearchResults([]);
+    setSelectedItem(item);
+  }
+
   return (
     <SearchContext.Provider
       value={{
+        configureSelectedItem,
         cancelOngoingRequest,
         debounceSearch,
         clearResults,
+        getKeyPaths,
         search,
         iconSearchButton,
         searchWhenTyping,
         inputContentRef,
         searchResults,
+        selectedItem,
         isLoading,
       }}
     >

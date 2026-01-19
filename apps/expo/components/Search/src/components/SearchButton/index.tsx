@@ -2,6 +2,7 @@ import { ButtonProps } from "@mobilestock-native/button";
 import { Clickable } from "@mobilestock-native/clickable";
 import { Icon } from "@mobilestock-native/icons";
 import tools from "@mobilestock-native/tools";
+import { ActivityIndicator } from "react-native";
 import { useTheme } from "styled-components/native";
 import { useSearch } from "../../hooks/useSearch";
 export function SearchButton(props: Omit<ButtonProps, "onPress">) {
@@ -20,11 +21,18 @@ export function SearchButton(props: Omit<ButtonProps, "onPress">) {
       }}
       {...props}
     >
-      <Icon
-        name={Search.iconSearchButton || "Search"}
-        size="SM"
-        color={tools.defineTextColor(Theme.colors.button.default)}
-      />
+      {Search.isLoading ? (
+        <ActivityIndicator
+          size="small"
+          color={tools.defineTextColor(Theme.colors.button.default)}
+        />
+      ) : (
+        <Icon
+          name={Search.iconSearchButton || "Search"}
+          size="SM"
+          color={tools.defineTextColor(Theme.colors.button.default)}
+        />
+      )}
     </Clickable>
   );
 }

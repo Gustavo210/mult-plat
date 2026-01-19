@@ -19,6 +19,10 @@ export function Input({ hiddenLoadingIndicator = false }) {
   }, [Search.selectedItem]);
 
   function clearInput() {
+    if (typeof Search.onChange === "function") {
+      Search.onChange({ value: null, event: "CLEARED" });
+    }
+
     Search.clearResults();
     Search.cancelOngoingRequest();
     setInputValue("");
@@ -38,6 +42,9 @@ export function Input({ hiddenLoadingIndicator = false }) {
       Search.inputContentRef.current = text;
     }
     Search.configureSelectedItem(null);
+    if (typeof Search.onChange === "function") {
+      Search.onChange({ value: text, event: "TYPING" });
+    }
   }
 
   return (

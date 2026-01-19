@@ -14,7 +14,24 @@ import "react-native-get-random-values";
 import { v4 as uuid } from "uuid";
 import { dataType, LeafObjectKeyPath } from "..";
 
-interface SearchContextType<T extends dataType> {
+interface CommonTypes {
+  disableSuggestions?: boolean;
+  iconSearchButton?: "Search" | "ChevronRight" | "ArrowRight";
+  searchWhenTyping?: boolean;
+  format?: (value: string) => string;
+  onChange?: (data: {
+    value: unknown;
+    event:
+      | "SEARCHING"
+      | "SEARCHED"
+      | "CLEARED"
+      | "SELECTED"
+      | "DESELECTED"
+      | "TYPING";
+  }) => void;
+}
+
+interface SearchContextType<T extends dataType> extends CommonTypes {
   debounceSearch: (query: string) => void;
   searchResults: {
     id: string;
@@ -27,27 +44,16 @@ interface SearchContextType<T extends dataType> {
   clearResults: () => void;
   search: (query: string) => Promise<void>;
   inputContentRef: React.RefObject<string>;
-  searchWhenTyping?: boolean;
-  format?: (value: string) => string;
   cancelOngoingRequest: () => void;
-  disableSuggestions?: boolean;
-  iconSearchButton?: "Search" | "ChevronRight" | "ArrowRight";
 }
 const SearchContext = createContext<SearchContextType<dataType> | null>(null);
 
-export interface SearchProviderProps<T extends dataType> {
+export interface SearchProviderProps<T extends dataType> extends CommonTypes {
   children: React.ReactNode;
   fetchOnQuery?: (query?: string, signal?: AbortSignal) => Promise<T[]>;
   valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
   defaultData?: T[];
-  searchWhenTyping?: boolean;
-  iconSearchButton?: "Search" | "ChevronRight" | "ArrowRight";
-  format?: (value: string) => string;
   disableSuggestions?: boolean;
-  // onChange?: (data: {
-  //   value: T[]
-  //   event: 'search' | 'select' | "searchClick" | "clearClick"
-  // })
 }
 export function SearchProvider<T extends dataType>({
   children,
@@ -57,6 +63,7 @@ export function SearchProvider<T extends dataType>({
   defaultData = [],
   iconSearchButton,
   format,
+  onChange,
   disableSuggestions,
 }: SearchProviderProps<T>) {
   const [isLoading, setIsLoading] = useState(false);
@@ -232,6 +239,14 @@ export function SearchProvider<T extends dataType>({
       setSearchResults([]);
       setIsLoading(true);
 
+      onChange?.({
+        value: {
+          query,
+          cachedData,
+        },
+        event: "SEARCHING",
+      });
+
       if (cachedData.length > 0) {
         const filteredCachedResults = filterData(cachedData, query);
 
@@ -285,6 +300,8 @@ export function SearchProvider<T extends dataType>({
         fetchedData = await fetchOnQuery(query);
       }
 
+      onChange?.({ value: fetchedData ?? null, event: "SEARCHED" });
+
       if (!fetchedData) {
         setSearchResults([]);
         return;
@@ -299,6 +316,16 @@ export function SearchProvider<T extends dataType>({
   function configureSelectedItem(item: dataType | null) {
     setSearchResults([]);
     setSelectedItem(item);
+
+    if (item === selectedItem) {
+      return;
+    }
+
+    if (item === null) {
+      onChange?.({ value: null, event: "DESELECTED" });
+    } else {
+      onChange?.({ value: item as T, event: "SELECTED" });
+    }
   }
 
   return (
@@ -308,6 +335,7 @@ export function SearchProvider<T extends dataType>({
         cancelOngoingRequest,
         debounceSearch,
         clearResults,
+        onChange,
         search,
         format,
         disableSuggestions,

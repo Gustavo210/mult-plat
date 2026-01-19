@@ -41,7 +41,7 @@ export function Input({ hiddenLoadingIndicator = false }) {
         selectTextOnFocus={!!Search.selectedItem}
         style={{
           height: 40,
-          width: "100%",
+          flex: 1,
           outline: "none",
         }}
         onChangeText={(text) => {

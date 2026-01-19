@@ -24,7 +24,6 @@ interface SearchContextType<T extends dataType> {
   selectedItem: T | null;
   configureSelectedItem: (item: dataType | null) => void;
   isLoading: boolean;
-  getKeyPaths: (obj: any, prefix?: string) => string[];
   clearResults: () => void;
   search: (query: string) => Promise<void>;
   inputContentRef: React.RefObject<string>;
@@ -309,7 +308,6 @@ export function SearchProvider<T extends dataType>({
         cancelOngoingRequest,
         debounceSearch,
         clearResults,
-        getKeyPaths,
         search,
         format,
         disableSuggestions,

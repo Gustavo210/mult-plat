@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { Platform, View } from "react-native";
+import "react-native-get-random-values";
 import { v4 as uuid } from "uuid";
 import { dataType, LeafObjectKeyPath } from "..";
 

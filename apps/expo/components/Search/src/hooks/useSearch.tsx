@@ -14,60 +14,60 @@ import "react-native-get-random-values";
 import { v4 as uuid } from "uuid";
 import { dataType, LeafObjectKeyPath } from "..";
 
+type EventType =
+  | "SEARCHING"
+  | "SEARCHED"
+  | "CLEARED"
+  | "SELECTED"
+  | "DESELECTED"
+  | "TYPING";
+
 interface CommonTypes {
   disableSuggestions?: boolean;
   iconSearchButton?: "Search" | "ChevronRight" | "ArrowRight";
   searchWhenTyping?: boolean;
+  onChange?: (data: { value: unknown; event: EventType }) => void;
   format?: (value: string) => string;
-  onChange?: (data: {
-    value: unknown;
-    event:
-      | "SEARCHING"
-      | "SEARCHED"
-      | "CLEARED"
-      | "SELECTED"
-      | "DESELECTED"
-      | "TYPING";
-  }) => void;
 }
 
 interface SearchContextType<T extends dataType> extends CommonTypes {
-  debounceSearch: (query: string) => void;
+  inputContentRef: React.RefObject<string>;
   searchResults: {
     id: string;
     item: T;
     value: string;
   }[];
   selectedItem: T | null;
-  configureSelectedItem: (item: dataType | null) => void;
   isLoading: boolean;
+  configureSelectedItem: (item: dataType | null) => void;
+  cancelOngoingRequest: () => void;
+  debounceSearch: (query: string) => void;
   clearResults: () => void;
   search: (query: string) => Promise<void>;
-  inputContentRef: React.RefObject<string>;
-  cancelOngoingRequest: () => void;
 }
 const SearchContext = createContext<SearchContextType<dataType> | null>(null);
 
 export interface SearchProviderProps<T extends dataType> extends CommonTypes {
+  valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
+  disableSuggestions?: boolean;
+  defaultData?: T[];
   children: React.ReactNode;
   fetchOnQuery?: (query?: string, signal?: AbortSignal) => Promise<T[]>;
-  valueSuggestionKey?: T extends object ? LeafObjectKeyPath<T> : never;
-  defaultData?: T[];
-  disableSuggestions?: boolean;
 }
 export function SearchProvider<T extends dataType>({
+  valueSuggestionKey,
+  disableSuggestions,
+  searchWhenTyping,
+  iconSearchButton,
+  defaultData = [],
   children,
   fetchOnQuery,
-  valueSuggestionKey,
-  searchWhenTyping,
-  defaultData = [],
-  iconSearchButton,
-  format,
   onChange,
-  disableSuggestions,
+  format,
 }: SearchProviderProps<T>) {
   const [isLoading, setIsLoading] = useState(false);
   const [cachedData, setCachedData] = useState<T[]>(defaultData ?? []);
+  const [selectedItem, setSelectedItem] = useState<dataType | null>(null);
   const [searchResults, setSearchResults] = useState<
     {
       id: string;
@@ -75,7 +75,6 @@ export function SearchProvider<T extends dataType>({
       value: string;
     }[]
   >([]);
-  const [selectedItem, setSelectedItem] = useState<dataType | null>(null);
   const debouncedTimeoutSearch = useRef<number | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const componentAreaRef = useRef<View>(null);

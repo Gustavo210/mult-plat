@@ -31,6 +31,7 @@ interface SearchContextType<T extends dataType> {
   searchWhenTyping?: boolean;
   format?: (value: string) => string;
   cancelOngoingRequest: () => void;
+  disableSuggestions?: boolean;
   iconSearchButton?: "Search" | "ChevronRight" | "ArrowRight";
 }
 const SearchContext = createContext<SearchContextType<dataType> | null>(null);
@@ -43,6 +44,7 @@ export interface SearchProviderProps<T extends dataType> {
   searchWhenTyping?: boolean;
   iconSearchButton?: "Search" | "ChevronRight" | "ArrowRight";
   format?: (value: string) => string;
+  disableSuggestions?: boolean;
   // onChange?: (data: {
   //   value: T[]
   //   event: 'search' | 'select' | "searchClick" | "clearClick"
@@ -56,6 +58,7 @@ export function SearchProvider<T extends dataType>({
   defaultData = [],
   iconSearchButton,
   format,
+  disableSuggestions,
 }: SearchProviderProps<T>) {
   const [isLoading, setIsLoading] = useState(false);
   const [cachedData, setCachedData] = useState<T[]>(defaultData ?? []);
@@ -309,6 +312,7 @@ export function SearchProvider<T extends dataType>({
         getKeyPaths,
         search,
         format,
+        disableSuggestions,
         iconSearchButton,
         searchWhenTyping,
         inputContentRef,

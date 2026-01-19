@@ -5,6 +5,10 @@ import { useSearch } from "../../hooks/useSearch";
 export function SuggestionArea() {
   const Search = useSearch();
 
+  if (Search.disableSuggestions) {
+    return null;
+  }
+
   return (
     <Container.Vertical
       style={{

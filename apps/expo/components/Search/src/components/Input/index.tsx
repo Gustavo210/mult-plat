@@ -5,13 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, TextInput } from "react-native";
 import { useSearch } from "../../hooks/useSearch";
 
-export function Input({
-  hiddenLoadingIndicator = false,
-  format,
-}: {
-  hiddenLoadingIndicator?: boolean;
-  format?: (value: string) => string;
-}) {
+export function Input({ hiddenLoadingIndicator = false }) {
   const Search = useSearch();
   const [showXButton, setShowXButton] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -33,8 +27,8 @@ export function Input({
   }
 
   function onChangeText(text: string) {
-    if (format) {
-      text = format(text);
+    if (Search.format) {
+      text = Search.format(text);
     }
     setInputValue(text);
     setShowXButton(text.length > 0);

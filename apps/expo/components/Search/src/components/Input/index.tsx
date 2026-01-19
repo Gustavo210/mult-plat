@@ -5,7 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, TextInput } from "react-native";
 import { useSearch } from "../../hooks/useSearch";
 
-export function Input({ hiddenLoadingIndicator = false }) {
+export function Input({
+  hiddenLoadingIndicator = false,
+  format,
+}: {
+  hiddenLoadingIndicator?: boolean;
+  format?: (value: string) => string;
+}) {
   const Search = useSearch();
   const [showXButton, setShowXButton] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -26,6 +32,20 @@ export function Input({ hiddenLoadingIndicator = false }) {
     Search.debounceSearch("");
   }
 
+  function onChangeText(text: string) {
+    if (format) {
+      text = format(text);
+    }
+    setInputValue(text);
+    setShowXButton(text.length > 0);
+    if (Search.searchWhenTyping && text.length > 0) {
+      Search.debounceSearch(text);
+    } else {
+      Search.inputContentRef.current = text;
+    }
+    Search.configureSelectedItem(null);
+  }
+
   return (
     <Container.Horizontal
       full
@@ -44,16 +64,7 @@ export function Input({ hiddenLoadingIndicator = false }) {
           flex: 1,
           outline: "none",
         }}
-        onChangeText={(text) => {
-          setInputValue(text);
-          setShowXButton(text.length > 0);
-          if (Search.searchWhenTyping) {
-            Search.debounceSearch(text);
-          } else {
-            Search.inputContentRef.current = text;
-          }
-          Search.configureSelectedItem(null);
-        }}
+        onChangeText={onChangeText}
         placeholder="Digite"
         clearButtonMode="never"
       />

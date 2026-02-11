@@ -23,7 +23,7 @@
     "@mobilestockweb/typography": "*",
     "@unform/core": "^2.1.6",
     "@unform/web": "^2.1.6",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "next": "15.5.4",
     "notistack": "^3.0.2",
     "react": "19.1.0",
